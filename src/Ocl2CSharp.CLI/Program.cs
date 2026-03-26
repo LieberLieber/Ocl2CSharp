@@ -8,7 +8,8 @@ app.Configure(config =>
 {
     config.SetApplicationName("ocl2csharp");
     config.SetApplicationVersion("1.0.0");
-    config.AddExample("--expression", "\"context Person inv agePositive: age >= 0\"");
+    config.AddExample("--expression", "\"age >= 0\"");
+    config.AddExample("--expression", "\"employees->select(e | e.active = true)->notEmpty()\"");
     config.AddExample("--file", "constraints.ocl");
 });
 return app.Run(args);

@@ -10,10 +10,10 @@ namespace Ocl2CSharp;
 public class OclToCSharpConverter : OCLBaseVisitor<string>
 {
     /// <summary>
-    /// Converts an OCL string containing one or more context specifications to C# code.
+    /// Converts an OCL expression string to the equivalent C# expression.
     /// </summary>
-    /// <param name="oclCode">The OCL source text.</param>
-    /// <returns>The equivalent C# code as a string.</returns>
+    /// <param name="oclCode">The OCL expression text.</param>
+    /// <returns>The equivalent C# expression as a string.</returns>
     public static string Convert(string oclCode)
     {
         var inputStream = new AntlrInputStream(oclCode);
@@ -21,49 +21,9 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
         var tokenStream = new CommonTokenStream(lexer);
         var parser = new OCLParser(tokenStream);
 
-        var tree = parser.multipleContextSpecifications();
+        var tree = parser.expression();
         var visitor = new OclToCSharpConverter();
         return visitor.Visit(tree);
-    }
-
-    // -------------------------------------------------------------------------
-    // Top-level rules
-    // -------------------------------------------------------------------------
-
-    public override string VisitMultipleContextSpecifications(OCLParser.MultipleContextSpecificationsContext context)
-    {
-        var sb = new StringBuilder();
-        foreach (var inv in context.singleInvariant())
-            sb.AppendLine(Visit(inv));
-        foreach (var der in context.singleDerivedAttribute())
-            sb.AppendLine(Visit(der));
-        return sb.ToString().TrimEnd();
-    }
-
-    public override string VisitSingleInvariant(OCLParser.SingleInvariantContext context)
-    {
-        // context ClassName inv invName?: expression
-        var className = context.ID(0).GetText();
-        var invName = context.ID().Length > 1 ? context.ID(1).GetText() : "Invariant";
-        var expression = Visit(context.expression());
-
-        var methodName = char.ToUpper(invName[0]) + invName.Substring(1);
-        return $"public bool {methodName}()\n{{\n    return {expression};\n}}";
-    }
-
-    public override string VisitSingleDerivedAttribute(OCLParser.SingleDerivedAttributeContext context)
-    {
-        // context qualified_name : type (init: expression)? derive: expression
-        var qualifiedName = Visit(context.qualified_name());
-        var typeName = Visit(context.type());
-        var expressions = context.expression();
-        var deriveExpr = Visit(expressions[expressions.Length - 1]);
-
-        // qualified_name is Class::attribute, extract just the attribute name
-        var parts = qualifiedName.Split('.');
-        var attrName = parts[parts.Length - 1];
-
-        return $"public {typeName} {attrName}\n{{\n    get {{ return {deriveExpr}; }}\n}}";
     }
 
     // -------------------------------------------------------------------------

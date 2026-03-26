@@ -5,89 +5,140 @@ namespace Ocl2CSharp.Tests;
 public class OclToCSharpConverterTests
 {
     // -------------------------------------------------------------------------
-    // Invariant tests
+    // Logical operators
     // -------------------------------------------------------------------------
 
     [Fact]
-    public void Invariant_SimpleComparison_IsConverted()
+    public void LogicalAnd_IsConverted()
     {
-        var ocl = "context Person inv agePositive: age >= 0";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("public bool AgePositive()", result);
-        Assert.Contains("return age >= 0;", result);
+        var result = OclToCSharpConverter.Convert("age >= 0 and age <= 150");
+        Assert.Equal("age >= 0 && age <= 150", result);
     }
 
     [Fact]
-    public void Invariant_WithoutName_UsesDefaultName()
+    public void LogicalAnd_Ampersand_IsConverted()
     {
-        var ocl = "context Person inv: age >= 0";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("public bool Invariant()", result);
-        Assert.Contains("return age >= 0;", result);
+        var result = OclToCSharpConverter.Convert("age >= 0 & age <= 150");
+        Assert.Equal("age >= 0 && age <= 150", result);
     }
 
     [Fact]
-    public void Invariant_LogicalAnd_IsConverted()
+    public void LogicalOr_IsConverted()
     {
-        var ocl = "context Person inv validAge: age >= 0 and age <= 150";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("return age >= 0 && age <= 150;", result);
+        var result = OclToCSharpConverter.Convert("email <> null or phone <> null");
+        Assert.Equal("email != null || phone != null", result);
     }
 
     [Fact]
-    public void Invariant_LogicalOr_IsConverted()
+    public void LogicalXor_IsConverted()
     {
-        var ocl = "context Person inv hasContact: email <> null or phone <> null";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("return email != null || phone != null;", result);
+        var result = OclToCSharpConverter.Convert("a or b xor c");
+        Assert.Contains("^", result);
     }
 
     [Fact]
-    public void Invariant_NotOperator_IsConverted()
+    public void ImpliesOperator_IsConverted()
     {
-        var ocl = "context Person inv notNull: not name = null";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("!name == null", result);
+        var result = OclToCSharpConverter.Convert("age >= 18 implies canVote = true");
+        Assert.Contains("!(age >= 18)", result);
+        Assert.Contains("canVote == true", result);
     }
 
     [Fact]
-    public void Invariant_EqualityOperator_IsConverted()
+    public void ImpliesArrow_IsConverted()
     {
-        var ocl = "context Person inv named: name = 'Alice'";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("name == \"Alice\"", result);
+        var result = OclToCSharpConverter.Convert("age >= 18 => canVote = true");
+        Assert.Contains("!(age >= 18)", result);
+        Assert.Contains("canVote == true", result);
+    }
+
+    // -------------------------------------------------------------------------
+    // Equality / comparison operators
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public void Equality_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("name = 'Alice'");
+        Assert.Equal("name == \"Alice\"", result);
     }
 
     [Fact]
-    public void Invariant_InequalityOperator_IsConverted()
+    public void Inequality_IsConverted()
     {
-        var ocl = "context Person inv notNull: name <> null";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("name != null", result);
+        var result = OclToCSharpConverter.Convert("name <> null");
+        Assert.Equal("name != null", result);
     }
 
     [Fact]
-    public void Invariant_ArithmeticExpression_IsConverted()
+    public void Inequality_SlashEquals_IsConverted()
     {
-        var ocl = "context Account inv balanced: balance + interest >= 0";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("return balance + interest >= 0;", result);
+        var result = OclToCSharpConverter.Convert("value /= 0");
+        Assert.Equal("value != 0", result);
     }
 
     [Fact]
-    public void Invariant_MultiplicationExpression_IsConverted()
+    public void LessThan_IsConverted()
     {
-        var ocl = "context Account inv positive: balance * rate > 0";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("return balance * rate > 0;", result);
+        var result = OclToCSharpConverter.Convert("age < 18");
+        Assert.Equal("age < 18", result);
     }
 
     [Fact]
-    public void Invariant_ModOperator_IsConverted()
+    public void GreaterThanOrEqual_IsConverted()
     {
-        var ocl = "context Account inv evenBalance: balance mod 2 = 0";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("balance % 2 == 0", result);
+        var result = OclToCSharpConverter.Convert("age >= 0");
+        Assert.Equal("age >= 0", result);
+    }
+
+    // -------------------------------------------------------------------------
+    // Arithmetic operators
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public void Addition_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("balance + interest >= 0");
+        Assert.Equal("balance + interest >= 0", result);
+    }
+
+    [Fact]
+    public void Multiplication_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("balance * rate > 0");
+        Assert.Equal("balance * rate > 0", result);
+    }
+
+    [Fact]
+    public void ModOperator_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("balance mod 2 = 0");
+        Assert.Equal("balance % 2 == 0", result);
+    }
+
+    [Fact]
+    public void DivOperator_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("total div numItems > 0");
+        Assert.Equal("total / numItems > 0", result);
+    }
+
+    // -------------------------------------------------------------------------
+    // Unary operators
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public void NotOperator_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("not active");
+        Assert.Equal("!active", result);
+    }
+
+    [Fact]
+    public void UnaryMinus_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("-balance > 0");
+        Assert.Equal("-balance > 0", result);
     }
 
     // -------------------------------------------------------------------------
@@ -95,89 +146,10 @@ public class OclToCSharpConverterTests
     // -------------------------------------------------------------------------
 
     [Fact]
-    public void Invariant_ConditionalExpression_IsConverted()
+    public void ConditionalExpression_IsConverted()
     {
-        var ocl = "context Person inv adultOrMinor: if age >= 18 then isAdult = true else isAdult = false endif";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("age >= 18 ? isAdult == true : isAdult == false", result);
-    }
-
-    // -------------------------------------------------------------------------
-    // Collection operations
-    // -------------------------------------------------------------------------
-
-    [Fact]
-    public void Invariant_SelectOperation_IsConverted()
-    {
-        var ocl = "context Company inv adultEmployees: employees->select(e | e.age >= 18)->notEmpty()";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains(".Where(e => e.age >= 18)", result);
-        Assert.Contains(".Any()", result);
-    }
-
-    [Fact]
-    public void Invariant_ForAllOperation_IsConverted()
-    {
-        var ocl = "context Company inv allAdult: employees->forAll(e | e.age >= 18)";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains(".All(e => e.age >= 18)", result);
-    }
-
-    [Fact]
-    public void Invariant_ExistsOperation_IsConverted()
-    {
-        var ocl = "context Company inv hasCEO: employees->exists(e | e.role = 'CEO')";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains(".Any(e => e.role == \"CEO\")", result);
-    }
-
-    [Fact]
-    public void Invariant_CollectOperation_IsConverted()
-    {
-        var ocl = "context Company inv collectNames: employees->collect(e | e.name)->notEmpty()";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains(".Select(e => e.name)", result);
-        Assert.Contains(".Any()", result);
-    }
-
-    [Fact]
-    public void Invariant_SizeOperation_IsConverted()
-    {
-        var ocl = "context Company inv hasEmployees: employees->size() > 0";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("employees.Count() > 0", result);
-    }
-
-    [Fact]
-    public void Invariant_IsEmptyOperation_IsConverted()
-    {
-        var ocl = "context Company inv noContracts: contracts->isEmpty()";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("!contracts.Any()", result);
-    }
-
-    [Fact]
-    public void Invariant_NotEmptyOperation_IsConverted()
-    {
-        var ocl = "context Company inv hasContracts: contracts->notEmpty()";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("contracts.Any()", result);
-    }
-
-    [Fact]
-    public void Invariant_IncludesOperation_IsConverted()
-    {
-        var ocl = "context Company inv hasAlice: employees->includes(alice)";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("employees.Contains(alice)", result);
-    }
-
-    [Fact]
-    public void Invariant_SumOperation_IsConverted()
-    {
-        var ocl = "context Company inv totalSalary: salaries->sum() > 0";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("salaries.Sum()", result);
+        var result = OclToCSharpConverter.Convert("if age >= 18 then isAdult else isMinor endif");
+        Assert.Equal("(age >= 18 ? isAdult : isMinor)", result);
     }
 
     // -------------------------------------------------------------------------
@@ -185,43 +157,52 @@ public class OclToCSharpConverterTests
     // -------------------------------------------------------------------------
 
     [Fact]
-    public void Invariant_NullLiteral_IsConverted()
+    public void NullLiteral_IsConverted()
     {
-        var ocl = "context Person inv hasName: name <> null";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("name != null", result);
+        var result = OclToCSharpConverter.Convert("name <> null");
+        Assert.Equal("name != null", result);
     }
 
     [Fact]
-    public void Invariant_BooleanLiteral_IsConverted()
+    public void BooleanLiteralTrue_IsConverted()
     {
-        var ocl = "context Person inv isActive: active = true";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("active == true", result);
+        var result = OclToCSharpConverter.Convert("active = true");
+        Assert.Equal("active == true", result);
     }
 
     [Fact]
-    public void Invariant_IntLiteral_IsConverted()
+    public void BooleanLiteralFalse_IsConverted()
     {
-        var ocl = "context Account inv positiveBalance: balance > 0";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("balance > 0", result);
+        var result = OclToCSharpConverter.Convert("active = false");
+        Assert.Equal("active == false", result);
     }
 
     [Fact]
-    public void Invariant_StringLiteral_IsConverted()
+    public void IntLiteral_IsConverted()
     {
-        var ocl = "context Person inv namedAlice: name = 'Alice'";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("name == \"Alice\"", result);
+        var result = OclToCSharpConverter.Convert("balance > 0");
+        Assert.Equal("balance > 0", result);
     }
 
     [Fact]
-    public void Invariant_EnumerationLiteral_IsConverted()
+    public void StringLiteralSingleQuote_IsConverted()
     {
-        var ocl = "context Person inv hasStatus: status = Status::Active";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("status == Status.Active", result);
+        var result = OclToCSharpConverter.Convert("name = 'Alice'");
+        Assert.Equal("name == \"Alice\"", result);
+    }
+
+    [Fact]
+    public void StringLiteralDoubleQuote_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("name = \"Alice\"");
+        Assert.Equal("name == \"Alice\"", result);
+    }
+
+    [Fact]
+    public void EnumerationLiteral_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("status = Status::Active");
+        Assert.Equal("status == Status.Active", result);
     }
 
     // -------------------------------------------------------------------------
@@ -229,89 +210,178 @@ public class OclToCSharpConverterTests
     // -------------------------------------------------------------------------
 
     [Fact]
-    public void Invariant_MemberAccess_IsConverted()
+    public void MemberAccess_IsConverted()
     {
-        var ocl = "context Company inv ceoExists: ceo.name <> null";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("ceo.name != null", result);
+        var result = OclToCSharpConverter.Convert("ceo.name <> null");
+        Assert.Equal("ceo.name != null", result);
+    }
+
+    [Fact]
+    public void NestedMemberAccess_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("company.ceo.name <> null");
+        Assert.Equal("company.ceo.name != null", result);
     }
 
     // -------------------------------------------------------------------------
-    // Derived attribute
+    // Collection operations — arrow (->)
     // -------------------------------------------------------------------------
 
     [Fact]
-    public void DerivedAttribute_SimpleExpression_IsConverted()
+    public void SelectOperation_IsConverted()
     {
-        var ocl = "context Person::fullName : String derive: firstName + ' ' + lastName";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("public", result);
-        Assert.Contains("fullName", result);
-        Assert.Contains("get {", result);
-        Assert.Contains("firstName", result);
+        var result = OclToCSharpConverter.Convert("employees->select(e | e.age >= 18)->notEmpty()");
+        Assert.Contains(".Where(e => e.age >= 18)", result);
+        Assert.Contains(".Any()", result);
     }
 
-    // -------------------------------------------------------------------------
-    // Multiple context specifications
-    // -------------------------------------------------------------------------
-
     [Fact]
-    public void MultipleInvariants_AreConverted()
+    public void ForAllOperation_IsConverted()
     {
-        var ocl = "context Person inv agePositive: age >= 0\ncontext Person inv hasName: name <> null";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("public bool AgePositive()", result);
-        Assert.Contains("public bool HasName()", result);
+        var result = OclToCSharpConverter.Convert("employees->forAll(e | e.age >= 18)");
+        Assert.Equal("employees.All(e => e.age >= 18)", result);
     }
 
-    // -------------------------------------------------------------------------
-    // Implies operator
-    // -------------------------------------------------------------------------
-
     [Fact]
-    public void Invariant_ImpliesOperator_IsConverted()
+    public void ExistsOperation_IsConverted()
     {
-        var ocl = "context Person inv adultImpliesVoter: age >= 18 implies canVote = true";
-        var result = OclToCSharpConverter.Convert(ocl);
-        // implies(a, b) => !a || b
-        Assert.Contains("!(age >= 18)", result);
-        Assert.Contains("canVote == true", result);
+        var result = OclToCSharpConverter.Convert("employees->exists(e | e.role = 'CEO')");
+        Assert.Equal("employees.Any(e => e.role == \"CEO\")", result);
     }
 
-    // -------------------------------------------------------------------------
-    // Reject operation
-    // -------------------------------------------------------------------------
+    [Fact]
+    public void CollectOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("employees->collect(e | e.name)->notEmpty()");
+        Assert.Contains(".Select(e => e.name)", result);
+        Assert.Contains(".Any()", result);
+    }
 
     [Fact]
-    public void Invariant_RejectOperation_IsConverted()
+    public void SizeOperation_IsConverted()
     {
-        var ocl = "context Company inv noMinors: employees->reject(e | e.age < 18)->isEmpty()";
-        var result = OclToCSharpConverter.Convert(ocl);
+        var result = OclToCSharpConverter.Convert("employees->size() > 0");
+        Assert.Equal("employees.Count() > 0", result);
+    }
+
+    [Fact]
+    public void IsEmptyOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("contracts->isEmpty()");
+        Assert.Equal("!contracts.Any()", result);
+    }
+
+    [Fact]
+    public void NotEmptyOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("contracts->notEmpty()");
+        Assert.Equal("contracts.Any()", result);
+    }
+
+    [Fact]
+    public void IncludesOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("employees->includes(alice)");
+        Assert.Equal("employees.Contains(alice)", result);
+    }
+
+    [Fact]
+    public void ExcludesOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("employees->excludes(alice)");
+        Assert.Equal("!employees.Contains(alice)", result);
+    }
+
+    [Fact]
+    public void SumOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("salaries->sum() > 0");
+        Assert.Equal("salaries.Sum() > 0", result);
+    }
+
+    [Fact]
+    public void MaxOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("scores->max()");
+        Assert.Equal("scores.Max()", result);
+    }
+
+    [Fact]
+    public void MinOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("scores->min()");
+        Assert.Equal("scores.Min()", result);
+    }
+
+    [Fact]
+    public void RejectOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("employees->reject(e | e.age < 18)->isEmpty()");
         Assert.Contains(".Where(e => !(e.age < 18))", result);
         Assert.Contains("!employees", result);
     }
 
-    // -------------------------------------------------------------------------
-    // OclIsUndefined
-    // -------------------------------------------------------------------------
+    [Fact]
+    public void AsSetOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("items->asSet()");
+        Assert.Equal("items.ToHashSet()", result);
+    }
 
     [Fact]
-    public void Invariant_OclIsUndefined_IsConverted()
+    public void AsSequenceOperation_IsConverted()
     {
-        var ocl = "context Person inv nameNotNull: name.oclIsUndefined() = false";
-        var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("(name == null) == false", result);
+        var result = OclToCSharpConverter.Convert("items->asSequence()");
+        Assert.Equal("items.ToList()", result);
+    }
+
+    [Fact]
+    public void ToUpperCaseOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("name->toUpperCase()");
+        Assert.Equal("name.ToUpper()", result);
+    }
+
+    [Fact]
+    public void ToLowerCaseOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("name->toLowerCase()");
+        Assert.Equal("name.ToLower()", result);
+    }
+
+    [Fact]
+    public void ToIntegerOperation_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("value->toInteger()");
+        Assert.Equal("Convert.ToInt32(value)", result);
     }
 
     // -------------------------------------------------------------------------
-    // Collection set literal
+    // Dot (.) OCL operations
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public void OclIsUndefined_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("name.oclIsUndefined() = false");
+        Assert.Equal("(name == null) == false", result);
+    }
+
+    [Fact]
+    public void OclIsKindOf_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("obj.oclIsKindOf(Person)");
+        Assert.Equal("(obj is Person)", result);
+    }
+
+    // -------------------------------------------------------------------------
+    // Collection literals
     // -------------------------------------------------------------------------
 
     [Fact]
     public void SetLiteral_IsConverted()
     {
-        var ocl = "context Person inv validStatus: Set{1, 2, 3}->includes(status)";
-        var result = OclToCSharpConverter.Convert(ocl);
+        var result = OclToCSharpConverter.Convert("Set{1, 2, 3}->includes(status)");
         Assert.Contains("new HashSet<dynamic>", result);
         Assert.Contains(".Contains(status)", result);
     }
@@ -319,9 +389,51 @@ public class OclToCSharpConverterTests
     [Fact]
     public void SequenceLiteral_IsConverted()
     {
-        var ocl = "context Person inv seq: Sequence{1, 2, 3}->size() > 0";
-        var result = OclToCSharpConverter.Convert(ocl);
+        var result = OclToCSharpConverter.Convert("Sequence{1, 2, 3}->size() > 0");
         Assert.Contains("new List<dynamic>", result);
         Assert.Contains(".Count()", result);
     }
+
+    [Fact]
+    public void BagLiteral_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("Bag{1, 2, 3}->size() > 0");
+        Assert.Contains("new List<dynamic>", result);
+    }
+
+    // -------------------------------------------------------------------------
+    // Let expressions
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public void LetExpression_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("let x = age + 1 in x > 0");
+        Assert.Contains("var x = age + 1", result);
+        Assert.Contains("x > 0", result);
+    }
+
+    // -------------------------------------------------------------------------
+    // Parenthesized expression
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public void ParenthesizedExpression_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("(age + 1) > 0");
+        Assert.Equal("(age + 1) > 0", result);
+    }
+
+    // -------------------------------------------------------------------------
+    // Chained operations
+    // -------------------------------------------------------------------------
+
+    [Fact]
+    public void ChainedSelectAndForAll_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("employees->select(e | e.active = true)->forAll(e | e.age >= 18)");
+        Assert.Contains(".Where(e => e.active == true)", result);
+        Assert.Contains(".All(e => e.age >= 18)", result);
+    }
 }
+
