@@ -32,46 +32,6 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CLSCompliant(false)]
 public interface IOCLListener : IParseTreeListener {
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="OCLParser.multipleContextSpecifications"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterMultipleContextSpecifications([NotNull] OCLParser.MultipleContextSpecificationsContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="OCLParser.multipleContextSpecifications"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitMultipleContextSpecifications([NotNull] OCLParser.MultipleContextSpecificationsContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="OCLParser.contextSpecification"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterContextSpecification([NotNull] OCLParser.ContextSpecificationContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="OCLParser.contextSpecification"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitContextSpecification([NotNull] OCLParser.ContextSpecificationContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="OCLParser.singleInvariant"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterSingleInvariant([NotNull] OCLParser.SingleInvariantContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="OCLParser.singleInvariant"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitSingleInvariant([NotNull] OCLParser.SingleInvariantContext context);
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="OCLParser.singleDerivedAttribute"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterSingleDerivedAttribute([NotNull] OCLParser.SingleDerivedAttributeContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="OCLParser.singleDerivedAttribute"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitSingleDerivedAttribute([NotNull] OCLParser.SingleDerivedAttributeContext context);
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="OCLParser.type"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
