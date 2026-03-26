@@ -1,0 +1,38 @@
+# .NET build artifacts
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+.vs/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+*.lock.json
+!packages.lock.json
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# .NET Core / Rider / Rider
+.idea/
+*.DotSettings.user
+
+# Rider
+.idea/
+
+# Build output
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]uild[Ll]og.*
+
+# Temporary files
+*.tmp
+*.bak
+*.swp

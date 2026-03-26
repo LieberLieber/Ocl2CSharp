@@ -1,0 +1,33 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocl2CSharp", "Ocl2CSharp\Ocl2CShapr.csproj", "{CCD437DF-DECB-43BD-A0B2-51654A4F9CB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocl2CSharp.Tests", "Ocl2CSharp.Tests\Ocl2CSharp.Tests.csproj", "{ACB345EC-E374-4518-8838-09A253DF5525}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocl2CSharp.CLI", "Ocl2CSharp.CLI\Ocl2CSharp.CLI.csproj", "{72671478-EF9F-44C5-B581-837BB863037F}"
+EndProject
+Global
+GlobalSection(SolutionConfigurationPlatforms) = preSolution
+Debug|Any CPU = Debug|Any CPU
+Release|Any CPU = Release|Any CPU
+EndGlobalSection
+GlobalSection(ProjectConfigurationPlatforms) = postSolution
+{CCD437DF-DECB-43BD-A0B2-51654A4F9CB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{CCD437DF-DECB-43BD-A0B2-51654A4F9CB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+{CCD437DF-DECB-43BD-A0B2-51654A4F9CB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+{CCD437DF-DECB-43BD-A0B2-51654A4F9CB8}.Release|Any CPU.Build.0 = Release|Any CPU
+{ACB345EC-E374-4518-8838-09A253DF5525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{ACB345EC-E374-4518-8838-09A253DF5525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+{ACB345EC-E374-4518-8838-09A253DF5525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+{ACB345EC-E374-4518-8838-09A253DF5525}.Release|Any CPU.Build.0 = Release|Any CPU
+{72671478-EF9F-44C5-B581-837BB863037F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{72671478-EF9F-44C5-B581-837BB863037F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+{72671478-EF9F-44C5-B581-837BB863037F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+{72671478-EF9F-44C5-B581-837BB863037F}.Release|Any CPU.Build.0 = Release|Any CPU
+EndGlobalSection
+GlobalSection(SolutionProperties) = preSolution
+HideSolutionNode = FALSE
+EndGlobalSection
+EndGlobal
