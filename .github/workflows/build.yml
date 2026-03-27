@@ -1,0 +1,29 @@
+name: Build Solution
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6.0.2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v5.2.0
+      with:
+        dotnet-version: '8.x'
+
+    - name: Restore NuGet packages
+      run: dotnet restore src/Ocl2CSharp.sln
+
+    - name: Build solution
+      run: dotnet build src/Ocl2CSharp.sln --configuration Release --no-restore
+
+
+    
