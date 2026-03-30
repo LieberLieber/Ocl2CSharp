@@ -66,31 +66,26 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 
 	public override string VisitLetExpression(OCLParser.LetExpressionContext context)
 	{
-		// let var1: Type1 = expr1, var2: Type2 = expr2 in body
-		// Translate to nested immediately-invoked lambdas:
-		//   ((Type1 var1) => ((Type2 var2) => body)(expr2))(expr1)
+		// let var1 = expr1, var2 = expr2 in body
+		// Translate to chained LINQ Select calls:
+		//   expr1.Select(var1 => expr2.Select(var2 => body))
+		// The type annotation (if present) is omitted — the lambda parameter is inferred.
 		var bindings = context.letBinding();
 		var result = Visit(context.expression());
 
-		// Iterate in reverse so that each outer binding wraps all inner bindings,
-		// preserving correct scoping: the rightmost binding is innermost (closest to body),
-		// and the leftmost binding becomes the outermost immediately-invoked lambda.
+		// Iterate in reverse so that each outer binding wraps all inner ones,
+		// with the leftmost binding becoming the outermost Select call.
 		for (int i = bindings.Length - 1; i >= 0; i--)
 		{
 			var binding = bindings[i];
 			var name = binding.ID().GetText();
 			var initExpr = Visit(binding.expression());
-			string param;
-			if (binding.type() != null)
-			{
-				var typeName = Visit(binding.type());
-				param = $"({typeName} {name})";
-			}
-			else
-			{
-				param = name;
-			}
-			result = $"({param} => {result})({initExpr})";
+		// Wrap initExpr in parentheses when it's not already terminated by a grouping character,
+		// so that infix operators like '+' don't bind more tightly than '.Select(...)'.
+		var receiver = (initExpr.EndsWith(')') || initExpr.EndsWith(']') || initExpr.EndsWith('}'))
+			? initExpr
+			: $"({initExpr})";
+		result = $"{receiver}.Select({name} => {result})";
 		}
 		return result;
 	}

@@ -409,7 +409,7 @@ public class OclToCSharpConverterTests
     public void LetExpression_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("let x = age + 1 in x > 0");
-        Assert.Equal("(x => x > 0)(age + 1)", result);
+        Assert.Equal("(age + 1).Select(x => x > 0)", result);
     }
 
     [Fact]
@@ -421,17 +421,16 @@ public class OclToCSharpConverterTests
             "if renderings->isEmpty() then null " +
             "else renderings->first().referencedRendering endif";
         var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Contains("(ISet<ViewRenderingMembership> renderings)", result);
-        Assert.Contains("featureMembership.OfType<ViewRenderingMembership>()", result);
-        Assert.Contains("!renderings.Any()", result);
-        Assert.Contains("renderings.First().referencedRendering", result);
+        Assert.Equal(
+            "featureMembership.OfType<ViewRenderingMembership>().Select(renderings => (!renderings.Any() ? null : renderings.First().referencedRendering))",
+            result);
     }
 
     [Fact]
     public void LetExpression_MultipleBindings_ReturnsNestedLinqExpressions()
     {
         var result = OclToCSharpConverter.Convert("let x = age + 1, y = age - 1 in x > y");
-        Assert.Equal("(x => (y => x > y)(age - 1))(age + 1)", result);
+        Assert.Equal("(age + 1).Select(x => (age - 1).Select(y => x > y))", result);
     }
 
     // -------------------------------------------------------------------------
