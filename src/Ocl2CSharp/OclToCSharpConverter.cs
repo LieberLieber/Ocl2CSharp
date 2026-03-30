@@ -66,32 +66,33 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 
 	public override string VisitLetExpression(OCLParser.LetExpressionContext context)
 	{
-		// let var1 = expr1, var2 = expr2 in body
-		// Translate to immediately-invoked lambda style isn't practical in C#,
-		// so we emit a block with local variables (as a comment + inline expression for simple cases).
+		// let var1: Type1 = expr1, var2: Type2 = expr2 in body
+		// Translate to nested immediately-invoked lambdas:
+		//   ((Type1 var1) => ((Type2 var2) => body)(expr2))(expr1)
 		var bindings = context.letBinding();
-		var bodyExpr = Visit(context.expression());
-		if (bindings.Length == 1)
-		{
-			var binding = Visit(bindings[0]);
-			return $"(({binding}) => {bodyExpr})()";
-		}
+		var result = Visit(context.expression());
 
-		var parts = string.Join(", ", Array.ConvertAll(bindings, b => Visit(b)));
-		return $"/* let {parts} in */ {bodyExpr}";
-	}
-
-	public override string VisitLetBinding(OCLParser.LetBindingContext context)
-	{
-		// ID (':' type)? '=' expression
-		var name = context.ID().GetText();
-		var expr = Visit(context.expression());
-		if (context.type() != null)
+		// Iterate in reverse so that each outer binding wraps all inner bindings,
+		// preserving correct scoping: the rightmost binding is innermost (closest to body),
+		// and the leftmost binding becomes the outermost immediately-invoked lambda.
+		for (int i = bindings.Length - 1; i >= 0; i--)
 		{
-			var typeName = Visit(context.type());
-			return $"{typeName} {name} = {expr}";
+			var binding = bindings[i];
+			var name = binding.ID().GetText();
+			var initExpr = Visit(binding.expression());
+			string param;
+			if (binding.type() != null)
+			{
+				var typeName = Visit(binding.type());
+				param = $"({typeName} {name})";
+			}
+			else
+			{
+				param = name;
+			}
+			result = $"({param} => {result})({initExpr})";
 		}
-		return $"var {name} = {expr}";
+		return result;
 	}
 
 	public override string VisitLogicalExpression(OCLParser.LogicalExpressionContext context)
