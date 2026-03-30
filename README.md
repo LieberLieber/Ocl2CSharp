@@ -1,10 +1,17 @@
-# Ocl2CSharp
+# Ocl2CSharp for SysML v2
 
-A converter for OCL code to C#.
-Many OCL contraint used in UML, SysMLv2,... are used to define derived properties and/or constraints for validation.
-Any implementation of those meta models will have the need to add these OCL contraints into the code.
+A converter for OCL code to C#, intended primarily for SysML v2 use cases.
 
-Using the ANTRL4 parser coupled with a visitor pattern should be able to convert majority of cases.
+Many OCL constraints used in UML and especially SysML v2 are used to define derived properties and/or validation constraints.
+Any implementation of those metamodels will need to translate these OCL constraints into executable code.
+
+Using the ANTLR4 parser coupled with a visitor pattern should make it possible to convert the majority of cases.
+
+## References
+
+- ANTLR: https://www.antlr.org/
+- OMG SysML v2: https://www.omg.org/spec/SysML
+- OMG OCL: https://www.omg.org/spec/OCL
 
 ## License
 
