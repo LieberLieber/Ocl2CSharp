@@ -37,54 +37,6 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 [System.CLSCompliant(false)]
 public partial class OCLBaseListener : IOCLListener {
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="OCLParser.multipleContextSpecifications"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterMultipleContextSpecifications([NotNull] OCLParser.MultipleContextSpecificationsContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="OCLParser.multipleContextSpecifications"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitMultipleContextSpecifications([NotNull] OCLParser.MultipleContextSpecificationsContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="OCLParser.contextSpecification"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterContextSpecification([NotNull] OCLParser.ContextSpecificationContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="OCLParser.contextSpecification"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitContextSpecification([NotNull] OCLParser.ContextSpecificationContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="OCLParser.singleInvariant"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterSingleInvariant([NotNull] OCLParser.SingleInvariantContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="OCLParser.singleInvariant"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitSingleInvariant([NotNull] OCLParser.SingleInvariantContext context) { }
-	/// <summary>
-	/// Enter a parse tree produced by <see cref="OCLParser.singleDerivedAttribute"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterSingleDerivedAttribute([NotNull] OCLParser.SingleDerivedAttributeContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="OCLParser.singleDerivedAttribute"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitSingleDerivedAttribute([NotNull] OCLParser.SingleDerivedAttributeContext context) { }
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="OCLParser.type"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>

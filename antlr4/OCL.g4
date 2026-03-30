@@ -18,22 +18,6 @@
 
 grammar OCL;
 
-multipleContextSpecifications
-    : (singleInvariant | singleDerivedAttribute)+ EOF
-    ;
-
-contextSpecification
-    : (singleInvariant | singleDerivedAttribute) EOF
-    ;
-
-singleInvariant
-    : 'context' ID 'inv' ID? ':' expression
-    ;
-
-singleDerivedAttribute
-    : 'context' qualified_name ':' type ('init:' expression)? 'derive:' expression
-    ;
-
 type
     : 'Sequence' '(' type ')'
     | 'Set' '(' type ')'

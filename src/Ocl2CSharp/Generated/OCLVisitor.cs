@@ -33,30 +33,6 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CLSCompliant(false)]
 public interface IOCLVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="OCLParser.multipleContextSpecifications"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitMultipleContextSpecifications([NotNull] OCLParser.MultipleContextSpecificationsContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="OCLParser.contextSpecification"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitContextSpecification([NotNull] OCLParser.ContextSpecificationContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="OCLParser.singleInvariant"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitSingleInvariant([NotNull] OCLParser.SingleInvariantContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="OCLParser.singleDerivedAttribute"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitSingleDerivedAttribute([NotNull] OCLParser.SingleDerivedAttributeContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="OCLParser.type"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
