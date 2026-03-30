@@ -421,8 +421,8 @@ public class OclToCSharpConverterTests
     public void ParenthesizedExpression_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("(age + 1) > 0");
-        Assert.Equal("(age + 1) > 0", result);
-    }
+		Assert.Equal("(age + 1) > 0", result);
+	}
 
     // -------------------------------------------------------------------------
     // Chained operations
@@ -435,5 +435,13 @@ public class OclToCSharpConverterTests
         Assert.Contains(".Where(e => e.active == true)", result);
         Assert.Contains(".All(e => e.age >= 18)", result);
     }
+
+
+    [Fact]
+    public void SelectByKind_IsCoverted()
+    {
+		var result = OclToCSharpConverter.Convert("ownedMembership->selectByKind(VariantMembership)");
+		Assert.Equal("ownedMembership.OfType<VariantMembership>()", result);
+	}
 }
 

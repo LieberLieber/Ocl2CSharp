@@ -399,8 +399,9 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 			"equalsIgnoreCase" => $"{target}.Equals({Visit(context.expression(0))}, StringComparison.OrdinalIgnoreCase)",
 			"oclAsType" => $"(({Visit(context.expression(0))}){target})",
 			"at" => $"{target}.ElementAt({Visit(context.expression(0))} - 1)",
-			"oclIsTypeOf" => $"({target}.GetType() == typeof({Visit(context.expression(0))}))",
-			"oclIsKindOf" => $"({target} is {Visit(context.expression(0))})",
+			"selectByKind" or 
+			"oclIsTypeOf" or
+			"oclIsKindOf" => $"{target}.OfType<{Visit(context.expression(0))}>()",
 			"oclAsSet" => $"{target}.ToHashSet()",
 			"collect" => BuildCollectionOp(target, "Select", context),
 			"select" => BuildCollectionOp(target, "Where", context),
