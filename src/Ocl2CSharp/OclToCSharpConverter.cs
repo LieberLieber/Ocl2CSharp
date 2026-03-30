@@ -98,7 +98,9 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
     {
         var operands = context.equalityExpression();
         if (operands.Length == 1)
+        {
             return Visit(operands[0]);
+        }
 
         var sb = new StringBuilder(Visit(operands[0]));
         for (int i = 1; i < operands.Length; i++)
@@ -142,10 +144,6 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
             {
                 "=" => "==",
                 "/=" or "<>" => "!=",
-                "<" => "<",
-                ">" => ">",
-                ">=" => ">=",
-                "<=" => "<=",
                 ":" => "is",
                 "/:" => "is not",
                 "<:" => "/* subtype */",
@@ -222,11 +220,15 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
         var primary = Visit(context.primaryFactor());
         var suffixes = context.postfixSuffix();
         if (suffixes.Length == 0)
+        {
             return primary;
+        }
 
         var result = primary;
         foreach (var suffix in suffixes)
+        {
             result = ApplyPostfixSuffix(result, suffix);
+        }
         return result;
     }
 
