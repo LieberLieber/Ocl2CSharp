@@ -11,6 +11,7 @@ app.Configure(config =>
     config.AddExample("--expression", "\"age >= 0\"");
     config.AddExample("--expression", "\"employees->select(e | e.active = true)->notEmpty()\"");
     config.AddExample("--file", "constraints.ocl");
+    config.AddExample("--expression", "\"if age >= 18 then isAdult else isMinor endif\"", "--if-statement");
 });
 return app.Run(args);
 
@@ -32,6 +33,10 @@ internal sealed class ConvertCommand : Command<ConvertCommand.Settings>
         [Description("Output file path. If omitted, output is written to stdout.")]
         [CommandOption("-o|--output")]
         public string? OutputPath { get; init; }
+
+        [Description("Emit OCL if…then…else…endif as a multiline C# if/else statement instead of a ternary ?: expression.")]
+        [CommandOption("--if-statement")]
+        public bool UseIfStatement { get; init; }
     }
 
     public override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
@@ -64,7 +69,7 @@ internal sealed class ConvertCommand : Command<ConvertCommand.Settings>
         string csharpCode;
         try
         {
-            csharpCode = OclToCSharpConverter.Convert(oclCode);
+            csharpCode = OclToCSharpConverter.Convert(oclCode, settings.UseIfStatement);
         }
         catch (Exception ex)
         {

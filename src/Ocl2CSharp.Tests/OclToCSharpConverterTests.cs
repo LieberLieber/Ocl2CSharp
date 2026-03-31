@@ -152,6 +152,21 @@ public class OclToCSharpConverterTests
         Assert.Equal("(age >= 18 ? isAdult : isMinor)", result);
     }
 
+    [Fact]
+    public void ConditionalExpression_UseIfStatement_EmitsIfElseBlock()
+    {
+        var result = OclToCSharpConverter.Convert("if age >= 18 then isAdult else isMinor endif", useIfStatement: true);
+        Assert.Equal("if (age >= 18)\n{\n\treturn isAdult;\n}\nelse\n{\n\treturn isMinor;\n}", result);
+    }
+
+    [Fact]
+    public void ConditionalExpression_DefaultMode_EmitsTernary()
+    {
+        // Verify that the default (no second argument) still produces ternary output.
+        var result = OclToCSharpConverter.Convert("if x > 0 then positive else nonPositive endif");
+        Assert.Equal("(x > 0 ? positive : nonPositive)", result);
+    }
+
     // -------------------------------------------------------------------------
     // Literals
     // -------------------------------------------------------------------------
