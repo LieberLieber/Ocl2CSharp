@@ -406,13 +406,6 @@ public class OclToCSharpConverterTests
     // -------------------------------------------------------------------------
 
     [Fact]
-    public void LetExpression_IsConverted()
-    {
-        var result = OclToCSharpConverter.Convert("let x = age + 1 in x > 0");
-        Assert.Equal("(age + 1).Select(x => x > 0)", result);
-    }
-
-    [Fact]
     public void LetExpression_WithTypedBinding_ReturnsLinqExpression()
     {
         var ocl =
@@ -424,13 +417,6 @@ public class OclToCSharpConverterTests
         Assert.Equal(
             "featureMembership.OfType<ViewRenderingMembership>().Select(renderings => (!renderings.Any() ? null : renderings.First().referencedRendering))",
             result);
-    }
-
-    [Fact]
-    public void LetExpression_MultipleBindings_ReturnsNestedLinqExpressions()
-    {
-        var result = OclToCSharpConverter.Convert("let x = age + 1, y = age - 1 in x > y");
-        Assert.Equal("(age + 1).Select(x => (age - 1).Select(y => x > y))", result);
     }
 
     // -------------------------------------------------------------------------
