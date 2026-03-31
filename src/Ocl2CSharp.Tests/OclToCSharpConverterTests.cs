@@ -406,11 +406,17 @@ public class OclToCSharpConverterTests
     // -------------------------------------------------------------------------
 
     [Fact]
-    public void LetExpression_IsConverted()
+    public void LetExpression_WithTypedBinding_ReturnsLinqExpression()
     {
-        var result = OclToCSharpConverter.Convert("let x = age + 1 in x > 0");
-        Assert.Contains("var x = age + 1", result);
-        Assert.Contains("x > 0", result);
+        var ocl =
+            "let renderings: OrderedSet(ViewRenderingMembership) = " +
+            "featureMembership->selectByKind(ViewRenderingMembership) in " +
+            "if renderings->isEmpty() then null " +
+            "else renderings->first().referencedRendering endif";
+        var result = OclToCSharpConverter.Convert(ocl);
+        Assert.Equal(
+            "featureMembership.OfType<ViewRenderingMembership>().Select(renderings => (!renderings.Any() ? null : renderings.First().referencedRendering))",
+            result);
     }
 
     // -------------------------------------------------------------------------

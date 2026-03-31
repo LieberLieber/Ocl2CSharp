@@ -67,31 +67,27 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 	public override string VisitLetExpression(OCLParser.LetExpressionContext context)
 	{
 		// let var1 = expr1, var2 = expr2 in body
-		// Translate to immediately-invoked lambda style isn't practical in C#,
-		// so we emit a block with local variables (as a comment + inline expression for simple cases).
+		// Translate to chained LINQ Select calls:
+		//   expr1.Select(var1 => expr2.Select(var2 => body))
+		// The type annotation (if present) is omitted — the lambda parameter is inferred.
 		var bindings = context.letBinding();
-		var bodyExpr = Visit(context.expression());
-		if (bindings.Length == 1)
-		{
-			var binding = Visit(bindings[0]);
-			return $"(({binding}) => {bodyExpr})()";
-		}
+		var result = Visit(context.expression());
 
-		var parts = string.Join(", ", Array.ConvertAll(bindings, b => Visit(b)));
-		return $"/* let {parts} in */ {bodyExpr}";
-	}
-
-	public override string VisitLetBinding(OCLParser.LetBindingContext context)
-	{
-		// ID (':' type)? '=' expression
-		var name = context.ID().GetText();
-		var expr = Visit(context.expression());
-		if (context.type() != null)
+		// Iterate in reverse so that each outer binding wraps all inner ones,
+		// with the leftmost binding becoming the outermost Select call.
+		for (int i = bindings.Length - 1; i >= 0; i--)
 		{
-			var typeName = Visit(context.type());
-			return $"{typeName} {name} = {expr}";
+			var binding = bindings[i];
+			var name = binding.ID().GetText();
+			var initExpr = Visit(binding.expression());
+		// Wrap initExpr in parentheses when it's not already terminated by a grouping character,
+		// so that infix operators like '+' don't bind more tightly than '.Select(...)'.
+		var receiver = (initExpr.EndsWith(')') || initExpr.EndsWith(']') || initExpr.EndsWith('}'))
+			? initExpr
+			: $"({initExpr})";
+		result = $"{receiver}.Select({name} => {result})";
 		}
-		return $"var {name} = {expr}";
+		return result;
 	}
 
 	public override string VisitLogicalExpression(OCLParser.LogicalExpressionContext context)
