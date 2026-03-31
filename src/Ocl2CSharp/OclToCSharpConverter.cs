@@ -9,12 +9,32 @@ namespace Ocl2CSharp;
 /// </summary>
 public class OclToCSharpConverter : OCLBaseVisitor<string>
 {
+	private readonly bool _useIfStatement;
+
+	/// <summary>
+	/// Initializes a new instance of <see cref="OclToCSharpConverter"/>.
+	/// </summary>
+	/// <param name="useIfStatement">
+	/// When <see langword="true"/>, OCL <c>if…then…else…endif</c> expressions are emitted as
+	/// multiline C# <c>if</c>/<c>else</c> statements (suitable for use inside a method or property getter).
+	/// When <see langword="false"/> (the default), they are emitted as inline ternary <c>?:</c> expressions.
+	/// </param>
+	private OclToCSharpConverter(bool useIfStatement = false)
+	{
+		_useIfStatement = useIfStatement;
+	}
+
 	/// <summary>
 	/// Converts an OCL expression string to the equivalent C# expression.
 	/// </summary>
 	/// <param name="oclCode">The OCL expression text.</param>
+	/// <param name="useIfStatement">
+	/// When <see langword="true"/>, OCL <c>if…then…else…endif</c> expressions are emitted as
+	/// multiline C# <c>if</c>/<c>else</c> statements.
+	/// When <see langword="false"/> (the default), they are emitted as inline ternary <c>?:</c> expressions.
+	/// </param>
 	/// <returns>The equivalent C# expression as a string.</returns>
-	public static string Convert(string oclCode)
+	public static string Convert(string oclCode, bool useIfStatement = false)
 	{
 		var inputStream = new AntlrInputStream(oclCode);
 		var lexer = new OCLLexer(inputStream);
@@ -22,7 +42,7 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 		var parser = new OCLParser(tokenStream);
 
 		var tree = parser.expression();
-		var visitor = new OclToCSharpConverter();
+		var visitor = new OclToCSharpConverter(useIfStatement);
 		return visitor.Visit(tree);
 	}
 
@@ -61,6 +81,19 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 		var condition = Visit(context.expression(0));
 		var thenExpr = Visit(context.expression(1));
 		var elseExpr = Visit(context.expression(2));
+
+		if (_useIfStatement)
+		{
+			return $@"if ({condition})
+{{
+	return {thenExpr};
+}}
+else
+{{
+	return {elseExpr};
+}}";
+		}
+
 		return $"({condition} ? {thenExpr} : {elseExpr})";
 	}
 
