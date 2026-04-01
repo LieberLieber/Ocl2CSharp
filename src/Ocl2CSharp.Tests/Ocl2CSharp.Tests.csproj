@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Ocl2CSharp\Ocl2CSharp.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="../../testdata/SysML_OCL.txt" CopyToOutputDirectory="PreserveNewest" Link="SysML_OCL.txt" />
+  </ItemGroup>
+
 </Project>
