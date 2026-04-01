@@ -5,48 +5,86 @@ namespace Ocl2CSharp.Tests;
 public class SysMLOclConstraintTests
 {
     private static readonly string TestDataPath =
-        Path.Combine(AppContext.BaseDirectory, "SysML_OCL.txt");
+        Path.Combine(AppContext.BaseDirectory, "SysML_OCLAndCSharp.md");
 
     public static IEnumerable<object[]> GetSysMLOclRules()
     {
-        var lines = File.ReadAllLines(TestDataPath);
-        string? currentName = null;
-        var bodyLines = new List<string>();
+        var content = File.ReadAllText(TestDataPath);
+        var lines = content.Split('\n');
 
-        foreach (var line in lines)
+        string? currentName = null;
+        string? oclCode = null;
+        string? expectedCSharp = null;
+        var blockLines = new List<string>();
+        string? currentSection = null; // "OCL" or "CSharp"
+        bool inCodeBlock = false;
+
+        foreach (var rawLine in lines)
         {
+            var line = rawLine.TrimEnd('\r');
+
             if (line.StartsWith("# ", StringComparison.Ordinal))
             {
-                if (currentName != null)
-                    yield return [currentName, string.Join("\n", bodyLines).Trim()];
+                // Emit previous rule if complete
+                if (currentName != null && oclCode != null && expectedCSharp != null)
+                    yield return [currentName, oclCode, expectedCSharp];
 
                 currentName = line[2..].Trim();
-                bodyLines.Clear();
+                oclCode = null;
+                expectedCSharp = null;
+                currentSection = null;
+                inCodeBlock = false;
+                blockLines.Clear();
             }
-            else
+            else if (line.TrimStart().StartsWith("### OCL", StringComparison.Ordinal))
             {
-                bodyLines.Add(line);
+                currentSection = "OCL";
+                inCodeBlock = false;
+                blockLines.Clear();
+            }
+            else if (line.TrimStart().StartsWith("### C#", StringComparison.Ordinal))
+            {
+                currentSection = "CSharp";
+                inCodeBlock = false;
+                blockLines.Clear();
+            }
+            else if (line.TrimStart().StartsWith("```", StringComparison.Ordinal))
+            {
+                if (!inCodeBlock)
+                {
+                    inCodeBlock = true;
+                }
+                else
+                {
+                    // End of code block
+                    var code = string.Join("\n", blockLines).Trim();
+                    if (currentSection == "OCL")
+                        oclCode = code;
+                    else if (currentSection == "CSharp")
+                        expectedCSharp = code;
+                    inCodeBlock = false;
+                    blockLines.Clear();
+                }
+            }
+            else if (inCodeBlock)
+            {
+                blockLines.Add(line);
             }
         }
 
-        if (currentName != null)
-            yield return [currentName, string.Join("\n", bodyLines).Trim()];
+        // Emit last rule
+        if (currentName != null && oclCode != null && expectedCSharp != null)
+            yield return [currentName, oclCode, expectedCSharp];
     }
 
     [Theory]
     [MemberData(nameof(GetSysMLOclRules))]
-    public void SysMLRule_CanBeConverted(string ruleName, string oclCode)
+    public void SysMLRule_ProducesExpectedCSharp(string ruleName, string oclCode, string expectedCSharp)
     {
-        // Skip rules that are not yet defined
-        if (string.IsNullOrWhiteSpace(oclCode) || oclCode.Trim() == "TBD")
-            return;
+        _ = ruleName; // used as the theory display name
 
-        // Act – must not throw
         var result = OclToCSharpConverter.Convert(oclCode);
 
-        // Assert – a non-empty C# expression must be produced
-        Assert.NotNull(result);
-        Assert.NotEmpty(result);
-        _ = ruleName; // used as the theory display name
+        Assert.Equal(expectedCSharp, result);
     }
 }

@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="../../testdata/SysML_OCL.txt" CopyToOutputDirectory="PreserveNewest" Link="SysML_OCL.txt" />
+    <Content Include="../../testdata/SysML_OCLAndCSharp.md" CopyToOutputDirectory="PreserveNewest" Link="SysML_OCLAndCSharp.md" />
   </ItemGroup>
 
 </Project>
