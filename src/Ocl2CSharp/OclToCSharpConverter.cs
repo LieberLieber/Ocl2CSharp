@@ -122,12 +122,12 @@ else
 			var binding = bindings[i];
 			var name = binding.ID().GetText();
 			var initExpr = Visit(binding.expression());
-		// Wrap initExpr in parentheses when it's not already terminated by a grouping character,
-		// so that infix operators like '+' don't bind more tightly than '.Select(...)'.
-		var receiver = (initExpr.EndsWith(')') || initExpr.EndsWith(']') || initExpr.EndsWith('}'))
-			? initExpr
-			: $"({initExpr})";
-		result = $"{receiver}.Select({name} => {result})";
+			// Wrap initExpr in parentheses when it's not already terminated by a grouping character,
+			// so that infix operators like '+' don't bind more tightly than '.Select(...)'.
+			var receiver = (initExpr.EndsWith(')') || initExpr.EndsWith(']') || initExpr.EndsWith('}'))
+				? initExpr
+				: $"({initExpr})";
+			result = $"{receiver}.Select({name} => {result})";
 		}
 		return result;
 	}
@@ -380,6 +380,7 @@ else
 				"oclIsInvalid" => $"({target} == null)",
 				"oclIsNew" => $"/* oclIsNew({target}) */",
 				"oclAsSet" => $"new HashSet<dynamic> {{ {target} }}",
+				"oclIsType" => $"({target} is {Visit(context.expression(0))})",
 				"oclIsTypeOf" => $"({target}.GetType() == typeof({Visit(context.expression(0))}))",
 				"oclIsKindOf" => $"({target} is {Visit(context.expression(0))})",
 				"oclIsType" => $"{target} is {Visit(context.expression(0))}",
@@ -439,7 +440,8 @@ else
 			"equalsIgnoreCase" => $"{target}.Equals({Visit(context.expression(0))}, StringComparison.OrdinalIgnoreCase)",
 			"oclAsType" => $"(({Visit(context.expression(0))}){target})",
 			"at" => $"{target}.ElementAt({Visit(context.expression(0))} - 1)",
-			"selectByKind" or 
+			"oclIsType" => $"({target} is {Visit(context.expression(0))})",
+			"selectByKind" or
 			"oclIsTypeOf" or
 			"oclIsKindOf" => $"{target}.OfType<{Visit(context.expression(0))}>()",
 			"oclAsSet" => $"{target}.ToHashSet()",
