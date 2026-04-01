@@ -1,0 +1,29 @@
+# VariantMemberships
+ownedMembership->selectByKind(VariantMembership)
+
+# ViewRendering
+let renderings: OrderedSet(ViewRenderingMembership) = featureMembership->selectByKind(ViewRenderingMembership) in if renderings->isEmpty() then null else renderings->first().referencedRendering endif
+
+# AllFeaturesHaveType
+ownedFeature->forAll(f | f.type->notEmpty())
+
+# MemberNamesUnique
+member->isUnique(m | m.name)
+
+# OwnedRelationshipsValid
+ownedRelationship->forAll(r | r.owner = self)
+
+# DirectedFeaturesHaveDirection
+directedFeature->forAll(df | df.direction <> null)
+
+# OwnedMembershipNotEmpty
+ownedMembership->notEmpty()
+
+# OwnedFeatureCount
+ownedFeature->size() >= 0
+
+# FeatureDirectionConsistency
+if isEnd then direction <> null else direction = null endif
+
+# ConnectorEndCount
+connectorEnd->size() >= 2
