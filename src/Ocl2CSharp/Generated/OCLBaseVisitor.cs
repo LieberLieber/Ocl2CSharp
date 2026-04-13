@@ -19,6 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
+namespace Ocl2CSharp {
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using IToken = Antlr4.Runtime.IToken;
@@ -235,3 +236,4 @@ public partial class OCLBaseVisitor<Result> : AbstractParseTreeVisitor<Result>, 
 	/// <return>The visitor result.</return>
 	public virtual Result VisitQualified_name([NotNull] OCLParser.Qualified_nameContext context) { return VisitChildren(context); }
 }
+} // namespace Ocl2CSharp
