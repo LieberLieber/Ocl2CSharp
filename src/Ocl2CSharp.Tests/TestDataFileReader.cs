@@ -15,7 +15,7 @@
 			var lines = File.ReadAllLines(filename);
 			var currentlyReading = Reading.None;
 			var data = new TestData();
-
+		
 			foreach (var line in lines)
 			{
 
@@ -35,6 +35,11 @@
 				}
 
 
+				if (line.Trim().StartsWith("If statement", StringComparison.OrdinalIgnoreCase))
+				{
+					data.GenerateIfStatement = true;
+				}
+
 				if (line.TrimStart().StartsWith("```"))
 				{
 					currentlyReading = Reading.None;
@@ -53,10 +58,10 @@
 				switch (currentlyReading)
 				{
 					case Reading.Ocl:
-						data.Ocl += line;
+						data.Ocl += $" {line}";
 						break;
 					case Reading.CSharp:
-						data.CSharp += line;
+						data.CSharp += $" {line}";
 						break;
 				}
 

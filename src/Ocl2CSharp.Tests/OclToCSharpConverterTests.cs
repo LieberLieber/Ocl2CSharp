@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using Ocl2CSharp;
 
 namespace Ocl2CSharp.Tests;
@@ -8,419 +9,419 @@ public class OclToCSharpConverterTests
     // Logical operators
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void LogicalAnd_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("age >= 0 and age <= 150");
-        Assert.Equal("age >= 0 && age <= 150", result);
+        Assert.AreEqual("age >= 0 && age <= 150", result);
     }
 
-    [Fact]
+    [Test]
     public void LogicalAnd_Ampersand_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("age >= 0 & age <= 150");
-        Assert.Equal("age >= 0 && age <= 150", result);
+        Assert.AreEqual("age >= 0 && age <= 150", result);
     }
 
-    [Fact]
+    [Test]
     public void LogicalOr_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("email <> null or phone <> null");
-        Assert.Equal("email != null || phone != null", result);
+        Assert.AreEqual("email != null || phone != null", result);
     }
 
-    [Fact]
+    [Test]
     public void LogicalXor_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("a or b xor c");
-        Assert.Contains("^", result);
+        Assert.That(result, Does.Contain("^"));
     }
 
-    [Fact]
+    [Test]
     public void ImpliesOperator_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("age >= 18 implies canVote = true");
-        Assert.Contains("!(age >= 18)", result);
-        Assert.Contains("canVote == true", result);
+        Assert.That(result, Does.Contain("!(age >= 18)"));
+        Assert.That(result, Does.Contain("canVote == true"));
     }
 
-    [Fact]
+    [Test]
     public void ImpliesArrow_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("age >= 18 => canVote = true");
-        Assert.Contains("!(age >= 18)", result);
-        Assert.Contains("canVote == true", result);
+        Assert.That(result, Does.Contain("!(age >= 18)"));
+        Assert.That(result, Does.Contain("canVote == true"));
     }
 
     // -------------------------------------------------------------------------
     // Equality / comparison operators
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void Equality_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("name = 'Alice'");
-        Assert.Equal("name == \"Alice\"", result);
+        Assert.AreEqual("name == \"Alice\"", result);
     }
 
-    [Fact]
+    [Test]
     public void Inequality_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("name <> null");
-        Assert.Equal("name != null", result);
+        Assert.AreEqual("name != null", result);
     }
 
-    [Fact]
+    [Test]
     public void Inequality_SlashEquals_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("value /= 0");
-        Assert.Equal("value != 0", result);
+        Assert.AreEqual("value != 0", result);
     }
 
-    [Fact]
+    [Test]
     public void LessThan_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("age < 18");
-        Assert.Equal("age < 18", result);
+        Assert.AreEqual("age < 18", result);
     }
 
-    [Fact]
+    [Test]
     public void GreaterThanOrEqual_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("age >= 0");
-        Assert.Equal("age >= 0", result);
+        Assert.AreEqual("age >= 0", result);
     }
 
     // -------------------------------------------------------------------------
     // Arithmetic operators
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void Addition_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("balance + interest >= 0");
-        Assert.Equal("balance + interest >= 0", result);
+        Assert.AreEqual("balance + interest >= 0", result);
     }
 
-    [Fact]
+    [Test]
     public void Multiplication_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("balance * rate > 0");
-        Assert.Equal("balance * rate > 0", result);
+        Assert.AreEqual("balance * rate > 0", result);
     }
 
-    [Fact]
+    [Test]
     public void ModOperator_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("balance mod 2 = 0");
-        Assert.Equal("balance % 2 == 0", result);
+        Assert.AreEqual("balance % 2 == 0", result);
     }
 
-    [Fact]
+    [Test]
     public void DivOperator_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("total div numItems > 0");
-        Assert.Equal("total / numItems > 0", result);
+        Assert.AreEqual("total / numItems > 0", result);
     }
 
     // -------------------------------------------------------------------------
     // Unary operators
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void NotOperator_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("not active");
-        Assert.Equal("!active", result);
+        Assert.AreEqual("!active", result);
     }
 
-    [Fact]
+    [Test]
     public void UnaryMinus_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("-balance > 0");
-        Assert.Equal("-balance > 0", result);
+        Assert.AreEqual("-balance > 0", result);
     }
 
     // -------------------------------------------------------------------------
     // Conditional expression
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void ConditionalExpression_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("if age >= 18 then isAdult else isMinor endif");
-        Assert.Equal("(age >= 18 ? isAdult : isMinor)", result);
+        Assert.AreEqual("(age >= 18 ? isAdult : isMinor)", result);
     }
 
-    [Fact]
+    [Test]
     public void ConditionalExpression_UseIfStatement_EmitsIfElseBlock()
     {
         var result = OclToCSharpConverter.Convert("if age >= 18 then isAdult else isMinor endif", useIfStatement: true).Replace("\r", "");
         Assert.Equal("if (age >= 18)\n{\n\treturn isAdult;\n}\nelse\n{\n\treturn isMinor;\n}", result);
     }
 
-    [Fact]
+    [Test]
     public void ConditionalExpression_DefaultMode_EmitsTernary()
     {
         // Verify that the default (no second argument) still produces ternary output.
         var result = OclToCSharpConverter.Convert("if x > 0 then positive else nonPositive endif");
-        Assert.Equal("(x > 0 ? positive : nonPositive)", result);
+        Assert.AreEqual("(x > 0 ? positive : nonPositive)", result);
     }
 
     // -------------------------------------------------------------------------
     // Literals
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void NullLiteral_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("name <> null");
-        Assert.Equal("name != null", result);
+        Assert.AreEqual("name != null", result);
     }
 
-    [Fact]
+    [Test]
     public void BooleanLiteralTrue_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("active = true");
-        Assert.Equal("active == true", result);
+        Assert.AreEqual("active == true", result);
     }
 
-    [Fact]
+    [Test]
     public void BooleanLiteralFalse_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("active = false");
-        Assert.Equal("active == false", result);
+        Assert.AreEqual("active == false", result);
     }
 
-    [Fact]
+    [Test]
     public void IntLiteral_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("balance > 0");
-        Assert.Equal("balance > 0", result);
+        Assert.AreEqual("balance > 0", result);
     }
 
-    [Fact]
+    [Test]
     public void StringLiteralSingleQuote_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("name = 'Alice'");
-        Assert.Equal("name == \"Alice\"", result);
+        Assert.AreEqual("name == \"Alice\"", result);
     }
 
-    [Fact]
+    [Test]
     public void StringLiteralDoubleQuote_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("name = \"Alice\"");
-        Assert.Equal("name == \"Alice\"", result);
+        Assert.AreEqual("name == \"Alice\"", result);
     }
 
-    [Fact]
+    [Test]
     public void EnumerationLiteral_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("status = Status::Active");
-        Assert.Equal("status == Status.Active", result);
+        Assert.AreEqual("status == Status.Active", result);
     }
 
     // -------------------------------------------------------------------------
     // Navigation / member access
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void MemberAccess_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("ceo.name <> null");
-        Assert.Equal("ceo.name != null", result);
+        Assert.AreEqual("ceo.name != null", result);
     }
 
-    [Fact]
+    [Test]
     public void NestedMemberAccess_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("company.ceo.name <> null");
-        Assert.Equal("company.ceo.name != null", result);
+        Assert.AreEqual("company.ceo.name != null", result);
     }
 
     // -------------------------------------------------------------------------
     // Collection operations — arrow (->)
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void SelectOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("employees->select(e | e.age >= 18)->notEmpty()");
-        Assert.Contains(".Where(e => e.age >= 18)", result);
-        Assert.Contains(".Any()", result);
+        Assert.That(result, Does.Contain(".Where(e => e.age >= 18)"));
+        Assert.That(result, Does.Contain(".Any()"));
     }
 
-    [Fact]
+    [Test]
     public void ForAllOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("employees->forAll(e | e.age >= 18)");
-        Assert.Equal("employees.All(e => e.age >= 18)", result);
+        Assert.AreEqual("employees.All(e => e.age >= 18)", result);
     }
 
-    [Fact]
+    [Test]
     public void ExistsOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("employees->exists(e | e.role = 'CEO')");
-        Assert.Equal("employees.Any(e => e.role == \"CEO\")", result);
+        Assert.AreEqual("employees.Any(e => e.role == \"CEO\")", result);
     }
 
-    [Fact]
+    [Test]
     public void CollectOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("employees->collect(e | e.name)->notEmpty()");
-        Assert.Contains(".Select(e => e.name)", result);
-        Assert.Contains(".Any()", result);
+        Assert.That(result, Does.Contain(".Select(e => e.name)"));
+        Assert.That(result, Does.Contain(".Any()"));
     }
 
-    [Fact]
+    [Test]
     public void SizeOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("employees->size() > 0");
-        Assert.Equal("employees.Count() > 0", result);
+        Assert.AreEqual("employees.Count() > 0", result);
     }
 
-    [Fact]
+    [Test]
     public void IsEmptyOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("contracts->isEmpty()");
-        Assert.Equal("!contracts.Any()", result);
+        Assert.AreEqual("!contracts.Any()", result);
     }
 
-    [Fact]
+    [Test]
     public void NotEmptyOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("contracts->notEmpty()");
-        Assert.Equal("contracts.Any()", result);
+        Assert.AreEqual("contracts.Any()", result);
     }
 
-    [Fact]
+    [Test]
     public void IncludesOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("employees->includes(alice)");
-        Assert.Equal("employees.Contains(alice)", result);
+        Assert.AreEqual("employees.Contains(alice)", result);
     }
 
-    [Fact]
+    [Test]
     public void ExcludesOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("employees->excludes(alice)");
-        Assert.Equal("!employees.Contains(alice)", result);
+        Assert.AreEqual("!employees.Contains(alice)", result);
     }
 
-    [Fact]
+    [Test]
     public void SumOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("salaries->sum() > 0");
-        Assert.Equal("salaries.Sum() > 0", result);
+        Assert.AreEqual("salaries.Sum() > 0", result);
     }
 
-    [Fact]
+    [Test]
     public void MaxOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("scores->max()");
-        Assert.Equal("scores.Max()", result);
+        Assert.AreEqual("scores.Max()", result);
     }
 
-    [Fact]
+    [Test]
     public void MinOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("scores->min()");
-        Assert.Equal("scores.Min()", result);
+        Assert.AreEqual("scores.Min()", result);
     }
 
-    [Fact]
+    [Test]
     public void RejectOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("employees->reject(e | e.age < 18)->isEmpty()");
-        Assert.Contains(".Where(e => !(e.age < 18))", result);
-        Assert.Contains("!employees", result);
+        Assert.That(result, Does.Contain(".Where(e => !(e.age < 18))"));
+        Assert.That(result, Does.Contain("!employees"));
     }
 
-    [Fact]
+    [Test]
     public void AsSetOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("items->asSet()");
-        Assert.Equal("items.ToHashSet()", result);
+        Assert.AreEqual("items.ToHashSet()", result);
     }
 
-    [Fact]
+    [Test]
     public void AsSequenceOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("items->asSequence()");
-        Assert.Equal("items.ToList()", result);
+        Assert.AreEqual("items.ToList()", result);
     }
 
-    [Fact]
+    [Test]
     public void ToUpperCaseOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("name->toUpperCase()");
-        Assert.Equal("name.ToUpper()", result);
+        Assert.AreEqual("name.ToUpper()", result);
     }
 
-    [Fact]
+    [Test]
     public void ToLowerCaseOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("name->toLowerCase()");
-        Assert.Equal("name.ToLower()", result);
+        Assert.AreEqual("name.ToLower()", result);
     }
 
-    [Fact]
+    [Test]
     public void ToIntegerOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("value->toInteger()");
-        Assert.Equal("Convert.ToInt32(value)", result);
+        Assert.AreEqual("Convert.ToInt32(value)", result);
     }
 
     // -------------------------------------------------------------------------
     // Dot (.) OCL operations
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void OclIsUndefined_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("name.oclIsUndefined() = false");
-        Assert.Equal("(name == null) == false", result);
+        Assert.AreEqual("(name == null) == false", result);
     }
 
-    [Fact]
+    [Test]
     public void OclIsKindOf_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("obj.oclIsKindOf(Person)");
-        Assert.Equal("(obj is Person)", result);
+        Assert.AreEqual("(obj is Person)", result);
     }
 
     // -------------------------------------------------------------------------
     // Collection literals
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void SetLiteral_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("Set{1, 2, 3}->includes(status)");
-        Assert.Contains("new HashSet<dynamic>", result);
-        Assert.Contains(".Contains(status)", result);
+        Assert.That(result, Does.Contain("new HashSet<dynamic>"));
+        Assert.That(result, Does.Contain(".Contains(status)"));
     }
 
-    [Fact]
+    [Test]
     public void SequenceLiteral_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("Sequence{1, 2, 3}->size() > 0");
-        Assert.Contains("new List<dynamic>", result);
-        Assert.Contains(".Count()", result);
+        Assert.That(result, Does.Contain("new List<dynamic>"));
+        Assert.That(result, Does.Contain(".Count()"));
     }
 
-    [Fact]
+    [Test]
     public void BagLiteral_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("Bag{1, 2, 3}->size() > 0");
-        Assert.Contains("new List<dynamic>", result);
+        Assert.That(result, Does.Contain("new List<dynamic>"));
     }
 
     // -------------------------------------------------------------------------
     // Let expressions
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void LetExpression_WithTypedBinding_ReturnsLinqExpression()
     {
         var ocl =
@@ -429,7 +430,7 @@ public class OclToCSharpConverterTests
             "if renderings->isEmpty() then null " +
             "else renderings->first().referencedRendering endif";
         var result = OclToCSharpConverter.Convert(ocl);
-        Assert.Equal(
+        Assert.AreEqual(
             "featureMembership.OfType<ViewRenderingMembership>().Select(renderings => (!renderings.Any() ? null : renderings.First().referencedRendering))",
             result);
     }
@@ -438,31 +439,31 @@ public class OclToCSharpConverterTests
     // Parenthesized expression
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void ParenthesizedExpression_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("(age + 1) > 0");
-		Assert.Equal("(age + 1) > 0", result);
+		Assert.AreEqual("(age + 1) > 0", result);
 	}
 
     // -------------------------------------------------------------------------
     // Chained operations
     // -------------------------------------------------------------------------
 
-    [Fact]
+    [Test]
     public void ChainedSelectAndForAll_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("employees->select(e | e.active = true)->forAll(e | e.age >= 18)");
-        Assert.Contains(".Where(e => e.active == true)", result);
-        Assert.Contains(".All(e => e.age >= 18)", result);
+        Assert.That(result, Does.Contain(".Where(e => e.active == true)"));
+        Assert.That(result, Does.Contain(".All(e => e.age >= 18)"));
     }
 
 
-    [Fact]
+    [Test]
     public void SelectByKind_IsCoverted()
     {
 		var result = OclToCSharpConverter.Convert("ownedMembership->selectByKind(VariantMembership)");
-		Assert.Equal("ownedMembership.OfType<VariantMembership>()", result);
+		Assert.AreEqual("ownedMembership.OfType<VariantMembership>()", result);
 	}
 
 

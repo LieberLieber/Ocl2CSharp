@@ -1,5 +1,6 @@
 using System.Text;
 using Antlr4.Runtime;
+using Antlr4.Runtime.Misc;
 
 namespace Ocl2CSharp;
 
@@ -113,7 +114,11 @@ else
 		//   expr1.Select(var1 => expr2.Select(var2 => body))
 		// The type annotation (if present) is omitted — the lambda parameter is inferred.
 		var bindings = context.letBinding();
-		var result = Visit(context.expression());
+		string result = "NOTHING";
+		if (context.expression() != null)
+		{
+			result = Visit(context.expression());
+		}
 
 		// Iterate in reverse so that each outer binding wraps all inner ones,
 		// with the leftmost binding becoming the outermost Select call.
@@ -325,7 +330,10 @@ else
 		if (nestedBasic == null)
 		{
 			// ID or '(' expression ')'
-			if (context.ID() != null) return context.ID().GetText();
+			if (context.identifier() != null)
+			{
+				return Visit(context.identifier()); ;
+			}
 			// parenthesized expression
 			if (context.expression() != null)
 				return $"({Visit(context.expression())})";
@@ -337,7 +345,7 @@ else
 			if (sep == ".")
 			{
 				// member access: basicExpression '.' ID
-				return $"{baseExpr}.{context.ID().GetText()}";
+				return $"{baseExpr}.{context.identifier().ID().GetText()}";
 			}
 			if (sep == "(")
 			{
@@ -381,7 +389,7 @@ else
 				"oclIsNew" => $"/* oclIsNew({target}) */",
 				"oclAsSet" => $"new HashSet<dynamic> {{ {target} }}",
 				"oclIsType" => $"({target} is {Visit(context.expression(0))})",
-				"oclIsTypeOf" => $"({target}.GetType() == typeof({Visit(context.expression(0))}))",
+				"oclIsTypeOf" => $"({target} is {Visit(context.expression(0))})",
 				"oclIsKindOf" => $"({target} is {Visit(context.expression(0))})",
 				"oclIsType" => $"{target} is {Visit(context.expression(0))}",
 				"oclAsType" => BuildOclAsType(target, context),
@@ -439,7 +447,7 @@ else
 			"indexOf" => $"{target}.ToList().IndexOf({Visit(context.expression(0))})",
 			"equalsIgnoreCase" => $"{target}.Equals({Visit(context.expression(0))}, StringComparison.OrdinalIgnoreCase)",
 			"oclAsType" => $"(({Visit(context.expression(0))}){target})",
-			"at" => $"{target}.ElementAt({Visit(context.expression(0))} - 1)",
+			"at" => $"{target}.ElementAt({ItemIndex(Visit(context.expression(0)))})",
 			"oclIsType" => $"({target} is {Visit(context.expression(0))})",
 			"selectByKind" or
 			"oclIsTypeOf" or
@@ -463,6 +471,16 @@ else
 	// -------------------------------------------------------------------------
 	// Postfix helper methods
 	// -------------------------------------------------------------------------
+
+	private string ItemIndex(string index)
+	{
+		return index switch
+		{
+			"1" => "0",
+			"2" => "1",
+			_ => $"{index} - 1"
+		};
+	}
 
 	private string BuildOclAsType(string target, OCLParser.PostfixSuffixContext context)
 	{
@@ -726,7 +744,12 @@ else
 
 	public override string VisitIdentifier(OCLParser.IdentifierContext context)
 	{
-		return context.ID().GetText();
+		var tmp = context.ID().GetText();
+		if (tmp == "self")
+		{
+			return "this";
+		}
+		return tmp;
 	}
 
 	public override string VisitQualified_name(OCLParser.Qualified_nameContext context)

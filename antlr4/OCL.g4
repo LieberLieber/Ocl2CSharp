@@ -52,11 +52,10 @@ letBinding
     : ID (':' type)? '=' expression
     ;
 
-
 basicExpression
     : NULL_LITERAL
     | BOOLEAN_LITERAL
-    | basicExpression '.' ID
+    | basicExpression '.' identifier
     | basicExpression '(' expressionList? ')'
     | basicExpression '[' expression ']'
     | INT
@@ -64,7 +63,7 @@ basicExpression
     | STRING1_LITERAL
     | STRING2_LITERAL
     | ENUMERATION_LITERAL
-    | ID
+    | identifier
     | '(' expression ')'
     ;
 
@@ -112,6 +111,7 @@ postfixSuffix
     | '.' 'oclIsInvalid' '(' ')'
     | '.' 'oclIsNew' '(' ')'
     | '.' 'oclAsSet' '(' ')'
+    | '.' 'oclIsType' '(' expression ')'
     | '.' 'oclIsTypeOf' '(' expression ')'
     | '.' 'oclIsKindOf' '(' expression ')'
     | '.' 'oclIsType' '(' expression ')'
@@ -169,7 +169,7 @@ postfixSuffix
       ) '(' expression ')'
     | '->' 'equalsIgnoreCase' '(' expression ')'
     | '->' ('oclAsType' | 'at') '(' expression ')' ('.' ID)?
-    | '->' ('oclIsTypeOf' | 'oclIsKindOf' | 'oclAsSet') '(' expression ')'
+    | '->' ('oclIsType' | 'oclIsTypeOf' | 'oclIsKindOf' | 'oclAsSet') '(' expression ')'
     | '->' 'collect' '(' (identOptType '|')? expression ')'
     | '->' 'select' '(' (identOptType '|')? expression ')'
     | '->' 'reject' '(' (identOptType '|')? expression ')'

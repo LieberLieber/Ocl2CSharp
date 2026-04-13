@@ -1,5 +1,8 @@
+using NUnit.Framework;
+
 namespace Ocl2CSharp.Tests;
 
+[TestFixture]
 public class SysMLOclConstraintTests
 {
 	private static readonly string TestDataPath =
@@ -13,14 +16,12 @@ public class SysMLOclConstraintTests
 		}
 	}
 
-	[Theory]
-	[MemberData(nameof(GetSysMLOclRules))]
+	[Test]
+	[TestCaseSource(nameof(GetSysMLOclRules))]
 	public void SysMLRule_ProducesExpectedCSharp(TestData data)
 	{
-		_ = data.Name; // used as the theory display name
+		var result = OclToCSharpConverter.Convert(data.Ocl, data.GenerateIfStatement).Trim();
 
-		var result = OclToCSharpConverter.Convert(data.Ocl);
-
-		Assert.Equal(data.CSharp, result);
+		Assert.That(result, Is.EqualTo(data.CSharp.Trim()));
 	}
 }
