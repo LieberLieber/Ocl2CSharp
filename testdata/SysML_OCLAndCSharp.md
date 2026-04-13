@@ -27,7 +27,7 @@ owningType.oclIsType(CaseUsage)
 ```
 ### C#
 ``` CSharp 
-owningType is RequirementDefinition || owningType is RequiremenCaseRequirementDefinition) || owningType is CaseDefinition || owningType is CaseUsage
+owningType is RequirementDefinition || owningType is RequiremenCaseRequirementDefinition || owningType is CaseDefinition || owningType is CaseUsage
 ```
 # DeriveFeatureReferenceExpressionReferent
 ### OCL
@@ -43,7 +43,7 @@ referent =
 ```
 ### C#
 ``` CSharp 
-referent == nonParameterMemberships is (Membership) == ownedMembership.Where(it => !((ParameterMembership)))
+referent == ownedMembership.Where(it => !((ParameterMembership))).Select(nonParameterMemberships => (!nonParameterMemberships.Any() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))
 ```
 # DeriveTypeOwnedIntersecting
 ### OCL
@@ -129,7 +129,7 @@ subjectParameter =
 ```
 ### C#
 ``` CSharp 
-subjectParameter ==  featureMembership.OfType<SubjectMembership>().Select(subjectMems => !subjectMems.Any() ? null : subjectMems.First().ownedSubjectParameter
+subjectParameter == featureMembership.OfType<SubjectMembership>().Select(subjectMems => (!subjectMems.Any() ? null : subjectMems.First().ownedSubjectParameter))
 ```
 # DeriveDefinitionOwnedConnection
 ### OCL
@@ -176,7 +176,7 @@ instantiatedType = instantiatedType()
 ```
 ### C#
 ``` CSharp 
-instantiatedType = instantiatedType()
+instantiatedType == instantiatedType()
 ```
 # ValidateConnectorBinarySpecialization
 ### OCL
@@ -245,7 +245,7 @@ targetFeature =
 ```
 ### C#
 ``` CSharp 
-targetFeature == nonParameterMemberships is (Membership) == ownedMembership.Where(it => !((ParameterMembership)))
+targetFeature == ownedMembership.Where(it => !((ParameterMembership))).Select(nonParameterMemberships => (!nonParameterMemberships.Any() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))
 ```
 # DeriveUsageNestedAllocation
 ### OCL
@@ -288,7 +288,7 @@ annotatingElement =
 ```
 ### C#
 ``` CSharp 
-annotatingElement == ownedAnnotatingElement != null
+annotatingElement == (ownedAnnotatingElement != null ? ownedAnnotatingElement : owningAnnotatingElement)
 ```
 # DeriveStepBehavior
 ### OCL
@@ -488,7 +488,7 @@ ownedAnnotatingElement =
 ```
 ### C#
 ``` CSharp 
-ownedAnnotatingElement == ownedAnnotatingElements is (AnnotatingElement) == ownedRelatedElement.OfType<AnnotatingElement>()
+ownedAnnotatingElement == ownedRelatedElement.OfType<AnnotatingElement>().Select(ownedAnnotatingElements => (!ownedAnnotatingElements.Any() ? null : ownedAnnotatingElements.First()))
 ```
 # DeriveAllocationDefinitionAllocation
 ### OCL
@@ -553,7 +553,7 @@ owningNamespace =
 ```
 ### C#
 ``` CSharp 
-owningNamespace == owningMembership == null
+owningNamespace == (owningMembership == null ? null : owningMembership.membershipOwningNamespace)
 ```
 # DeriveUsageNestedPart
 ### OCL
@@ -596,7 +596,7 @@ ownedConjugator =
 ```
 ### C#
 ``` CSharp 
-ownedConjugator == ownedConjugators is (Conjugator) == ownedRelationship.OfType<Conjugation>()
+ownedConjugator == ownedRelationship.OfType<Conjugation>().Select(ownedConjugators => (!ownedConjugators.Any() ? null : ownedConjugators.ElementAt(1 - 1)))
 ```
 # ValidateActorMembershipOwningType
 ### OCL
@@ -623,7 +623,7 @@ verifiedRequirement =
 ```
 ### C#
 ``` CSharp 
-verifiedRequirement == objectiveRequirement == null
+verifiedRequirement == (objectiveRequirement == null ? new List<dynamic> {  } : objectiveRequirement.featureMembership.OfType<RequirementVerificationMembership>().Distinct().ToHashSet())
 ```
 # CheckConcernUsageFramedConcernSpecialization
 ### OCL
@@ -736,7 +736,7 @@ referencedRendering =
 ```
 ### C#
 ``` CSharp 
-referencedRendering == referencedFeature is Feature == ownedRendering.referencedFeatureTarget()
+referencedRendering == ownedRendering.referencedFeatureTarget().Select(referencedFeature => (referencedFeature == null ? ownedRendering : ((referencedFeature is RenderingUsage) ? ((RenderingUsage)refrencedFeature) : null)))
 ```
 # ValidateFeatureOwnedReferenceSubsetting
 ### OCL

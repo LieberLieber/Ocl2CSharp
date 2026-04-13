@@ -72,6 +72,15 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 
 	public override string VisitExpression(OCLParser.ExpressionContext context)
 	{
+		// Derivation form: ID '=' letExpression  or  ID '=' conditionalExpression
+		if (context.ID() != null)
+		{
+			var id = context.ID().GetText();
+			if (context.letExpression() != null)
+				return $"{id} == {Visit(context.letExpression())}";
+			if (context.conditionalExpression() != null)
+				return $"{id} == {Visit(context.conditionalExpression())}";
+		}
 		return VisitChildren(context) ?? string.Empty;
 	}
 
@@ -373,12 +382,14 @@ else
 				"oclAsSet" => $"new HashSet<dynamic> {{ {target} }}",
 				"oclIsTypeOf" => $"({target}.GetType() == typeof({Visit(context.expression(0))}))",
 				"oclIsKindOf" => $"({target} is {Visit(context.expression(0))})",
+				"oclIsType" => $"{target} is {Visit(context.expression(0))}",
 				"oclAsType" => BuildOclAsType(target, context),
 				"size" => $"{target}.Length",
 				"max" => $"{target}.Max()",
 				"min" => $"{target}.Min()",
 				"indexOf" => $"{target}.IndexOf({Visit(context.expression(0))})",
 				"at" => BuildAtAccess(target, context),
+				"isUnique" => $"{target}.isUnique",
 				_ => BuildDotMethodCall(target, context),
 			};
 		}
