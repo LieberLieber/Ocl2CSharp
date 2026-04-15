@@ -155,7 +155,7 @@ public class OclToCSharpConverterTests
     [Fact]
     public void ConditionalExpression_UseIfStatement_EmitsIfElseBlock()
     {
-        var result = OclToCSharpConverter.Convert("if age >= 18 then isAdult else isMinor endif", useIfStatement: true);
+        var result = OclToCSharpConverter.Convert("if age >= 18 then isAdult else isMinor endif", useIfStatement: true).Replace("\r", "");
         Assert.Equal("if (age >= 18)\n{\n\treturn isAdult;\n}\nelse\n{\n\treturn isMinor;\n}", result);
     }
 
