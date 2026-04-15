@@ -34,7 +34,8 @@ expressionList
     ;
 
 expression
-    : logicalExpression
+    : ID '=' (letExpression | conditionalExpression)  // derivation: x = let … or x = if …
+    | logicalExpression
     | conditionalExpression
     | letExpression
     ;
@@ -113,12 +114,14 @@ postfixSuffix
     | '.' 'oclAsSet' '(' ')'
     | '.' 'oclIsTypeOf' '(' expression ')'
     | '.' 'oclIsKindOf' '(' expression ')'
+    | '.' 'oclIsType' '(' expression ')'
     | '.' 'oclAsType' '(' expression ')' ('.' ID)?
     | '.' 'size' '(' ')'
     | '.' 'max' '(' ')'
     | '.' 'min' '(' ')'
     | '.' 'indexOf' '(' expression ')'
     | '.' 'at' '(' expression ')' ('.' ID)?
+    | '.' 'isUnique'
     | '.' ID '(' (expression (',' expression)*)? ')' ('.' ID)?  // Generic dot operation with optional args and chaining
     | '.' ID
     | '->' 'size' '(' ')'
