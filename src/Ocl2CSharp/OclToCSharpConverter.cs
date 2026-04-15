@@ -391,7 +391,6 @@ else
 				"oclIsType" => $"({target} is {Visit(context.expression(0))})",
 				"oclIsTypeOf" => $"({target} is {Visit(context.expression(0))})",
 				"oclIsKindOf" => $"({target} is {Visit(context.expression(0))})",
-				"oclIsType" => $"{target} is {Visit(context.expression(0))}",
 				"oclAsType" => BuildOclAsType(target, context),
 				"size" => $"{target}.Length",
 				"max" => $"{target}.Max()",
@@ -554,7 +553,7 @@ else
 		}
 		else if (exprs.Length > 0)
 		{
-			lambda = $"it => {Visit(exprs[0])}";
+			lambda = $"item => {Visit(exprs[0])}";
 		}
 		else
 		{
@@ -579,11 +578,11 @@ else
 		}
 		else if (exprs.Length > 0)
 		{
-			lambda = $"it => !({Visit(exprs[0])})";
+			lambda = $"item => !({Visit(exprs[0])})";
 		}
 		else
 		{
-			return $"{target}.Where(/* reject */ it => true)";
+			return $"{target}.Where(/* reject */ item => true)";
 		}
 		return $"{target}.Where({lambda})";
 	}
@@ -591,7 +590,7 @@ else
 	private string BuildExcluding(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var expr = Visit(context.expression(0));
-		return $"{target}.Where(it => it != {expr})";
+		return $"{target}.Where(item => item != {expr})";
 	}
 
 	private string BuildSymmetricDifference(string target, OCLParser.PostfixSuffixContext context)
@@ -605,7 +604,7 @@ else
 		var exprs = context.expression();
 		if (exprs.Length > 0)
 		{
-			return $"{target}.Count(it => it == {Visit(exprs[0])})";
+			return $"{target}.Count(item => item == {Visit(exprs[0])})";
 		}
 		return $"{target}.Count()";
 	}
@@ -622,7 +621,7 @@ else
 		}
 		else if (exprs.Length > 0)
 		{
-			lambda = $"it => {Visit(exprs[0])}";
+			lambda = $"item => {Visit(exprs[0])}";
 		}
 		else
 		{
@@ -655,7 +654,7 @@ else
 		}
 		else if (exprs.Length > 0)
 		{
-			selector = $"it => {Visit(exprs[0])}";
+			selector = $"item => {Visit(exprs[0])}";
 		}
 		else
 		{
@@ -685,7 +684,7 @@ else
 			var varName = iterVar.ID().GetText();
 			return $"{target}.Aggregate({initExpr}, ({accId}, {varName}) => {bodyExpr})";
 		}
-		return $"{target}.Aggregate({initExpr}, ({accId}, it) => {bodyExpr})";
+		return $"{target}.Aggregate({initExpr}, ({accId}, item) => {bodyExpr})";
 	}
 
 	private string BuildArrowGenericCall(string target, OCLParser.PostfixSuffixContext context)
