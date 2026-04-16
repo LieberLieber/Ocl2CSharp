@@ -397,7 +397,7 @@ else
 				"min" => $"{target}.Min()",
 				"indexOf" => $"{target}.IndexOf({Visit(context.expression(0))})",
 				"at" => BuildAtAccess(target, context),
-				"isUnique" => $"{target}.isUnique",
+				"isUnique" => $".IsUnique(item => item.{target})",
 				_ => BuildDotMethodCall(target, context),
 			};
 		}
@@ -405,10 +405,10 @@ else
 		{
 			"size" => $"{target}.Count()",
 			"isEmpty" => $"!{target}.Any()",
-			"notEmpty" => $"{target}.Any()",
-			"asSet" => $"{target}.ToHashSet()",
+			"notEmpty" => $"{target}.NotEmpty()",
+			"asSet" => $"new Set({target})",
 			"asBag" => $"{target}.ToList()",
-			"asOrderedSet" => $"{target}.Distinct().ToHashSet()",
+			"asOrderedSet" => $"asOrderedSet({target})",
 			"asSequence" => $"{target}.ToList()",
 			"any" when context.identOptType() == null && context.expression().Length == 0 => $"{target}.FirstOrDefault()",
 			"any" when context.identOptType() != null || context.expression().Length > 0 => BuildCollectionOp(target, "FirstOrDefault", context),
@@ -445,13 +445,13 @@ else
 			"count" => BuildCount(target, context),
 			"indexOf" => $"{target}.ToList().IndexOf({Visit(context.expression(0))})",
 			"equalsIgnoreCase" => $"{target}.Equals({Visit(context.expression(0))}, StringComparison.OrdinalIgnoreCase)",
-			"oclAsType" => $"(({Visit(context.expression(0))}){target})",
+			"oclAsType" => $"({target} as {Visit(context.expression(0))})",
 			"at" => $"{target}.ElementAt({ItemIndex(Visit(context.expression(0)))})",
 			"oclIsType" => $"({target} is {Visit(context.expression(0))})",
 			"selectByKind" or
 			"oclIsTypeOf" or
 			"oclIsKindOf" => $"{target}.OfType<{Visit(context.expression(0))}>()",
-			"oclAsSet" => $"{target}.ToHashSet()",
+			"oclAsSet" => $"new Set({target})",
 			"collect" => BuildCollectionOp(target, "Select", context),
 			"select" => BuildCollectionOp(target, "Where", context),
 			"reject" => BuildReject(target, context),
@@ -488,9 +488,9 @@ else
 		var ids = context.ID();
 		if (ids.Length > 0)
 		{
-			return $"(({expr}){target}).{ids[0].GetText()}";
+			return $"({target} as {expr}).{ids[0].GetText()}";
 		}
-		return $"(({expr}){target})";
+		return $"({target} as {expr})";
 	}
 
 	private string BuildAtAccess(string target, OCLParser.PostfixSuffixContext context)
@@ -574,23 +574,23 @@ else
 		if (identOpt != null && exprs.Length > 0)
 		{
 			var varName = identOpt.ID().GetText();
-			lambda = $"{varName} => !({Visit(exprs[0])})";
+			lambda = $"{varName} => ({Visit(exprs[0])})";
 		}
 		else if (exprs.Length > 0)
 		{
-			lambda = $"item => !({Visit(exprs[0])})";
+			lambda = $"item => ({Visit(exprs[0])})";
 		}
 		else
 		{
-			return $"{target}.Where(/* reject */ item => true)";
+			return $"{target}.Reject(/* reject */ item => true)";
 		}
-		return $"{target}.Where({lambda})";
+		return $"{target}.Reject({lambda})";
 	}
 
 	private string BuildExcluding(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var expr = Visit(context.expression(0));
-		return $"{target}.Where(item => item != {expr})";
+		return $"{target}.Excluding(item => item != {expr})";
 	}
 
 	private string BuildSymmetricDifference(string target, OCLParser.PostfixSuffixContext context)
@@ -637,9 +637,9 @@ else
 		if (identOpt != null && exprs.Length > 0)
 		{
 			var varName = identOpt.ID().GetText();
-			return $"/* closure */ {target}.SelectMany({varName} => {Visit(exprs[0])})";
+			return $"{target}.Closure({varName} => {Visit(exprs[0])})";
 		}
-		return $"/* closure */ {target}";
+		return $"{target}.Closure()";
 	}
 
 	private string BuildIsUnique(string target, OCLParser.PostfixSuffixContext context)
@@ -660,7 +660,7 @@ else
 		{
 			return $"({target}.Distinct().Count() == {target}.Count())";
 		}
-		return $"({target}.Select({selector}).Distinct().Count() == {target}.Count())";
+		return $"({target}.IsUnique({selector})";
 	}
 
 	private string BuildInsertAt(string target, OCLParser.PostfixSuffixContext context)
@@ -728,7 +728,7 @@ else
 		var items = context.expressionList() != null ? Visit(context.expressionList()) : string.Empty;
 		return kind switch
 		{
-			"Set{" => $"new HashSet<dynamic> {{ {items} }}",
+			"Set{" => $"new Set({items})",
 			"OrderedSet{" => $"new List<dynamic> {{ {items} }}", // OrderedSet preserves insertion order
 			"Bag{" => $"new List<dynamic> {{ {items} }}",
 			"Sequence{" => $"new List<dynamic> {{ {items} }}",

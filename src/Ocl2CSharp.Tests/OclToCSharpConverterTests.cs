@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Ocl2CSharp;
+using System.Linq;
 
 namespace Ocl2CSharp.Tests;
 
@@ -631,6 +632,7 @@ public class OclToCSharpConverterTests
     [Test]
     public void SysML_DeriveDefinitionOwnedConnection()
     {
+        IEnumerable<string> test;
         var ocl =
             "ownedConnection = ownedUsage->selectByKind(ConnectorAsUsage)";
         var result = OclToCSharpConverter.Convert(ocl);

@@ -24,4 +24,10 @@
 		<Content Include="../../testdata/SysML_OCLAndCSharp.md" CopyToOutputDirectory="PreserveNewest" Link="SysML_OCLAndCSharp.md" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Include="..\..\testdata\Consolidated_OCLAndCSharp.md" Link="Consolidated_OCLAndCSharp.md">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>
