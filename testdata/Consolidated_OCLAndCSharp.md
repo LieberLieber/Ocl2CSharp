@@ -314,8 +314,7 @@ owningType <> null and
 ```
 ### C#
 ``` CSharp 
-(relatedType.Count() < 2 ? new OrderedSet() : relatedType.SubSequence(2,
-relatedType.Count()).AsOrderedSet)
+(relatedType.Count() < 2 ? new OrderedSet() : relatedType.SubSequence(2, relatedType.Count()).AsOrderedSet())
 ```
 
 # let with OrderedSet, select, forAll, intersection

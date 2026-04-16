@@ -387,7 +387,7 @@ else
 				"oclIsUndefined" => $"({target} == null)",
 				"oclIsInvalid" => $"({target} == null)",
 				"oclIsNew" => $"/* oclIsNew({target}) */",
-				"oclAsSet" => $"new HashSet<dynamic> {{ {target} }}",
+				"oclAsSet" => $"new Set({target})",
 				"oclIsType" => $"({target} is {Visit(context.expression(0))})",
 				"oclIsTypeOf" => $"({target} is {Visit(context.expression(0))})",
 				"oclIsKindOf" => $"({target} is {Visit(context.expression(0))})",
@@ -406,9 +406,9 @@ else
 			"size" => $"{target}.Count()",
 			"isEmpty" => $"!{target}.Any()",
 			"notEmpty" => $"{target}.NotEmpty()",
-			"asSet" => $"new Set({target})",
+			"asSet" => $"{target}.AsSet()",
 			"asBag" => $"{target}.ToList()",
-			"asOrderedSet" => $"asOrderedSet({target})",
+			"asOrderedSet" => $"{target}.AsOrderedSet()",
 			"asSequence" => $"{target}.ToList()",
 			"any" when context.identOptType() == null && context.expression().Length == 0 => $"{target}.FirstOrDefault()",
 			"any" when context.identOptType() != null || context.expression().Length > 0 => BuildCollectionOp(target, "FirstOrDefault", context),
@@ -451,7 +451,8 @@ else
 			"selectByKind" or
 			"oclIsTypeOf" or
 			"oclIsKindOf" => $"{target}.OfType<{Visit(context.expression(0))}>()",
-			"oclAsSet" => $"new Set({target})",
+			"oclAsSet" => $"{target}.AsSet()",
+			"subSequence" => BuildSubSequence(target, context),
 			"collect" => BuildCollectionOp(target, "Select", context),
 			"select" => BuildCollectionOp(target, "Where", context),
 			"reject" => BuildReject(target, context),
@@ -687,6 +688,13 @@ else
 		return $"{target}.Aggregate({initExpr}, ({accId}, item) => {bodyExpr})";
 	}
 
+	private string BuildSubSequence(string target, OCLParser.PostfixSuffixContext context)
+	{
+		var exprs = context.expression();
+		var args = string.Join(", ", Array.ConvertAll(exprs, e => Visit(e)));
+		return $"{target}.SubSequence({args})";
+	}
+
 	private string BuildArrowGenericCall(string target, OCLParser.PostfixSuffixContext context)
 	{
 		// '->' ID '(' (expression (',' expression)*)? ')' ('.' ID)?
@@ -729,7 +737,7 @@ else
 		return kind switch
 		{
 			"Set{" => $"new Set({items})",
-			"OrderedSet{" => $"new List<dynamic> {{ {items} }}", // OrderedSet preserves insertion order
+			"OrderedSet{" => $"new OrderedSet({items})",
 			"Bag{" => $"new List<dynamic> {{ {items} }}",
 			"Sequence{" => $"new List<dynamic> {{ {items} }}",
 			"Map{" => $"new Dictionary<dynamic, dynamic> {{ {items} }}",
