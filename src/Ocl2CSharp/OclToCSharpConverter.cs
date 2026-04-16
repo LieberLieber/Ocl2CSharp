@@ -1,5 +1,6 @@
 using System.Text;
 using Antlr4.Runtime;
+using Antlr4.Runtime.Misc;
 
 namespace Ocl2CSharp;
 
@@ -113,7 +114,11 @@ else
 		//   expr1.Select(var1 => expr2.Select(var2 => body))
 		// The type annotation (if present) is omitted — the lambda parameter is inferred.
 		var bindings = context.letBinding();
-		var result = Visit(context.expression());
+		string result = "NOTHING";
+		if (context.expression() != null)
+		{
+			result = Visit(context.expression());
+		}
 
 		// Iterate in reverse so that each outer binding wraps all inner ones,
 		// with the leftmost binding becoming the outermost Select call.
@@ -122,12 +127,12 @@ else
 			var binding = bindings[i];
 			var name = binding.ID().GetText();
 			var initExpr = Visit(binding.expression());
-		// Wrap initExpr in parentheses when it's not already terminated by a grouping character,
-		// so that infix operators like '+' don't bind more tightly than '.Select(...)'.
-		var receiver = (initExpr.EndsWith(')') || initExpr.EndsWith(']') || initExpr.EndsWith('}'))
-			? initExpr
-			: $"({initExpr})";
-		result = $"{receiver}.Select({name} => {result})";
+			// Wrap initExpr in parentheses when it's not already terminated by a grouping character,
+			// so that infix operators like '+' don't bind more tightly than '.Select(...)'.
+			var receiver = (initExpr.EndsWith(')') || initExpr.EndsWith(']') || initExpr.EndsWith('}'))
+				? initExpr
+				: $"({initExpr})";
+			result = $"{receiver}.Select({name} => {result})";
 		}
 		return result;
 	}
@@ -325,7 +330,10 @@ else
 		if (nestedBasic == null)
 		{
 			// ID or '(' expression ')'
-			if (context.ID() != null) return context.ID().GetText();
+			if (context.identifier() != null)
+			{
+				return Visit(context.identifier()); ;
+			}
 			// parenthesized expression
 			if (context.expression() != null)
 				return $"({Visit(context.expression())})";
@@ -337,7 +345,7 @@ else
 			if (sep == ".")
 			{
 				// member access: basicExpression '.' ID
-				return $"{baseExpr}.{context.ID().GetText()}";
+				return $"{baseExpr}.{context.identifier().ID().GetText()}";
 			}
 			if (sep == "(")
 			{
@@ -380,9 +388,9 @@ else
 				"oclIsInvalid" => $"({target} == null)",
 				"oclIsNew" => $"/* oclIsNew({target}) */",
 				"oclAsSet" => $"new HashSet<dynamic> {{ {target} }}",
-				"oclIsTypeOf" => $"({target}.GetType() == typeof({Visit(context.expression(0))}))",
+				"oclIsType" => $"({target} is {Visit(context.expression(0))})",
+				"oclIsTypeOf" => $"({target} is {Visit(context.expression(0))})",
 				"oclIsKindOf" => $"({target} is {Visit(context.expression(0))})",
-				"oclIsType" => $"{target} is {Visit(context.expression(0))}",
 				"oclAsType" => BuildOclAsType(target, context),
 				"size" => $"{target}.Length",
 				"max" => $"{target}.Max()",
@@ -438,8 +446,9 @@ else
 			"indexOf" => $"{target}.ToList().IndexOf({Visit(context.expression(0))})",
 			"equalsIgnoreCase" => $"{target}.Equals({Visit(context.expression(0))}, StringComparison.OrdinalIgnoreCase)",
 			"oclAsType" => $"(({Visit(context.expression(0))}){target})",
-			"at" => $"{target}.ElementAt({Visit(context.expression(0))} - 1)",
-			"selectByKind" or 
+			"at" => $"{target}.ElementAt({ItemIndex(Visit(context.expression(0)))})",
+			"oclIsType" => $"({target} is {Visit(context.expression(0))})",
+			"selectByKind" or
 			"oclIsTypeOf" or
 			"oclIsKindOf" => $"{target}.OfType<{Visit(context.expression(0))}>()",
 			"oclAsSet" => $"{target}.ToHashSet()",
@@ -461,6 +470,16 @@ else
 	// -------------------------------------------------------------------------
 	// Postfix helper methods
 	// -------------------------------------------------------------------------
+
+	private string ItemIndex(string index)
+	{
+		return index switch
+		{
+			"1" => "0",
+			"2" => "1",
+			_ => $"{index} - 1"
+		};
+	}
 
 	private string BuildOclAsType(string target, OCLParser.PostfixSuffixContext context)
 	{
@@ -534,7 +553,7 @@ else
 		}
 		else if (exprs.Length > 0)
 		{
-			lambda = $"it => {Visit(exprs[0])}";
+			lambda = $"item => {Visit(exprs[0])}";
 		}
 		else
 		{
@@ -559,11 +578,11 @@ else
 		}
 		else if (exprs.Length > 0)
 		{
-			lambda = $"it => !({Visit(exprs[0])})";
+			lambda = $"item => !({Visit(exprs[0])})";
 		}
 		else
 		{
-			return $"{target}.Where(/* reject */ it => true)";
+			return $"{target}.Where(/* reject */ item => true)";
 		}
 		return $"{target}.Where({lambda})";
 	}
@@ -571,7 +590,7 @@ else
 	private string BuildExcluding(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var expr = Visit(context.expression(0));
-		return $"{target}.Where(it => it != {expr})";
+		return $"{target}.Where(item => item != {expr})";
 	}
 
 	private string BuildSymmetricDifference(string target, OCLParser.PostfixSuffixContext context)
@@ -585,7 +604,7 @@ else
 		var exprs = context.expression();
 		if (exprs.Length > 0)
 		{
-			return $"{target}.Count(it => it == {Visit(exprs[0])})";
+			return $"{target}.Count(item => item == {Visit(exprs[0])})";
 		}
 		return $"{target}.Count()";
 	}
@@ -602,7 +621,7 @@ else
 		}
 		else if (exprs.Length > 0)
 		{
-			lambda = $"it => {Visit(exprs[0])}";
+			lambda = $"item => {Visit(exprs[0])}";
 		}
 		else
 		{
@@ -635,7 +654,7 @@ else
 		}
 		else if (exprs.Length > 0)
 		{
-			selector = $"it => {Visit(exprs[0])}";
+			selector = $"item => {Visit(exprs[0])}";
 		}
 		else
 		{
@@ -665,7 +684,7 @@ else
 			var varName = iterVar.ID().GetText();
 			return $"{target}.Aggregate({initExpr}, ({accId}, {varName}) => {bodyExpr})";
 		}
-		return $"{target}.Aggregate({initExpr}, ({accId}, it) => {bodyExpr})";
+		return $"{target}.Aggregate({initExpr}, ({accId}, item) => {bodyExpr})";
 	}
 
 	private string BuildArrowGenericCall(string target, OCLParser.PostfixSuffixContext context)
@@ -724,7 +743,12 @@ else
 
 	public override string VisitIdentifier(OCLParser.IdentifierContext context)
 	{
-		return context.ID().GetText();
+		var tmp = context.ID().GetText();
+		if (tmp == "self")
+		{
+			return "this";
+		}
+		return tmp;
 	}
 
 	public override string VisitQualified_name(OCLParser.Qualified_nameContext context)
