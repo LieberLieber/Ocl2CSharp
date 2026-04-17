@@ -163,8 +163,7 @@ featureWithValue.redefinition.redefinedFeature->
 ```
 ### C#
 ``` CSharp 
-featureWithValue.redefinition.redefinedFeature.Closure(item => 
-item.redefinition.redefinedFeature).valuation.All(item => item.isDefault)
+featureWithValue.redefinition.redefinedFeature.Closure(item => item.redefinition.redefinedFeature).valuation.All(item => item.isDefault)
 ```
 # let with OrderedSet, selectByKind, isEmpty, first
 ### OCL
@@ -462,10 +461,7 @@ annotatedElementFeatures->notEmpty() implies
 ```
 ### C#
 ``` CSharp 
-((Feature)resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberEleme
-nt).Select(baseAnnotatedElementFeature => feature.Where(item => 
-specializes(baseAnnotatedElementFeature)).Where(item => item != 
-baseAnnotatedElementFeature).Select(annotatedElementFeatures => 
-(!(annotatedElementFeatures.Any()) || annotatedElementTypes is (Feature) == 
-annotatedElementFeatures.typing.type.ToHashSet())))
+((Feature)resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberElement).Select(baseAnnotatedElementFeature => feature.Where(item => 
+specializes(baseAnnotatedElementFeature)).Where(item => item != baseAnnotatedElementFeature).Select(annotatedElementFeatures => 
+(!(annotatedElementFeatures.Any()) || annotatedElementTypes is (Feature) == annotatedElementFeatures.typing.type.ToHashSet())))
 ```
