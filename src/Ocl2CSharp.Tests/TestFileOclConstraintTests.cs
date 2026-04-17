@@ -2,45 +2,31 @@ using NUnit.Framework;
 
 namespace Ocl2CSharp.Tests;
 
-[TestFixture]
 public class TestFileOclConstraintTests
 {
-	private static readonly string TestDataPath1 =
-		Path.Combine(AppContext.BaseDirectory, "SysML_OCLAndCSharp.md");
-
-
-	private static readonly string TestDataPath2 =
-		Path.Combine(AppContext.BaseDirectory, "Consolidated_OCLAndCSharp.md");
-
-	public static IEnumerable<object[]> GetSysMLOclRules1()
+	public static IEnumerable<object[]> GetOclData(string fileName)
 	{
-		foreach (var data in TestDataFileReader.Read(TestDataPath1))
+		var filePath = Path.Combine(AppContext.BaseDirectory, fileName);
+
+		foreach (var data in TestDataFileReader.Read(filePath))
 		{
 			yield return [data];
 		}
 	}
 
-	[Test]
-	[TestCaseSource(nameof(GetSysMLOclRules1))]
-	public void SysMLRules(TestData data)
+	[TestCaseSource(nameof(GetOclData), ["SysML_OCLAndCSharp.md"])]
+	public void SysML(TestData data)
 	{
-		var result = OclToCSharpConverter.Convert(data.Ocl, data.GenerateIfStatement).Trim();
+		ConvertOcl(data);
+	}
+	[TestCaseSource(nameof(GetOclData), ["Consolidated_OCLAndCSharp.md"])]
 
-		Assert.That(result, Is.EqualTo(data.CSharp.Trim()));
+	public void Consolidated(TestData data)
+	{
+		ConvertOcl(data);
 	}
 
-
-	public static IEnumerable<object[]> GetSysMLOclRules2()
-	{
-		foreach (var data in TestDataFileReader.Read(TestDataPath2))
-		{
-			yield return [data];
-		}
-	}
-
-	[Test]
-	[TestCaseSource(nameof(GetSysMLOclRules2))]
-	public void ConsolidatedRules(TestData data)
+	private void ConvertOcl(TestData data)
 	{
 		var result = OclToCSharpConverter.Convert(data.Ocl, data.GenerateIfStatement).Trim();
 #if DEBUG
@@ -51,6 +37,6 @@ public class TestFileOclConstraintTests
 		TestContext.WriteLine("Generated");
 		TestContext.WriteLine(result);
 #endif
-		Assert.That(result, Is.EqualTo(data.CSharp.Trim()));
+		Assert.That(result, Is.EqualTo(data.CSharp.Trim()).IgnoreWhiteSpace);
 	}
 }

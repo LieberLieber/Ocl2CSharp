@@ -55,6 +55,12 @@ letBinding
 basicExpression
     : NULL_LITERAL
     | BOOLEAN_LITERAL
+    | 'oclIsKindOf' '(' expression ')'
+    | 'oclIsTypeOf' '(' expression ')'
+    | 'oclIsType' '(' expression ')'
+    | 'oclAsType' '(' expression ')'
+    | 'oclIsUndefined' '(' ')'
+    | 'oclIsInvalid' '(' ')'
     | basicExpression '.' identifier
     | basicExpression '(' expressionList? ')'
     | basicExpression '[' expression ']'

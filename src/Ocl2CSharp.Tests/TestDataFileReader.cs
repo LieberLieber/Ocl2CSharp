@@ -58,10 +58,10 @@
 				switch (currentlyReading)
 				{
 					case Reading.Ocl:
-						data.Ocl += $" {line}";
+						data.AppendOcl(line);
 						break;
 					case Reading.CSharp:
-						data.CSharp += $" {line}";
+						data.AppendCS(line);
 						break;
 				}
 

@@ -23,16 +23,6 @@ namespace Ocl2CSharp
 			}
 		}
 
-		public static IEnumerable<object> AllSuperTypes<T>(this T type)
-		{
-			if (type == null)
-			{
-				return Enumerable.Empty<object>();
-			}
-
-			return type.GetType().GetInterfaces();
-		}
-
 		public static bool Includes<T>(this IEnumerable<T> objects, IEnumerable<T> otherObjects)
 		{
 			if (objects == null)
@@ -214,16 +204,6 @@ namespace Ocl2CSharp
 			return objects?.All(predicate) ?? false;
 		}
 
-		public static IEnumerable<T> Set<T>()
-		{
-			return Enumerable.Empty<T>();
-		}
-
-		public static IEnumerable<T> Set<T>(T obj)
-		{
-			return new T[1] { obj };
-		}
-
 		public static IEnumerable<T> SubSequence<T>(this IEnumerable<T> objects, int startPos, int length)
 		{
 			if (objects == null)
@@ -244,14 +224,14 @@ namespace Ocl2CSharp
 			return new OrderedSet<T>(objects.Distinct());
 		}
 
-		public static IEnumerable<T> AsSet<T>(this IEnumerable<T> objects)
+		public static Set<T> AsSet<T>(this IEnumerable<T> objects)
 		{
 			if (objects == null)
 			{
-				return Enumerable.Empty<T>();
+				return new Set<T>();
 			}
 
-			return objects;
+			return new Set<T>(objects);
 		}
 	}
 }
