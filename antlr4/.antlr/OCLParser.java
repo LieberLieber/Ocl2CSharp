@@ -160,14 +160,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_type; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitType(this);
-		}
 	}
 
 	public final TypeContext type() throws RecognitionException {
@@ -310,14 +302,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expressionList; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterExpressionList(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitExpressionList(this);
-		}
 	}
 
 	public final ExpressionListContext expressionList() throws RecognitionException {
@@ -376,14 +360,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitExpression(this);
-		}
 	}
 
 	public final ExpressionContext expression() throws RecognitionException {
@@ -466,14 +442,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_conditionalExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterConditionalExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitConditionalExpression(this);
-		}
 	}
 
 	public final ConditionalExpressionContext conditionalExpression() throws RecognitionException {
@@ -524,14 +492,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_letExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterLetExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitLetExpression(this);
-		}
 	}
 
 	public final LetExpressionContext letExpression() throws RecognitionException {
@@ -591,14 +551,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_letBinding; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterLetBinding(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitLetBinding(this);
-		}
 	}
 
 	public final LetBindingContext letBinding() throws RecognitionException {
@@ -664,14 +616,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_basicExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterBasicExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitBasicExpression(this);
-		}
 	}
 
 	public final BasicExpressionContext basicExpression() throws RecognitionException {
@@ -914,14 +858,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_logicalExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterLogicalExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitLogicalExpression(this);
-		}
 	}
 
 	public final LogicalExpressionContext logicalExpression() throws RecognitionException {
@@ -982,14 +918,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_equalityExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterEqualityExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitEqualityExpression(this);
-		}
 	}
 
 	public final EqualityExpressionContext equalityExpression() throws RecognitionException {
@@ -1050,14 +978,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_additiveExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterAdditiveExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitAdditiveExpression(this);
-		}
 	}
 
 	public final AdditiveExpressionContext additiveExpression() throws RecognitionException {
@@ -1118,14 +1038,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_multiplicativeExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterMultiplicativeExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitMultiplicativeExpression(this);
-		}
 	}
 
 	public final MultiplicativeExpressionContext multiplicativeExpression() throws RecognitionException {
@@ -1186,14 +1098,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_unaryExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterUnaryExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitUnaryExpression(this);
-		}
 	}
 
 	public final UnaryExpressionContext unaryExpression() throws RecognitionException {
@@ -1281,14 +1185,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_navigationExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterNavigationExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitNavigationExpression(this);
-		}
 	}
 
 	public final NavigationExpressionContext navigationExpression() throws RecognitionException {
@@ -1339,14 +1235,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_primaryFactor; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterPrimaryFactor(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitPrimaryFactor(this);
-		}
 	}
 
 	public final PrimaryFactorContext primaryFactor() throws RecognitionException {
@@ -1428,14 +1316,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_postfixSuffix; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterPostfixSuffix(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitPostfixSuffix(this);
-		}
 	}
 
 	public final PostfixSuffixContext postfixSuffix() throws RecognitionException {
@@ -2646,14 +2526,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_identOptType; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterIdentOptType(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitIdentOptType(this);
-		}
 	}
 
 	public final IdentOptTypeContext identOptType() throws RecognitionException {
@@ -2702,14 +2574,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_identOptTypeList; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterIdentOptTypeList(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitIdentOptTypeList(this);
-		}
 	}
 
 	public final IdentOptTypeListContext identOptTypeList() throws RecognitionException {
@@ -2759,14 +2623,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_setExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterSetExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitSetExpression(this);
-		}
 	}
 
 	public final SetExpressionContext setExpression() throws RecognitionException {
@@ -2894,14 +2750,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_identifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitIdentifier(this);
-		}
 	}
 
 	public final IdentifierContext identifier() throws RecognitionException {
@@ -2932,14 +2780,6 @@ public class OCLParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_qualified_name; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).enterQualified_name(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof OCLListener ) ((OCLListener)listener).exitQualified_name(this);
-		}
 	}
 
 	public final Qualified_nameContext qualified_name() throws RecognitionException {
