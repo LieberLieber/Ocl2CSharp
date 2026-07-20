@@ -205,10 +205,7 @@ instantiatedType.type.Count() == 1
 ```
 ### C#
 ``` CSharp
-featuring.type.Distinct().ToHashSet()
-    .Select(featuringTypes => (!chainingFeature.Any()
-    ? featuringTypes : featuringTypes.Union(chainingFeature.First().featuringType).Distinct().ToHashSet
-()))
+featuring.type.asOrderedSet().Select(featuringTypes => (!chainingFeature.Any() ? featuringTypes : featuringTypes.Union(chainingFeature.First().featuringType).asOrderedSet()))
 ```
 # selectByKind, exists, includes
 ### OCL
@@ -239,10 +236,9 @@ ownedFeatureMembership.OfType<TransitionFeatureMembership>()
 # let with OrderedSet, new OrderedSet, comment, closure, asOrderedSet, reject, exist
 ### OCL
 ``` OCL
-    let types : OrderedSet(Types) = OrderedSet{self}->
-        -- Note: The closure operation automatically handles circular relationships.
-        closure(typingFeatures()).typing.type->asOrderedSet() in
-    types->reject(t1 | types->exist(t2 | t2 <> t1 and t2.specializes(t1)))
+let types : OrderedSet(Types) = OrderedSet{self}->
+    closure(typingFeatures()).typing.type->asOrderedSet() in
+types->reject(t1 | types->exist(t2 | t2 <> t1 and t2.specializes(t1)))
 ```
 ### C#
 ``` CSharp

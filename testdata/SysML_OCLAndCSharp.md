@@ -1598,16 +1598,14 @@ result.owningType == this
 # DeriveFeatureType
 ### OCL
 ``` OCL
-    let types : OrderedSet(Types) = OrderedSet{self}->
-        -- Note: The closure operation automatically handles circular relationships.
-        closure(typingFeatures()).typing.type->asOrderedSet() in
-    types->reject(t1 | types->exist(t2 | t2 <> t1 and t2.specializes(t1)))
+let types : OrderedSet(Types) = OrderedSet{self}->
+    closure(typingFeatures()).typing.type->asOrderedSet() in
+types->reject(t1 | types->exist(t2 | t2 <> t1 and t2.specializes(t1)))
 ```
 ### C#
 ``` CSharp
-new List<dynamic> { this }.Closure(item =>
-item.typingFeatures()).typing.type.Distinct().ToHashSet().Select(types =>
-types.Where(t1 => !(types.exist(t2).t2 != t1 && t2.specializes(t1))))
+new List<dynamic> { this }.Closure().typing.type.asOrderedSet().Select(types => types.Where(t1 =>
+!(types.exist(t2).exist != t1 && t2.specializes(t1))))
 ```
 # CheckPartDefinitionSpecialization
 ### OCL
