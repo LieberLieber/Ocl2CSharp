@@ -416,6 +416,7 @@ else
 				"min" => $"{target}.Min()",
 				"indexOf" => $"{target}.IndexOf({Visit(context.expression(0))})",
 				"at" => BuildAtAccess(target, context),
+				"isUnique" => $"{target}.isUnique",
 				_ => BuildDotMethodCall(target, context),
 			};
 		}
@@ -426,7 +427,7 @@ else
 			"notEmpty" => $"{target}.Any()",
 			"asSet" => $"{target}.ToHashSet()",
 			"asBag" => $"{target}.ToList()",
-			"asOrderedSet" => $"{target}.Distinct().ToHashSet()",
+			"asOrderedSet" => $"{target}.asOrderedSet()",
 			"asSequence" => $"{target}.ToList()",
 			"any" when context.identOptType() == null && context.expression().Length == 0 => $"{target}.FirstOrDefault()",
 			"any" when context.identOptType() != null || context.expression().Length > 0 => BuildCollectionOp(target, "FirstOrDefault", context),
@@ -504,6 +505,8 @@ else
 		var expr = Visit(context.expression(0));
 		// Check if there's a chained .ID after the cast
 		var ids = context.ID();
+
+
 		if (ids.Length > 0)
 		{
 			return $"(({expr}){target}).{ids[0].GetText()}";
@@ -606,14 +609,14 @@ else
 			// Use the first variable from the list as the primary lambda parameter
 			var firstVar = identOptList.identOptType(0).ID().GetText();
 			lambda = $"{firstVar} => {Visit(exprs[0])}";
-		}
+        }
 		else if (exprs.Length > 0)
 		{
 			// No explicit iterator variable — apply implicit-self transformation
 			var body = Visit(exprs[0]);
 			lambda = $"item => {ApplyImplicitSelf(body)}";
 		}
-		else
+        else
 		{
 			return $"{target}.{csMethod}()";
 		}
