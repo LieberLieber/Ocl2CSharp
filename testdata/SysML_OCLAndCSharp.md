@@ -342,7 +342,7 @@ ownedImport->selectByKind(Expose).
 ```
 ### C#
 ``` CSharp
-ownedImport.OfType<Expose>().importedMemberships(new HashSet<dynamic> {  }).memberElement.Where(elm => includeAsExposed(elm)).Distinct().ToHashSet()
+ownedImport.OfType<Expose>().importedMemberships(new HashSet<dynamic> {  }).memberElement.Where(elm => includeAsExposed(elm)).asOrderedSet()
 ```
 # DeriveViewDefinitionView
 ### OCL
@@ -624,7 +624,7 @@ owningType.oclIsKindOf(CaseUsage)
 ```
 ### C#
 ``` CSharp
-(objectiveRequirement == null ? new List<dynamic> {  } : objectiveRequirement.featureMembership.OfType<RequirementVerificationMembership>().Select(item => item.verifiedRequirement).Distinct().ToHashSet())
+(objectiveRequirement == null ? new List<dynamic> {  } : objectiveRequirement.featureMembership.OfType<RequirementVerificationMembership>().Select(item => item.verifiedRequirement).asOrderedSet())
 ```
 # CheckConcernUsageFramedConcernSpecialization
 ### OCL
@@ -1329,8 +1329,8 @@ specializesFromLibrary("UseCases::UseCase")
 ```
 ### C#
 ``` CSharp
-featuring.type.Distinct().ToHashSet().Select(featuringTypes => (!chainingFeature.Any() ? featuringTypes :
-featuringTypes.Union(chainingFeature.First().featuringType).Distinct().ToHashSet()))
+featuring.type.asOrderedSet().Select(featuringTypes => (!chainingFeature.Any() ? featuringTypes :
+featuringTypes.Union(chainingFeature.First().featuringType).asOrderedSet()))
 ```
 # CheckLiteralIntegerSpecialization
 ### OCL
@@ -2100,7 +2100,7 @@ Expression)).All(supertype => (redefines() is )).superType).result)
 ### C#
 ``` CSharp
 (relatedType.Count() < 2 ? new List<dynamic> {  } : relatedType.subSequence(2,
-relatedType.Count()).Distinct().ToHashSet())
+relatedType.Count()).subSequence.asOrderedSet())
 ```
 # DeriveDefinitionOwnedCase
 ### OCL
@@ -3642,6 +3642,8 @@ featureMembership.OfType<ObjectiveMembership>().Select(item =>
 item.ownedRequirement).Select(objectives => (!objectives.Any() ? null :
 objectives.First().ownedObjectiveRequirement))
 ```
+//Select(objectives => objectives.ownedRequirement).
+
 # DeriveRequirementUsageRequiredConstraint
 ### OCL
 ``` OCL
@@ -4466,8 +4468,8 @@ owningType <> null and
 ```
 ### C#
 ``` CSharp
-(relatedFeature.Count() < 2 ? new List<dynamic> {  } :
-relatedFeature.subSequence(2, relatedFeature.Count()).Distinct().ToHashSet())
+(relatedFeature.Count() < 2 ? new List<dynamic> {  } : relatedFeature.subSequence(2,
+relatedFeature.Count()).subSequence.asOrderedSet())
 ```
 # DeriveUsageNestedRequirement
 ### OCL
@@ -4745,9 +4747,7 @@ sourceConnector->selectAsKind(Succession)->
 ```
 ### C#
 ``` CSharp
-sourceConnector.selectAsKind(Succession).Select(item =>
-connectorEnd.ElementAt(1)).All(targetMult => multiplicityHasBounds(targetMult,
-0, 1))
+sourceConnector.OfType<Succession>().Select(item => item.connectorEnd.ElementAt(1)).All(targetMult => multiplicityHasBounds(targetMult, 0, 1)).
 ```
 # CheckRenderingUsageSubrenderingSpecialization
 ### OCL
@@ -5339,7 +5339,7 @@ sourceConnector->selectAsKind(Succession)->size() <= 1
 ```
 ### C#
 ``` CSharp
-sourceConnector.selectAsKind(Succession).Count() <= 1
+sourceConnector.OfType<Succession>().Count() <= 1
 ```
 # CheckWhileLoopActionUsageSpecialization
 ### OCL
@@ -5703,8 +5703,7 @@ isSemantic() implies
 ```
 ### C#
 ``` CSharp
-(!(isSemantic()) || annotatedTypes is (Type) ==
-annotatedElement.selectAsKind(Type))
+(!(isSemantic()) || annotatedTypes is (Type) == annotatedElement.OfType<Type>())
 ```
 # CheckItemUsageSubitemSpecialization
 ### OCL
@@ -5974,9 +5973,7 @@ owningFeatureMembership <> null implies
 ```
 ### C#
 ``` CSharp
-(objectiveRequirement == null ? new List<dynamic> {  } :
-objectiveRequirement.featureMembership.OfType<RequirementVerificationMembership>
-().Select(item => item.verifiedRequirement).Distinct().ToHashSet())
+(objectiveRequirement == null ? new List<dynamic> {  } : objectiveRequirement.featureMembership.OfType<RequirementVerificationMembership>().asOrderedSet())
 ```
 # CheckDecisionNodeOutgoingSuccessionSpecialization
 ### OCL
