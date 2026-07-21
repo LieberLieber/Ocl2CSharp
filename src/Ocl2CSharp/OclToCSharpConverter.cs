@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Antlr4.Runtime;
 using static Ocl2CSharp.OCLParser;
@@ -437,8 +440,8 @@ else
 		{
 			"size" => $"{target}.Count()",
 			"isEmpty" => $"{target}.IsEmpty()",
-			"notEmpty" => $"{target}.NotEmpty()",
-			"asSet" => $"{target}.AsSet()",
+			"notEmpty" => $"{target}.Any()",
+			"asSet" => $"{target}.ToHashSet()",
 			"asBag" => $"{target}.ToList()",
 			"asOrderedSet" => $"{target}.AsOrderedSet()",
 			"asSequence" => $"{target}.ToList()",

@@ -285,7 +285,7 @@ public class OclToCSharpConverterTests
     public void IsEmptyOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("contracts->isEmpty()");
-        Assert.AreEqual("!contracts.Any()", result);
+        Assert.AreEqual("contracts.IsEmpty()", result);
     }
 
     [Test]
@@ -334,8 +334,8 @@ public class OclToCSharpConverterTests
     public void RejectOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("employees->reject(e | e.age < 18)->isEmpty()");
-        Assert.That(result, Does.Contain(".Where(e => !(e.age < 18))"));
-        Assert.That(result, Does.Contain("!employees"));
+        Assert.That(result, Does.Contain(".Reject(e => e.age < 18)"));
+        Assert.That(result, Does.Contain(".IsEmpty()"));
     }
 
     [Test]
@@ -415,7 +415,7 @@ public class OclToCSharpConverterTests
     public void AsSet_UsesOclExtension()
     {
         var result = OclToCSharpConverter.Convert("items->asSet()");
-        Assert.That(result, Does.Contain(".AsSet()"));
+        Assert.That(result, Does.Contain(".ToHashSet()"));
     }
 
     [Test]
@@ -454,7 +454,7 @@ public class OclToCSharpConverterTests
             "else renderings->first().referencedRendering endif";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "featureMembership.OfType<ViewRenderingMembership>().Select(renderings => (!renderings.Any() ? null : renderings.First().referencedRendering))",
+            "featureMembership.OfType<ViewRenderingMembership>().Select(renderings => (renderings.IsEmpty() ? null : renderings.First().referencedRendering))",
             result);
     }
 
@@ -1353,7 +1353,7 @@ public class OclToCSharpConverterTests
             "    specializesFromLibrary('Objects::linkObjects')";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "(!(association.Any(item => (AssociationStructure))) || specializesFromLibrary(\"Objects::linkObjects\"))",
+            "(!(association.Any(item => item.OfType<AssociationStructure>())) || specializesFromLibrary(\"Objects::linkObjects\"))",
             result);
     }
 

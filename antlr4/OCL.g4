@@ -39,6 +39,7 @@ expression
     | conditionalExpression
     | letExpression
     | function
+    | unaryExpression
     ;
 
 function
@@ -94,7 +95,7 @@ multiplicativeExpression
     : unaryExpression (('*' | '/' | 'mod' | 'div') unaryExpression)* ;
 
 unaryExpression
-    : ('not' | '-' | '+' | '?' | '!') unaryExpression
+    : ('not' | '-' | '+' | '?' | '!') expression
     | navigationExpression
     ;
 
