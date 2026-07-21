@@ -467,7 +467,8 @@ else
 			"oclAsType" => BuildArrowOclAsType(target, context),
 			"at" => $"{target}.ElementAt({ItemIndex(Visit(context.expression(0)))})",
 			"oclIsType" => $"({target} is {Visit(context.expression(0))})",
-			"selectByKind" or
+			"selectAsKind" or
+            "selectByKind" or
 			"oclIsTypeOf" or
 			"oclIsKindOf" => BuildSelectByKind(target, context),
 			"oclAsSet" => $"new HashSet<dynamic> {{ {target} }}",
