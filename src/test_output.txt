@@ -1,0 +1,2047 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Ocl2CSharp -> /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/bin/Debug/net8.0/Ocl2CSharp.dll
+  Ocl2CSharp.Tests -> /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/bin/Debug/net8.0/Ocl2CSharp.Tests.dll
+Test run for /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/bin/Debug/net8.0/Ocl2CSharp.Tests.dll (.NETCoreApp,Version=v8.0)
+A total of 1 test files matched the specified pattern.
+Ocl
+ referencedFeatureTarget() <> null implies     referencedFeatureTarget().oclIsKindOf(OccurrenceUsage)
+C#
+ (!(referencedFeatureTarget() != null) || (referencedFeatureTarget() is OccurrenceUsage))
+Generated
+(!(referencedFeatureTarget() != null) || (referencedFeatureTarget() is OccurrenceUsage))
+
+Ocl
+ action->selectByKind(CalculationUsage)
+C#
+ action.OfType<CalculationUsage>()
+Generated
+action.OfType<CalculationUsage>()
+
+Ocl
+ owningType.oclIsType(RequirementDefinition) or owningType.oclIsType(CaseUsage)
+C#
+ (owningType is RequirementDefinition) || (owningType is CaseUsage)
+Generated
+(owningType is RequirementDefinition) || (owningType is CaseUsage)
+
+Ocl
+     let nonParameterMemberships : Sequence(Membership) = ownedMembership->reject(oclIsKindOf(ParameterMembership)) in     if nonParameterMemberships->isEmpty() or        not nonParameterMemberships->first().memberElement.oclIsKindOf(Feature)     then null     else nonParameterMemberships->first().memberElement.oclAsType(Feature)     endif
+C#
+ ownedMembership.Where(reject => !(reject is ParameterMembership)).Select(nonParameterMemberships => (!nonParameterMemberships.Any() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))
+Generated
+ownedMembership.Where(item => !(item is ParameterMembership)).Select(nonParameterMemberships => (!nonParameterMemberships.Any() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))
+
+Ocl
+ not oclIsKindOf(ConjugatedPortDefinition) implies     ownedMember->         selectByKind(ConjugatedPortDefinition)->         size() = 1
+C#
+ (!(!(this is ConjugatedPortDefinition)) || ownedMember.OfType<ConjugatedPortDefinition>().Count() == 1)
+Generated
+(!(!(this is ConjugatedPortDefinition)) || ownedMember.OfType<ConjugatedPortDefinition>().Count() == 1)
+
+Ocl
+ direction = null and ownedSpecializations->forAll(isImplied) implies     ownedMembership->         selectByKind(FeatureValue)->         forAll(fv | specializes(fv.value.result))
+C#
+ (direction == null) && (ownedSpecializations.ForAll(item => item.isImplied) || ownedMembership.OfType<FeatureValue>().ForAll(fv => specializes(fv.value.result)))
+Generated
+(!(direction == null && ownedSpecializations.All(item => item.isImplied)) || ownedMembership.OfType<FeatureValue>().All(fv => specializes(fv.value.result)))
+
+Ocl
+ ownedRelationship->selectByKind(TypeFeaturing)->     select(tf | tf.featureOfType = self)
+C#
+ ownedRelationship.OfType<TypeFeaturing>().Where(tf => tf.featureOfType == this)
+Generated
+ownedRelationship.OfType<TypeFeaturing>().Where(tf => tf.featureOfType == this)
+
+Ocl
+ specializesFromLibrary('Performances::metadataAccessEvaluations')
+C#
+ specializesFromLibrary("Performances::metadataAccessEvaluations")
+Generated
+specializesFromLibrary("Performances::metadataAccessEvaluations")
+
+Ocl
+ ownedFeatures->excluding(result)->isEmpty()
+C#
+ !ownedFeatures.Excluding(result).Any()
+Generated
+!ownedFeatures.Where(item => item != result).Any()
+
+  Failed ConsolidatedRules(let with sequence, reject, oclIsKindOf, if, first) [47 ms]
+  Error Message:
+     Expected string length 262 but was 258. Strings differ at index 22.
+  Expected: "ownedMembership.Where(reject => !(reject is ParameterMembersh..."
+  But was:  "ownedMembership.Where(item => !(item is ParameterMembership))..."
+  ---------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+      let nonParameterMemberships : Sequence(Membership) = ownedMembership->reject(oclIsKindOf(ParameterMembership)) in     if nonParameterMemberships->isEmpty() or        not nonParameterMemberships->first().memberElement.oclIsKindOf(Feature)     then null     else nonParameterMemberships->first().memberElement.oclAsType(Feature)     endif
+ C#
+  ownedMembership.Where(reject => !(reject is ParameterMembership)).Select(nonParameterMemberships => (!nonParameterMemberships.Any() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))
+ Generated
+ ownedMembership.Where(item => !(item is ParameterMembership)).Select(nonParameterMemberships => (!nonParameterMemberships.Any() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))
+
+
+  Failed ConsolidatedRules(null, forAll, impies, selectByKind) [10 ms]
+  Error Message:
+     Expected string length 161 but was 156. Strings differ at index 1.
+  Expected: "(direction == null) && (ownedSpecializations.ForAll(item => i..."
+  But was:  "(!(direction == null && ownedSpecializations.All(item => item..."
+  ------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  direction = null and ownedSpecializations->forAll(isImplied) implies     ownedMembership->         selectByKind(FeatureValue)->         forAll(fv | specializes(fv.value.result))
+ C#
+  (direction == null) && (ownedSpecializations.ForAll(item => item.isImplied) || ownedMembership.OfType<FeatureValue>().ForAll(fv => specializes(fv.value.result)))
+ Generated
+ (!(direction == null && ownedSpecializations.All(item => item.isImplied)) || ownedMembership.OfType<FeatureValue>().All(fv => specializes(fv.value.result)))
+
+
+  Failed ConsolidatedRules(excluding, isEmpty) [1 ms]
+  Error Message:
+     Expected string length 38 but was 50. Strings differ at index 15.
+  Expected: "!ownedFeatures.Excluding(result).Any()"
+  But was:  "!ownedFeatures.Where(item => item != result).Any()"
+  --------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  ownedFeatures->excluding(result)->isEmpty()
+ C#
+  !ownedFeatures.Excluding(result).Any()
+ Generated
+ !ownedFeatures.Where(item => item != result).Any()
+
+
+Ocl
+     let nonParameterMemberships : Sequence(Membership) = ownedMembership->         reject(oclIsKindOf(ParameterMembership)) in     if nonParameterMemberships->isEmpty() or        not nonParameterMemberships->first().memberElement.oclIsKindOf(Feature)     then null     else nonParameterMemberships->first().memberElement.oclAsType(Feature)     endif
+C#
+ ownedMembership.Reject(reject => reject is ParameterMembership).Select(nonParameterMemberships => !nonParameterMemberships.Any() ||  !(nonParameterMemberships.First().memberElement is Feature)? null : nonParameterMemberships.First().memberElement as Feature )
+Generated
+ownedMembership.Where(item => !(item is ParameterMembership)).Select(nonParameterMemberships => (!nonParameterMemberships.Any() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))
+
+line 1:96 extraneous input ''in'' expecting ')'
+Ocl
+ ownedFeature->forAll(f |     f <> result implies          f.direction = FeatureDirectionKind::_'in')
+C#
+ ownedFeature.All(f => (!(f != result) || f.direction == FeatureDirectionKind.in))
+Generated
+ownedFeature.All(f => (!(f != result) || f.direction == FeatureDirectionKind._))
+
+Ocl
+ ownedImport->selectByKind(Expose).     importedMemberships(Set{}).memberElement->     select(elm | includeAsExposed(elm))->     asOrderedSet()
+C#
+ ownedImport.OfType<Expose>().importedMemberships(new Set()).memberElement.Where(elm => includeAsExposed(elm)).AsOrderedSet()
+Generated
+ownedImport.OfType<Expose>().importedMemberships(new HashSet<dynamic> {  }).memberElement.Where(elm => includeAsExposed(elm)).Distinct().ToHashSet()
+
+line 1:39 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+Ocl
+ triggerAction->notEmpty() implies     let payloadParameter : Feature = inputParameter(2) in     payloadParameter <> null and     payloadParameter.subsetsChain(triggerAction->at(1), triggerPayloadParameter())
+C#
+ (!(triggerAction.Any()) || inputParameter(2).Select(payloadParameter => payloadParameter != null && payloadParameter.subsetsChain(triggerAction->ElementAt(0), triggerPayloadParameter())))
+Generated
+(!(triggerAction.Any()) || payloadParameter is Feature == inputParameter(2))
+
+Ocl
+ featureWithValue.redefinition.redefinedFeature->     closure(redefinition.redefinedFeature).valuation->     forAll(isDefault)
+C#
+ featureWithValue.redefinition.redefinedFeature.Closure(item => item.redefinition.redefinedFeature).Select(item2 => item2.valuation.ForAll(item3 => item3.isDefault));
+Generated
+featureWithValue.redefinition.redefinedFeature.Closure(item => item.redefinition.redefinedFeature).valuation.All(item => item.isDefault)
+
+Ocl
+     let subjects : OrderedSet(SubjectMembership) =          featureMembership->selectByKind(SubjectMembership) in     if subjects->isEmpty() then null     else subjects->first().ownedSubjectParameter     endif
+C#
+ featureMembership.OfType<SubjectMembership>().Select(subjects => (subjects.IsEmpty() ? null : subjects.First().ownedSubjectParameter))
+Generated
+featureMembership.OfType<SubjectMembership>().Select(subjects => (!subjects.Any() ? null : subjects.First().ownedSubjectParameter))
+
+line 1:178 extraneous input '1' expecting ')'
+Ocl
+ instantiatedType.oclIsKindOf(Behavior) or instantiatedType.oclIsKindOf(Feature) and     instantiatedType.type->exists(oclIsKindOf(Behavior)) and     instantiatedType.type->size(1)
+C#
+ (instantiatedType is Behavior) || (instantiatedType is Feature) && instantiatedType.type.Any(item => (item is Behavior)) && instantiatedType.type.Count() == 1
+Generated
+(instantiatedType is Behavior) || (instantiatedType is Feature) && instantiatedType.type.Any(item => (item is Behavior)) && instantiatedType.type.Count()
+
+Ocl
+     let featuringTypes : OrderedSet(Type) =          featuring.type->asOrderedSet() in     if chainingFeature->isEmpty() then featuringTypes     else         featuringTypes->             union(chainingFeature->first().featuringType)->             asOrderedSet()     endif
+C#
+ featuring.type.AsOrderedSet().Select(featuringTypes => !(chainingFeature.Any()) ? featuringTypes : featuringTypes.Union(chainingFeature.First().featuringType).AsOrderedSet())
+Generated
+featuring.type.Distinct().ToHashSet().Select(featuringTypes => (!chainingFeature.Any() ? featuringTypes : featuringTypes.Union(chainingFeature.First().featuringType).Distinct().ToHashSet()))
+
+Ocl
+ ownedMember->selectByKind(BindingConnector)->exists(b |     b.relatedFeatures->includes(targetFeature) and     b.relatedFeatures->includes(result))
+C#
+ ownedMember.OfType<BindingConnector>().Any(b => b.relatedFeatures.Contains(targetFeature) && b.relatedFeatures.Contains(result))
+Generated
+ownedMember.OfType<BindingConnector>().Any(b => b.relatedFeatures.Contains(targetFeature) && b.relatedFeatures.Contains(result))
+
+  Failed ConsolidatedRules(let with sequence, reject, oclIsKindOf, or, oclIsKindOf, oclAsType) [1 ms]
+  Error Message:
+     Expected string length 259 but was 258. Strings differ at index 16.
+  Expected: "ownedMembership.Reject(reject => reject is ParameterMembershi..."
+  But was:  "ownedMembership.Where(item => !(item is ParameterMembership))..."
+  ---------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+      let nonParameterMemberships : Sequence(Membership) = ownedMembership->         reject(oclIsKindOf(ParameterMembership)) in     if nonParameterMemberships->isEmpty() or        not nonParameterMemberships->first().memberElement.oclIsKindOf(Feature)     then null     else nonParameterMemberships->first().memberElement.oclAsType(Feature)     endif
+ C#
+  ownedMembership.Reject(reject => reject is ParameterMembership).Select(nonParameterMemberships => !nonParameterMemberships.Any() ||  !(nonParameterMemberships.First().memberElement is Feature)? null : nonParameterMemberships.First().memberElement as Feature )
+ Generated
+ ownedMembership.Where(item => !(item is ParameterMembership)).Select(nonParameterMemberships => (!nonParameterMemberships.Any() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))
+
+
+  Failed ConsolidatedRules(forAll containing implies, enum with keyword) [5 ms]
+  Error Message:
+     Expected string length 81 but was 80. Strings differ at index 77.
+  Expected: "...> (!(f != result) || f.direction == FeatureDirectionKind.in))"
+  But was:  "...> (!(f != result) || f.direction == FeatureDirectionKind._))"
+  -----------------------------------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  ownedFeature->forAll(f |     f <> result implies          f.direction = FeatureDirectionKind::_'in')
+ C#
+  ownedFeature.All(f => (!(f != result) || f.direction == FeatureDirectionKind.in))
+ Generated
+ ownedFeature.All(f => (!(f != result) || f.direction == FeatureDirectionKind._))
+
+  Standard Error Messages:
+ line 1:96 extraneous input ''in'' expecting ')'
+
+  Failed ConsolidatedRules(selectByKind, empty set, select, asOrderedSet) [6 ms]
+  Error Message:
+     Expected string length 124 but was 148. Strings differ at index 53.
+  Expected: "...se>().importedMemberships(new Set()).memberElement.Where(e..."
+  But was:  "...se>().importedMemberships(new HashSet<dynamic> {  }).membe..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  ownedImport->selectByKind(Expose).     importedMemberships(Set{}).memberElement->     select(elm | includeAsExposed(elm))->     asOrderedSet()
+ C#
+  ownedImport.OfType<Expose>().importedMemberships(new Set()).memberElement.Where(elm => includeAsExposed(elm)).AsOrderedSet()
+ Generated
+ ownedImport.OfType<Expose>().importedMemberships(new HashSet<dynamic> {  }).memberElement.Where(elm => includeAsExposed(elm)).Distinct().ToHashSet()
+
+
+  Failed ConsolidatedRules(let, functioncall with select on return, at) [1 ms]
+  Error Message:
+     Expected string length 187 but was 76. Strings differ at index 27.
+  Expected: "(!(triggerAction.Any()) || inputParameter(2).Select(payloadPa..."
+  But was:  "(!(triggerAction.Any()) || payloadParameter is Feature == inp..."
+  --------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  triggerAction->notEmpty() implies     let payloadParameter : Feature = inputParameter(2) in     payloadParameter <> null and     payloadParameter.subsetsChain(triggerAction->at(1), triggerPayloadParameter())
+ C#
+  (!(triggerAction.Any()) || inputParameter(2).Select(payloadParameter => payloadParameter != null && payloadParameter.subsetsChain(triggerAction->ElementAt(0), triggerPayloadParameter())))
+ Generated
+ (!(triggerAction.Any()) || payloadParameter is Feature == inputParameter(2))
+
+  Standard Error Messages:
+ line 1:39 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+
+  Failed ConsolidatedRules(closure, forAll) [3 ms]
+  Error Message:
+     Expected string length 165 but was 136. Strings differ at index 99.
+  Expected: "...edefinition.redefinedFeature).Select(item2 => item2.valuat..."
+  But was:  "...edefinition.redefinedFeature).valuation.All(item => item.i..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  featureWithValue.redefinition.redefinedFeature->     closure(redefinition.redefinedFeature).valuation->     forAll(isDefault)
+ C#
+  featureWithValue.redefinition.redefinedFeature.Closure(item => item.redefinition.redefinedFeature).Select(item2 => item2.valuation.ForAll(item3 => item3.isDefault));
+ Generated
+ featureWithValue.redefinition.redefinedFeature.Closure(item => item.redefinition.redefinedFeature).valuation.All(item => item.isDefault)
+
+
+  Failed ConsolidatedRules(let with OrderedSet, selectByKind, isEmpty, first) [1 ms]
+  Error Message:
+     Expected string length 134 but was 131. Strings differ at index 66.
+  Expected: "...ership>().Select(subjects => (subjects.IsEmpty() ? null : ..."
+  But was:  "...ership>().Select(subjects => (!subjects.Any() ? null : sub..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+      let subjects : OrderedSet(SubjectMembership) =          featureMembership->selectByKind(SubjectMembership) in     if subjects->isEmpty() then null     else subjects->first().ownedSubjectParameter     endif
+ C#
+  featureMembership.OfType<SubjectMembership>().Select(subjects => (subjects.IsEmpty() ? null : subjects.First().ownedSubjectParameter))
+ Generated
+ featureMembership.OfType<SubjectMembership>().Select(subjects => (!subjects.Any() ? null : subjects.First().ownedSubjectParameter))
+
+
+  Failed ConsolidatedRules(oclIsKindOf, exists, size with parameter) [2 ms]
+  Error Message:
+     Expected string length 158 but was 153. Strings differ at index 153.
+  Expected: "... => (item is Behavior)) && instantiatedType.type.Count() == 1"
+  But was:  "... => (item is Behavior)) && instantiatedType.type.Count()"
+  ----------------------------------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  instantiatedType.oclIsKindOf(Behavior) or instantiatedType.oclIsKindOf(Feature) and     instantiatedType.type->exists(oclIsKindOf(Behavior)) and     instantiatedType.type->size(1)
+ C#
+  (instantiatedType is Behavior) || (instantiatedType is Feature) && instantiatedType.type.Any(item => (item is Behavior)) && instantiatedType.type.Count() == 1
+ Generated
+ (instantiatedType is Behavior) || (instantiatedType is Feature) && instantiatedType.type.Any(item => (item is Behavior)) && instantiatedType.type.Count()
+
+  Standard Error Messages:
+ line 1:178 extraneous input '1' expecting ')'
+
+  Failed ConsolidatedRules(let with OrderedSet, asOrderedSet, if, isEmpty, union) [2 ms]
+  Error Message:
+     Expected string length 174 but was 190. Strings differ at index 15.
+  Expected: "featuring.type.AsOrderedSet().Select(featuringTypes => !(chai..."
+  But was:  "featuring.type.Distinct().ToHashSet().Select(featuringTypes =..."
+  --------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+      let featuringTypes : OrderedSet(Type) =          featuring.type->asOrderedSet() in     if chainingFeature->isEmpty() then featuringTypes     else         featuringTypes->             union(chainingFeature->first().featuringType)->             asOrderedSet()     endif
+ C#
+  featuring.type.AsOrderedSet().Select(featuringTypes => !(chainingFeature.Any()) ? featuringTypes : featuringTypes.Union(chainingFeature.First().featuringType).AsOrderedSet())
+ Generated
+ featuring.type.Distinct().ToHashSet().Select(featuringTypes => (!chainingFeature.Any() ? featuringTypes : featuringTypes.Union(chainingFeature.First().featuringType).Distinct().ToHashSet()))
+
+
+Ocl
+ ownedFeatureMembership->     selectByKind(TransitionFeatureMembership)->     select(kind = TransitionFeatureKind::trigger).transitionFeature->     selectByKind(Expression)
+C#
+ ownedFeatureMembership.OfType<TransitionFeatureMembership>().Where(item => item.kind == TransitionFeatureKind.trigger).Select(item2 => item2.transitionFeature).OfType<Expression>()
+Generated
+ownedFeatureMembership.OfType<TransitionFeatureMembership>().Where(item => item.kind == TransitionFeatureKind.trigger).transitionFeature.OfType<Expression>()
+
+line 1:280 no viable alternative at input '->'
+line 1:121 mismatched input ''in'' expecting ')'
+Ocl
+ feature->select(f |      let direction: FeatureDirectionKind = directionOf(f) in     direction = FeatureDirectionKind::_'in' or     direction = FeatureDirectionKind::inout)
+C#
+ feature.Where(f => directionOf(f).Select(direction => direction == FeatureDirectionKind._)) || direction == FeatureDirectionKind.inout
+Generated
+feature.Where(f => directionOf(f).Select(direction => direction == FeatureDirectionKind._)) || direction == FeatureDirectionKind.inout
+
+Ocl
+ sourceConnector->selectByKind(Succession)->     collect(connectorEnd->at(1).multiplicity)->     forAll(sourceMult |          multiplicityHasBounds(sourceMult, 1, 1))
+C#
+ // TODO sourceConnector.OfType<Succession>().Select(item => item.connectorEnd.ElementAt(0)).All(sourceMult => multiplicityHasBounds(sourceMult, 1, 1))
+Generated
+sourceConnector.OfType<Succession>().Select(item => connectorEnd.ElementAt(0)).All(sourceMult => multiplicityHasBounds(sourceMult, 1, 1))
+
+Ocl
+ ownedMembership->     selectByKind(StateSubactionMembership)->     isUnique(kind)
+C#
+ ownedMembership.OfType<StateSubactionMembership>().IsUnique(item => item.kind);
+Generated
+ownedMembership.OfType<StateSubactionMembership>().IsUnique(item => item.kind)
+
+Ocl
+ crossFeature <> null implies     crossFeature.type->asSet() = type->asSet()
+C#
+ (!(crossFeature != null) || crossFeature.type.AsSet() == type.AsSet())
+Generated
+(!(crossFeature != null) || crossFeature.type.ToHashSet() == type.ToHashSet())
+
+line 1:48 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:94 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:286 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:417 no viable alternative at input 'ifsuperType.oclIsKindOf(Function'
+line 1:417 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:427 mismatched input 'then' expecting ')'
+line 1:472 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+Ocl
+ owningType <> null and (owningType.oclIsKindOf(Function) and     self = owningType.oclAsType(Function).result or  owningType.oclIsKindOf(Expression) and     self = owningType.oclAsType(Expression).result) implies     owningType.ownedSpecialization.general->         select(oclIsKindOf(Function) or oclIsKindOf(Expression))->         forAll(supertype |             redefines(                 if superType.oclIsKindOf(Function) then                     superType.oclAsType(Function).result                 else                     superType.oclAsType(Expression).result                 endif)
+C#
+ (!(owningType != null && ((owningType is ) && this == (()owningType).result || (owningType is Expression) && this == ((Expression)owningType).result)) || (()owningType.ownedSpecialization.general.Where(item => (item is Function) || (item is Expression)).All(supertype => (redefines() is )).superType).result)
+Generated
+(!(owningType != null && ((owningType is ) && this == (()owningType).result || (owningType is Expression) && this == ((Expression)owningType).result)) || (()owningType.ownedSpecialization.general.Where(item => (item is ) || (item is Expression)).All(supertype => (redefines() is )).superType).result)
+
+Ocl
+     if relatedType->size() < 2 then OrderedSet{}     else          relatedType->             subSequence(2, relatedType->size())->             asOrderedSet()      endif
+C#
+ (relatedType.Count() < 2 ? new OrderedSet() : relatedType.SubSequence(2, relatedType.Count()).AsOrderedSet)
+Generated
+(relatedType.Count() < 2 ? new List<dynamic> {  } : relatedType.subSequence(2, relatedType.Count()).Distinct().ToHashSet())
+
+Ocl
+ let features : OrderedSet(Feature) = instantiatedType.feature->     select(owningMembership.visibility = VisibilityKind::public) in result.ownedFeature->forAll(f |      f.ownedRedefinition.redefinedFeature->         intersection(features)->size() = 1)
+C#
+ instantiatedType.feature.Where(item => owningMembership.visibility == VisibilityKind.public).Select(features => result.ownedFeature.All(f => f.ownedRedefinition.redefinedFeature.Intersect(features).Count() == 1))
+Generated
+instantiatedType.feature.Where(item => owningMembership.visibility == VisibilityKind.public).Select(features => result.ownedFeature.All(f => f.ownedRedefinition.redefinedFeature.Intersect(features).Count() == 1))
+
+  Failed ConsolidatedRules(selectByKind, "empty" select) [2 ms]
+  Error Message:
+     Expected string length 180 but was 157. Strings differ at index 119.
+  Expected: "...Select(item2 => item2.transitionFeature).OfType<Expression>()"
+  But was:  "...transitionFeature.OfType<Expression>()"
+  --------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  ownedFeatureMembership->     selectByKind(TransitionFeatureMembership)->     select(kind = TransitionFeatureKind::trigger).transitionFeature->     selectByKind(Expression)
+ C#
+  ownedFeatureMembership.OfType<TransitionFeatureMembership>().Where(item => item.kind == TransitionFeatureKind.trigger).Select(item2 => item2.transitionFeature).OfType<Expression>()
+ Generated
+ ownedFeatureMembership.OfType<TransitionFeatureMembership>().Where(item => item.kind == TransitionFeatureKind.trigger).transitionFeature.OfType<Expression>()
+
+
+  Failed ConsolidatedRules(let with OrderedSet, new OrderedSet, comment, closure, asOrderedSet, reject, exist) [7 ms]
+  Error Message:
+   System.NullReferenceException : Object reference not set to an instance of an object.
+  Stack Trace:
+     at Ocl2CSharp.OclToCSharpConverter.ApplyPostfixSuffix(String target, PostfixSuffixContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 398
+   at Ocl2CSharp.OclToCSharpConverter.VisitNavigationExpression(NavigationExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 278
+   at Ocl2CSharp.OCLParser.NavigationExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 1394
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.VisitUnaryExpression(UnaryExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 252
+   at Ocl2CSharp.OCLParser.UnaryExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 1291
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.VisitMultiplicativeExpression(MultiplicativeExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 230
+   at Ocl2CSharp.OCLParser.MultiplicativeExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 1215
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.VisitAdditiveExpression(AdditiveExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 207
+   at Ocl2CSharp.OCLParser.AdditiveExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 1139
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.VisitEqualityExpression(EqualityExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 181
+   at Ocl2CSharp.OCLParser.EqualityExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 1063
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.VisitLogicalExpression(LogicalExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 145
+   at Ocl2CSharp.OCLParser.LogicalExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 987
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(IRuleNode node)
+   at Ocl2CSharp.OclToCSharpConverter.VisitExpression(ExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 85
+   at Ocl2CSharp.OCLParser.ExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 403
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.VisitLetExpression(LetExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 129
+   at Ocl2CSharp.OCLParser.LetExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 569
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(IRuleNode node)
+   at Ocl2CSharp.OclToCSharpConverter.VisitExpression(ExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 85
+   at Ocl2CSharp.OCLParser.ExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 403
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.Convert(String oclCode, Boolean useIfStatement) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 47
+   at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 45
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+
+  Standard Error Messages:
+ line 1:280 no viable alternative at input '->'
+
+  Failed ConsolidatedRules(selectByKind, collect, forAll) [3 ms]
+  Error Message:
+     Expected string length 150 but was 137. Strings differ at index 0.
+  Expected: "// TODO sourceConnector.OfType<Succession>().Select(item => i..."
+  But was:  "sourceConnector.OfType<Succession>().Select(item => connector..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  sourceConnector->selectByKind(Succession)->     collect(connectorEnd->at(1).multiplicity)->     forAll(sourceMult |          multiplicityHasBounds(sourceMult, 1, 1))
+ C#
+  // TODO sourceConnector.OfType<Succession>().Select(item => item.connectorEnd.ElementAt(0)).All(sourceMult => multiplicityHasBounds(sourceMult, 1, 1))
+ Generated
+ sourceConnector.OfType<Succession>().Select(item => connectorEnd.ElementAt(0)).All(sourceMult => multiplicityHasBounds(sourceMult, 1, 1))
+
+
+  Failed ConsolidatedRules(selectByKind, isUnique) [1 ms]
+  Error Message:
+     Expected string length 79 but was 78. Strings differ at index 78.
+  Expected: "...Type<StateSubactionMembership>().IsUnique(item => item.kind);"
+  But was:  "...Type<StateSubactionMembership>().IsUnique(item => item.kind)"
+  --------------------------------------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  ownedMembership->     selectByKind(StateSubactionMembership)->     isUnique(kind)
+ C#
+  ownedMembership.OfType<StateSubactionMembership>().IsUnique(item => item.kind);
+ Generated
+ ownedMembership.OfType<StateSubactionMembership>().IsUnique(item => item.kind)
+
+
+  Failed ConsolidatedRules(implies, asSet) [1 ms]
+  Error Message:
+     Expected string length 70 but was 78. Strings differ at index 46.
+  Expected: "...= null) || crossFeature.type.AsSet() == type.AsSet())"
+  But was:  "...= null) || crossFeature.type.ToHashSet() == type.ToHashSet())"
+  -------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  crossFeature <> null implies     crossFeature.type->asSet() = type->asSet()
+ C#
+  (!(crossFeature != null) || crossFeature.type.AsSet() == type.AsSet())
+ Generated
+ (!(crossFeature != null) || crossFeature.type.ToHashSet() == type.ToHashSet())
+
+
+  Failed ConsolidatedRules(The big one) [7 ms]
+  Error Message:
+     Expected string length 308 but was 300. Strings differ at index 219.
+  Expected: "...eneral.Where(item => (item is Function) || (item is Expres..."
+  But was:  "...eneral.Where(item => (item is ) || (item is Expression)).A..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  owningType <> null and (owningType.oclIsKindOf(Function) and     self = owningType.oclAsType(Function).result or  owningType.oclIsKindOf(Expression) and     self = owningType.oclAsType(Expression).result) implies     owningType.ownedSpecialization.general->         select(oclIsKindOf(Function) or oclIsKindOf(Expression))->         forAll(supertype |             redefines(                 if superType.oclIsKindOf(Function) then                     superType.oclAsType(Function).result                 else                     superType.oclAsType(Expression).result                 endif)
+ C#
+  (!(owningType != null && ((owningType is ) && this == (()owningType).result || (owningType is Expression) && this == ((Expression)owningType).result)) || (()owningType.ownedSpecialization.general.Where(item => (item is Function) || (item is Expression)).All(supertype => (redefines() is )).superType).result)
+ Generated
+ (!(owningType != null && ((owningType is ) && this == (()owningType).result || (owningType is Expression) && this == ((Expression)owningType).result)) || (()owningType.ownedSpecialization.general.Where(item => (item is ) || (item is Expression)).All(supertype => (redefines() is )).superType).result)
+
+  Standard Error Messages:
+ line 1:48 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:94 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:286 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:417 no viable alternative at input 'ifsuperType.oclIsKindOf(Function'
+ line 1:417 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:427 mismatched input 'then' expecting ')'
+ line 1:472 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+
+  Failed ConsolidatedRules(if, size, OrderedSet) [1 ms]
+  Error Message:
+     Expected string length 107 but was 123. Strings differ at index 31.
+  Expected: "...relatedType.Count() < 2 ? new OrderedSet() : relatedType.S..."
+  But was:  "...relatedType.Count() < 2 ? new List<dynamic> {  } : related..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+      if relatedType->size() < 2 then OrderedSet{}     else          relatedType->             subSequence(2, relatedType->size())->             asOrderedSet()      endif
+ C#
+  (relatedType.Count() < 2 ? new OrderedSet() : relatedType.SubSequence(2, relatedType.Count()).AsOrderedSet)
+ Generated
+ (relatedType.Count() < 2 ? new List<dynamic> {  } : relatedType.subSequence(2, relatedType.Count()).Distinct().ToHashSet())
+
+
+Ocl
+ let targetParameter : Feature = inputParameter(1) in targetParameter <> null and targetParameter.ownedFeature->notEmpty() and targetParameter->first().ownedFeature->notEmpty() and targetParameter->first().ownedFeature->first().redefines(referent)
+C#
+ inputParameter(1).Select(targetParameter => targetParameter != null && targetParameter.ownedFeature.Any() && targetParameter.First().ownedFeature.Any() && targetParameter.First().ownedFeature.First().redefines(referent))
+Generated
+inputParameter(1).Select(targetParameter => targetParameter != null && targetParameter.ownedFeature.Any() && targetParameter.First().ownedFeature.Any() && targetParameter.First().ownedFeature.First().redefines(referent))
+
+Ocl
+     if owningNamespace = null then null     else if name <> null and          owningNamespace.ownedMember->         select(m | m.name = name).indexOf(self) <> 1 then null     else if owningNamespace.owner = null then escapedName()     else if owningNamespace.qualifiedName = null or              escapedName() = null then null     else owningNamespace.qualifiedName + '::' + escapedName()     endif endif endif endif
+C#
+ (owningNamespace == null ? null : (name != null && owningNamespace.ownedMember.Where(m => m.name == name).IndexOf(this) != 1 ? null : (owningNamespace.owner == null ? escapedName() : (owningNamespace.qualifiedName == null || escapedName() == null ? null : owningNamespace.qualifiedName + "::" + escapedName()))))
+Generated
+(owningNamespace == null ? null : (name != null && owningNamespace.ownedMember.Where(m => m.name == name).IndexOf(this) != 1 ? null : (owningNamespace.owner == null ? escapedName() : (owningNamespace.qualifiedName == null || escapedName() == null ? null : owningNamespace.qualifiedName + "::" + escapedName()))))
+
+Ocl
+ ownedAnnotatingElement <> null xor owningAnnotatingElement <> null
+C#
+ ownedAnnotatingElement != null ^ owningAnnotatingElement != null
+Generated
+ownedAnnotatingElement != null ^ owningAnnotatingElement != null
+
+Ocl
+ inheritedMemberships(Set{}, Set{}, false)
+C#
+ inheritedMemberships(new Set(), new Set(), false)
+Generated
+inheritedMemberships(new HashSet<dynamic> {  }, new HashSet<dynamic> {  }, false)
+
+Ocl
+     if succession.targetFeature->isEmpty() then null     else         let targetFeature : Feature =             succession.targetFeature->first().featureTarget in         if not targetFeature.oclIsKindOf(ActionUsage) then null         else targetFeature.oclAsType(ActionUsage)         endif     endif
+C#
+ (!succession.targetFeature.Any() ? null : (succession.targetFeature.First().featureTarget).Select(targetFeature => (!(targetFeature is ActionUsage) ? null : ((ActionUsage)targetFeature))))
+Generated
+(!succession.targetFeature.Any() ? null : (succession.targetFeature.First().featureTarget).Select(targetFeature => (!(targetFeature is ActionUsage) ? null : ((ActionUsage)targetFeature))))
+
+Ocl
+ if chainingFeature->isEmpty() then self else chainingFeature->last() endif
+C#
+ (!chainingFeature.Any() ? this : chainingFeature.Last())
+Generated
+(!chainingFeature.Any() ? this : chainingFeature.Last())
+
+Ocl
+ ownedMembership.selectByKind(ResultExpressionMembership)->     forAll(mem | ownedFeature.selectByKind(BindingConnector)->         exists(binding |             binding.relatedFeature->includes(result) and             binding.relatedFeature->includes(mem.ownedResultExpression.result)))
+C#
+ ownedMembership.selectByKind(ResultExpressionMembership).All(mem => ownedFeature.selectByKind(BindingConnector).Any(binding => binding.relatedFeature.Contains(result) && binding.relatedFeature.Contains(mem.ownedResultExpression.result)))
+Generated
+ownedMembership.selectByKind(ResultExpressionMembership).All(mem => ownedFeature.selectByKind(BindingConnector).Any(binding => binding.relatedFeature.Contains(result) && binding.relatedFeature.Contains(mem.ownedResultExpression.result)))
+
+line 1:362 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:390 extraneous input 'Set' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+Ocl
+ let baseAnnotatedElementFeature : Feature =     resolveGlobal('Metaobjects::Metaobject::annotatedElement').memberElement.     oclAsType(Feature) in let annotatedElementFeatures : OrderedSet(Feature) = feature->     select(specializes(baseAnnotatedElementFeature))->     excluding(baseAnnotatedElementFeature) in annotatedElementFeatures->notEmpty() implies     let annotatedElementTypes : Set(Feature) =         annotatedElementFeatures.typing.type->asSet() in     let metaclasses : Set(Metaclass) =         annotatedElement.oclType().qualifiedName->collect(qn |              resolveGlobal(qn).memberElement.oclAsType(Metaclass)) in    metaclasses->forAll(m | annotatedElementTypes->exists(t | m.specializes(t)))
+C#
+ ((Feature)resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberElement).Select(baseAnnotatedElementFeature => feature.Where(item => specializes(baseAnnotatedElementFeature)).Where(item2 => item2 != baseAnnotatedElementFeature).Select(annotatedElementFeatures => (!(annotatedElementFeatures.Any()) || annotatedElementTypes is (Feature) == annotatedElementFeatures.typing.type.ToHashSet())))
+Generated
+((Feature)resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberElement).Select(baseAnnotatedElementFeature => feature.Where(item => specializes(baseAnnotatedElementFeature)).Where(item => item != baseAnnotatedElementFeature).Select(annotatedElementFeatures => (!(annotatedElementFeatures.Any()) || annotatedElementTypes is (Feature) == annotatedElementFeatures.typing.type.ToHashSet())))
+
+  Failed ConsolidatedRules(empty sets as parameter) [3 ms]
+  Error Message:
+     Expected string length 49 but was 81. Strings differ at index 25.
+  Expected: "...(new Set(), new Set(), false)"
+  But was:  "...(new HashSet<dynamic> {  }, new HashSet<dynamic> {  }, false)"
+  -------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  inheritedMemberships(Set{}, Set{}, false)
+ C#
+  inheritedMemberships(new Set(), new Set(), false)
+ Generated
+ inheritedMemberships(new HashSet<dynamic> {  }, new HashSet<dynamic> {  }, false)
+
+
+  Failed ConsolidatedRules(second big if) [2 ms]
+  Error Message:
+     Expected string length 401 but was 399. Strings differ at index 196.
+  Expected: "...tedElementFeature)).Where(item2 => item2 != baseAnnotatedE..."
+  But was:  "...tedElementFeature)).Where(item => item != baseAnnotatedEle..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.ConsolidatedRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 54
+   at InvokeStub_TestFileOclConstraintTests.ConsolidatedRules(Object, Span`1)
+
+
+  Standard Output Messages:
+ Ocl
+  let baseAnnotatedElementFeature : Feature =     resolveGlobal('Metaobjects::Metaobject::annotatedElement').memberElement.     oclAsType(Feature) in let annotatedElementFeatures : OrderedSet(Feature) = feature->     select(specializes(baseAnnotatedElementFeature))->     excluding(baseAnnotatedElementFeature) in annotatedElementFeatures->notEmpty() implies     let annotatedElementTypes : Set(Feature) =         annotatedElementFeatures.typing.type->asSet() in     let metaclasses : Set(Metaclass) =         annotatedElement.oclType().qualifiedName->collect(qn |              resolveGlobal(qn).memberElement.oclAsType(Metaclass)) in    metaclasses->forAll(m | annotatedElementTypes->exists(t | m.specializes(t)))
+ C#
+  ((Feature)resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberElement).Select(baseAnnotatedElementFeature => feature.Where(item => specializes(baseAnnotatedElementFeature)).Where(item2 => item2 != baseAnnotatedElementFeature).Select(annotatedElementFeatures => (!(annotatedElementFeatures.Any()) || annotatedElementTypes is (Feature) == annotatedElementFeatures.typing.type.ToHashSet())))
+ Generated
+ ((Feature)resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberElement).Select(baseAnnotatedElementFeature => feature.Where(item => specializes(baseAnnotatedElementFeature)).Where(item => item != baseAnnotatedElementFeature).Select(annotatedElementFeatures => (!(annotatedElementFeatures.Any()) || annotatedElementTypes is (Feature) == annotatedElementFeatures.typing.type.ToHashSet())))
+
+  Standard Error Messages:
+ line 1:362 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:390 extraneous input 'Set' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+
+  Failed SysMLRules(DeriveFeatureReferenceExpressionReferent) [1 ms]
+  Error Message:
+     Expected string length 266 but was 258. Strings differ at index 0.
+  Expected: "// TODO ownedMembership.Where(item => !(item is ParameterMemb..."
+  But was:  "ownedMembership.Where(item => !(item is ParameterMembership))..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:96 extraneous input ''in'' expecting ')'
+  Failed SysMLRules(DeriveFeatureChainExpressionTargetFeature) [1 ms]
+  Error Message:
+     Expected string length 266 but was 258. Strings differ at index 0.
+  Expected: "// TODO ownedMembership.Where(item => !(item is ParameterMemb..."
+  But was:  "ownedMembership.Where(item => !(item is ParameterMembership))..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(ValidateInvocationExpressionOwnedFeatures) [1 ms]
+  Error Message:
+     Expected string length 81 but was 80. Strings differ at index 77.
+  Expected: "...> (!(f != result) || f.direction == FeatureDirectionKind.in))"
+  But was:  "...> (!(f != result) || f.direction == FeatureDirectionKind._))"
+  -----------------------------------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:96 extraneous input ''in'' expecting ')'
+
+line 1:39 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(CheckTransitionUsagePayloadSpecialization) [< 1 ms]
+  Error Message:
+     Expected string length 187 but was 76. Strings differ at index 27.
+  Expected: "(!(triggerAction.Any()) || inputParameter(2).Select(payloadPa..."
+  But was:  "(!(triggerAction.Any()) || payloadParameter is Feature == inp..."
+  --------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:39 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+
+  Failed SysMLRules(ValidateFeatureValueOverriding) [1 ms]
+  Error Message:
+     Expected string length 110 but was 136. Strings differ at index 0.
+  Expected: "// TODO featureWithValue.redefinition.redefinedFeature.Any(it..."
+  But was:  "featureWithValue.redefinition.redefinedFeature.Closure(item =..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveAllocationDefinitionAllocation) [< 1 ms]
+  Error Message:
+     Expected string length 65 but was 35. Strings differ at index 6.
+  Expected: "...e.OfType<AllocationUsage>().Select(item => item.selectAsKind)"
+  But was:  "...e.selectAsKind(AllocationUsage)"
+  ----------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:400 missing ')' at '<EOF>'
+  Failed SysMLRules(ValidateTransitionUsageSuccession) [1 ms]
+  Error Message:
+     Expected string length 164 but was 150. Strings differ at index 101.
+  Expected: "...) && successions.ElementAt(0).targetFeature.featureTarget...."
+  But was:  "...) && successions.ElementAt(0).featureTarget.All(item => (i..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveRequirementDefinitionRequiredConstraint) [1 ms]
+  Error Message:
+     Expected string length 141 but was 146. Strings differ at index 79.
+  Expected: "...ntMembership>().Where(item => kind == RequirementConstrain..."
+  But was:  "...ntMembership>().Where(item => item.kind == RequirementCons..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:99 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:178 extraneous input '1' expecting ')'
+line 1:270 missing 'endif' at '<EOF>'
+  Failed SysMLRules(ValidateAssignmentActionUsageReferent) [1 ms]
+  Error Message:
+     Expected string length 84 but was 86. Strings differ at index 29.
+  Expected: "...=> ! (item.OwningMembership) && (memberElement is Feature))"
+  But was:  "...=> !(item is OwningMembership) && (memberElement is Feature))"
+  ------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveCaseDefinitionActorParameter) [< 1 ms]
+  Error Message:
+     Expected string length 43 but was 84. Strings differ at index 43.
+  Expected: "...e<ActorMembership>()"
+  But was:  "...e<ActorMembership>().Select(item => item.ownedActorParameter)"
+  ----------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveFunctionResult) [1 ms]
+  Error Message:
+     Expected string length 129 but was 171. Strings differ at index 62.
+  Expected: "...ParameterMembership>().Select(resultParams => (resultParam..."
+  But was:  "...ParameterMembership>().Select(item => item.ownedMemberPara..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(CheckFeatureSubobjectSpecialization) [2 ms]
+  Error Message:
+     Expected string length 220 but was 236. Strings differ at index 45.
+  Expected: "...&& ownedTyping.type.Contains((Structure)) && owningType !=..."
+  But was:  "...&& ownedTyping.type.Contains((this is Structure)) && ownin..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:280 no viable alternative at input '->'
+  Failed SysMLRules(DeriveFeatureType) [1 ms]
+  Error Message:
+   System.NullReferenceException : Object reference not set to an instance of an object.
+  Stack Trace:
+     at Ocl2CSharp.OclToCSharpConverter.ApplyPostfixSuffix(String target, PostfixSuffixContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 398
+   at Ocl2CSharp.OclToCSharpConverter.VisitNavigationExpression(NavigationExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 278
+   at Ocl2CSharp.OCLParser.NavigationExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 1394
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.VisitUnaryExpression(UnaryExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 252
+   at Ocl2CSharp.OCLParser.UnaryExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 1291
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.VisitMultiplicativeExpression(MultiplicativeExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 230
+   at Ocl2CSharp.OCLParser.MultiplicativeExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 1215
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.VisitAdditiveExpression(AdditiveExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 207
+   at Ocl2CSharp.OCLParser.AdditiveExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 1139
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.VisitEqualityExpression(EqualityExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 181
+   at Ocl2CSharp.OCLParser.EqualityExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 1063
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.VisitLogicalExpression(LogicalExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 145
+   at Ocl2CSharp.OCLParser.LogicalExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 987
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(IRuleNode node)
+   at Ocl2CSharp.OclToCSharpConverter.VisitExpression(ExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 85
+   at Ocl2CSharp.OCLParser.ExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 403
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.VisitLetExpression(LetExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 129
+   at Ocl2CSharp.OCLParser.LetExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 569
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(IRuleNode node)
+   at Ocl2CSharp.OclToCSharpConverter.VisitExpression(ExpressionContext context) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 85
+   at Ocl2CSharp.OCLParser.ExpressionContext.Accept[TResult](IParseTreeVisitor`1 visitor) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/Generated/OCLParser.cs:line 403
+   at Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.Visit(IParseTree tree)
+   at Ocl2CSharp.OclToCSharpConverter.Convert(String oclCode, Boolean useIfStatement) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp/OclToCSharpConverter.cs:line 47
+   at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 27
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+
+  Standard Error Messages:
+ line 1:280 no viable alternative at input '->'
+
+  Failed SysMLRules(ValidatePortUsageNestedUsagesNotComposite) [1 ms]
+  Error Message:
+     Expected string length 79 but was 78. Strings differ at index 28.
+  Expected: "...item => !((item.PortUsage))).All(item2 => !item2.isComposite)"
+  But was:  "...item => !(item is PortUsage)).All(item => !item.isComposite)"
+  ------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveCaseUsageObjectiveRequirement) [1 ms]
+  Error Message:
+     Expected string length 143 but was 181. Strings differ at index 55.
+  Expected: "...ObjectiveMembership>().Select(objectives => (!objectives.A..."
+  But was:  "...ObjectiveMembership>().Select(item => item.ownedRequiremen..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveRequirementDefinitionActorParameter) [< 1 ms]
+  Error Message:
+     Expected string length 43 but was 84. Strings differ at index 43.
+  Expected: "...e<ActorMembership>()"
+  But was:  "...e<ActorMembership>().Select(item => item.ownedActorParameter)"
+  ----------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:121 mismatched input ''in'' expecting ')'
+line 1:83 extraneous input ''in'' expecting ')'
+  Failed SysMLRules(ValidateControlNodeOutgoingSuccessions) [4 ms]
+  Error Message:
+     Expected string length 150 but was 137. Strings differ at index 0.
+  Expected: "// TODO sourceConnector.OfType<Succession>().Select(item => i..."
+  But was:  "sourceConnector.OfType<Succession>().Select(item => connector..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(ValidateStateUsageStateSubactionKind) [< 1 ms]
+  Error Message:
+     Expected string length 159 but was 78. Strings differ at index 0.
+  Expected: "(ownedMembership.OfType<StateSubactionMembership>().Select(it..."
+  But was:  "ownedMembership.OfType<StateSubactionMembership>().IsUnique(i..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:48 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:94 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:286 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:417 no viable alternative at input 'ifsuperType.oclIsKindOf(Function'
+line 1:417 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:427 mismatched input 'then' expecting ')'
+line 1:472 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(ValidateStateDefinitionStateSubactionKind) [< 1 ms]
+  Error Message:
+     Expected string length 159 but was 78. Strings differ at index 0.
+  Expected: "(ownedMembership.OfType<StateSubactionMembership>().Select(it..."
+  But was:  "ownedMembership.OfType<StateSubactionMembership>().IsUnique(i..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(CheckFeatureResultRedefinition) [3 ms]
+  Error Message:
+     Expected string length 308 but was 300. Strings differ at index 219.
+  Expected: "...eneral.Where(item => (item is Function) || (item is Expres..."
+  But was:  "...eneral.Where(item => (item is ) || (item is Expression)).A..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:48 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:94 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:286 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:417 no viable alternative at input 'ifsuperType.oclIsKindOf(Function'
+ line 1:417 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:427 mismatched input 'then' expecting ')'
+ line 1:472 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+
+  Failed SysMLRules(DeriveAssociationTargetType) [< 1 ms]
+  Error Message:
+     Expected string length 135 but was 123. Strings differ at index 100.
+  Expected: "...e(2, relatedType.Count()).subSequence.Distinct().ToHashSet())"
+  But was:  "...e(2, relatedType.Count()).Distinct().ToHashSet())"
+  ----------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveNamespaceOwnedMember) [< 1 ms]
+  Error Message:
+     Expected string length 42 but was 82. Strings differ at index 42.
+  Expected: "...e<OwningMembership>()"
+  But was:  "...e<OwningMembership>().Select(item => item.ownedMemberElement)"
+  -----------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:34 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:162 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(CheckInvocationExpressionBehaviorBindingConnector) [3 ms]
+  Error Message:
+     Expected string length 257 but was 249. Strings differ at index 119.
+  Expected: "...pe).type.Any(item => (item is Function)))) || ownedFeature..."
+  But was:  "...pe).type.Any(item => (item is )))) || ownedFeature.selectB..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:34 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:162 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+
+  Failed SysMLRules(ValidatePortDefinitionOwnedUsagesNotComposite) [< 1 ms]
+  Error Message:
+     Expected string length 81 but was 77. Strings differ at index 27.
+  Expected: "...m => !((item is PortUsage))).All(item2 => !item2.isComposite)"
+  But was:  "...m => !(item is PortUsage)).All(item => !item.isComposite)"
+  ---------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:362 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:390 extraneous input 'Set' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(ValidateMetadataFeatureAnnotatedElement) [2 ms]
+  Error Message:
+     Expected string length 401 but was 399. Strings differ at index 196.
+  Expected: "...tedElementFeature)).Where(item2 => item2 != baseAnnotatedE..."
+  But was:  "...tedElementFeature)).Where(item => item != baseAnnotatedEle..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:362 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:390 extraneous input 'Set' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+
+line 1:151 missing 'endif' at '<EOF>'
+line 1:42 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:181 missing ')' at '<EOF>'
+  Failed SysMLRules(DeriveStateDefinitionExitAction) [< 1 ms]
+  Error Message:
+     Expected string length 200 but was 192. Strings differ at index 0.
+  Expected: "// TODO ownedMembership.OfType<StateSubactionMembership>().Wh..."
+  But was:  "ownedMembership.OfType<StateSubactionMembership>().Where(item..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(ValidateClassSpecialization) [1 ms]
+  Error Message:
+     Expected string length 150 but was 158. Strings differ at index 69.
+  Expected: "... => !(item is DataType)) && !(Association)) || ownedSpecia..."
+  But was:  "... => !(item is DataType)) && !(this is Association)) || own..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveStateUsageDoAction) [< 1 ms]
+  Error Message:
+     Expected string length 192 but was 184. Strings differ at index 0.
+  Expected: "// TODO ownedMembership.OfType<StateSubactionMembership>().Wh..."
+  But was:  "ownedMembership.OfType<StateSubactionMembership>().Where(item..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveRequirementDefinitionStakeholderParameter) [< 1 ms]
+  Error Message:
+     Expected string length 48 but was 95. Strings differ at index 48.
+  Expected: "...rMembership>()"
+  But was:  "...rMembership>().Select(item => item.ownedStakeholderParameter)"
+  ----------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(ValidateAssociationEndTypes) [< 1 ms]
+  Error Message:
+     Expected string length 51 but was 46. Strings differ at index 28.
+  Expected: "ownedEndFeature.All(item => item.type.Count() == 1)"
+  But was:  "ownedEndFeature.All(item => type.Count() == 1)"
+  ---------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:35 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:51 extraneous input 'OrderedSet' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(CheckFeatureSuboccurrenceSpecialization) [1 ms]
+  Error Message:
+     Expected string length 257 but was 265. Strings differ at index 45.
+  Expected: "...&& ownedTyping.type.Contains((Class)) && owningType != nul..."
+  But was:  "...&& ownedTyping.type.Contains((this is Class)) && owningTyp..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:34 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:162 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(CheckInvocationExpressionBehaviorResultSpecialization) [1 ms]
+  Error Message:
+     Expected string length 180 but was 164. Strings differ at index 25.
+  Expected: "(!(!(instantiatedType is Function) && !((instantiatedType is ..."
+  But was:  "(!(!(instantiatedType is ) && !((instantiatedType is Feature)..."
+  ------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:34 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:162 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+
+  Failed SysMLRules(CheckFeatureDataValueSpecialization) [1 ms]
+  Error Message:
+     Expected string length 108 but was 103. Strings differ at index 32.
+  Expected: "...(ownedTyping.type.Any(item => item.selectByKind(DataType))..."
+  But was:  "...(ownedTyping.type.Any(item => selectByKind(DataType))) || ..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveStateDefinitionDoAction) [< 1 ms]
+  Error Message:
+     Expected string length 196 but was 184. Strings differ at index 0.
+  Expected: "// TODO ownedMembership.OfType<StateSubactionMembership>().Wh..."
+  But was:  "ownedMembership.OfType<StateSubactionMembership>().Where(item..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveRequirementUsageFramedConcern) [< 1 ms]
+  Error Message:
+     Expected string length 51 but was 85. Strings differ at index 51.
+  Expected: "...<FramedConcernMembership>()"
+  But was:  "...<FramedConcernMembership>().Select(item => item.ownedConcern)"
+  -----------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveCaseDefinitionObjectiveRequirement) [1 ms]
+  Error Message:
+     Expected string length 204 but was 181. Strings differ at index 0.
+  Expected: "//TODO fix featureMembership.OfType<ObjectiveMembership>().Se..."
+  But was:  "featureMembership.OfType<ObjectiveMembership>().Select(item =..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(CheckFeaturePortionSpecialization) [1 ms]
+  Error Message:
+     Expected string length 249 but was 257. Strings differ at index 43.
+  Expected: "...&& ownedTyping.type.Contains((Class)) && owningType != nul..."
+  But was:  "...&& ownedTyping.type.Contains((this is Class)) && owningTyp..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:257 mismatched input '<EOF>' expecting ')'
+line 1:294 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:501 mismatched input 'in' expecting ')'
+line 1:917 missing ')' at '<EOF>'
+  Failed SysMLRules(CheckFeatureOccurrenceSpecialization) [1 ms]
+  Error Message:
+     Expected string length 113 but was 108. Strings differ at index 32.
+  Expected: "...(ownedTyping.type.Any(item => item.selectByKind(Class))) |..."
+  But was:  "...(ownedTyping.type.Any(item => selectByKind(Class))) || spe..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(CheckTransitionUsageTransitionFeatureSpecialization) [1 ms]
+  Error Message:
+     Expected string length 282 but was 268. Strings differ at index 26.
+  Expected: "triggerAction.All(item => item.specializesFromLibrary("Action..."
+  But was:  "triggerAction.All(item => specializesFromLibrary("Actions::Tr..."
+  -------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:257 mismatched input '<EOF>' expecting ')'
+
+  Failed SysMLRules(CheckFeatureParameterRedefinition) [3 ms]
+  Error Message:
+     Expected string length 393 but was 695. Strings differ at index 0.
+  Expected: "// TODO owningType != null && !(owningFeatureMembership is Re..."
+  But was:  "owningType != null && !(owningFeatureMembership is ReturnPara..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:294 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:501 mismatched input 'in' expecting ')'
+ line 1:917 missing ')' at '<EOF>'
+
+line 1:259 missing ')' at '<EOF>'
+  Failed SysMLRules(DeriveExpressionResult) [1 ms]
+  Error Message:
+     Expected string length 129 but was 171. Strings differ at index 62.
+  Expected: "...ParameterMembership>().Select(resultParams => (resultParam..."
+  But was:  "...ParameterMembership>().Select(item => item.ownedMemberPara..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(CheckFeatureObjectSpecialization) [1 ms]
+  Error Message:
+     Expected string length 109 but was 103. Strings differ at index 32.
+  Expected: "...(ownedTyping.type.Any(item => item.kselectByKind(Structure..."
+  But was:  "...(ownedTyping.type.Any(item => selectByKind(Structure))) ||..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveUseCaseDefinitionIncludedUseCase) [< 1 ms]
+  Error Message:
+     Expected string length 42 but was 79. Strings differ at index 42.
+  Expected: "...e<IncludeUseCaseUsage>()"
+  But was:  "...e<IncludeUseCaseUsage>().Select(item => item.useCaseIncluded)"
+  --------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveMetadataAccessExpressionReferencdElement) [< 1 ms]
+  Error Message:
+     Expected string length 146 but was 139. Strings differ at index 0.
+  Expected: "// TODO (ownedMembership.Where(item => !(item is FeatureMembe..."
+  But was:  "(ownedMembership.Where(item => !(item is FeatureMembership))...."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:295 extraneous input 'if' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:312 mismatched input 'then' expecting ')'
+line 1:124 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:102 extraneous input 'if' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(ValidateTriggerInvocationExpressionWhenArgument) [1 ms]
+  Error Message:
+     Expected string length 195 but was 183. Strings differ at index 0.
+  Expected: "// TODO (!(TriggerKind.when) || argument.Any()) && (argument...."
+  But was:  "(!(TriggerKind.when) || argument.Any()) && (argument.ElementA..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:124 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+
+  Failed SysMLRules(CheckMergeNodeIncomingSuccessionSpecialization) [1 ms]
+  Error Message:
+     Expected string length 145 but was 140. Strings differ at index 49.
+  Expected: "...ype<Succession>().All(item => item.subsetsChain(this, reso..."
+  But was:  "...ype<Succession>().All(item => subsetsChain(this, resolveGl..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveRequirementUsageStakeholderParameter) [< 1 ms]
+  Error Message:
+     Expected string length 49 but was 96. Strings differ at index 49.
+  Expected: "...rMembership>()"
+  But was:  "...rMembership>().Select(item => item.ownedStakeholderParameter)"
+  ----------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveConnectorTargetFeature) [< 1 ms]
+  Error Message:
+     Expected string length 144 but was 132. Strings differ at index 109.
+  Expected: "..., relatedFeature.Count()).subSequence.Distinct().ToHashSet())"
+  But was:  "..., relatedFeature.Count()).Distinct().ToHashSet())"
+  ----------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(ValidateMergeNodeIncomingSuccessions) [1 ms]
+  Error Message:
+     Expected string length 150 but was 137. Strings differ at index 0.
+  Expected: "// TODO targetConnector.OfType<Succession>().Select(item => i..."
+  But was:  "targetConnector.OfType<Succession>().Select(item => connector..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveStateDefinitionEntryAction) [3 ms]
+  Error Message:
+     Expected string length 204 but was 196. Strings differ at index 0.
+  Expected: "// TODO ownedMembership.OfType<StateSubactionMembership>().Wh..."
+  But was:  "ownedMembership.OfType<StateSubactionMembership>().Where(item..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveConnectorDefaultFeaturingType) [2 ms]
+  Error Message:
+     Expected string length 360 but was 395. Strings differ at index 0.
+  Expected: "/* closure */ relatedFeature.Where(t => relatedFeature.All(f ..."
+  But was:  "relatedFeature.Closure(item => item.featuringType).Where(t =>..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:110 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(DeriveUseCaseUsageIncludedUseCase) [1 ms]
+  Error Message:
+     Expected string length 42 but was 79. Strings differ at index 42.
+  Expected: "...e<IncludeUseCaseUsage>()"
+  But was:  "...e<IncludeUseCaseUsage>().Select(item => item.useCaseIncluded)"
+  --------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(ValidateDecisionNodeOutgoingSuccessions) [< 1 ms]
+  Error Message:
+     Expected string length 168 but was 141. Strings differ at index 0.
+  Expected: "// TODO sourceConnector.selectAsKind(Succession).selectAsKind..."
+  But was:  "sourceConnector.selectAsKind(Succession).Select(item => conne..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:24 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:24 mismatched input 'Function' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(DeriveStateUsageExitAction) [1 ms]
+  Error Message:
+     Expected string length 200 but was 192. Strings differ at index 0.
+  Expected: "// TODO ownedMembership.OfType<StateSubactionMembership>().Wh..."
+  But was:  "ownedMembership.OfType<StateSubactionMembership>().Where(item..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:86 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(DeriveAssignmentActionUsageReferent) [1 ms]
+  Error Message:
+     Expected string length 189 but was 187. Strings differ at index 32.
+  Expected: "...nedMembership.Where(item => !((item is FeatureMembership))..."
+  But was:  "...nedMembership.Where(item => !(item is FeatureMembership))...."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveRequirementUsageActorParameter) [< 1 ms]
+  Error Message:
+     Expected string length 43 but was 84. Strings differ at index 43.
+  Expected: "...e<ActorMembership>()"
+  But was:  "...e<ActorMembership>().Select(item => item.ownedActorParameter)"
+  ----------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(ValidateMetadataFeatureBody) [10 ms]
+  Error Message:
+     Expected string length 209 but was 230. Strings differ at index 0.
+  Expected: "/* closure */ ownedFeature.All(f => (!(f.declaredName == null..."
+  But was:  "ownedFeature.Closure(item => item.ownedFeature).All(f => (!(f..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveStateUsageEntryAction) [< 1 ms]
+  Error Message:
+     Expected string length 204 but was 196. Strings differ at index 0.
+  Expected: "// TODO ownedMembership.OfType<StateSubactionMembership>().Wh..."
+  But was:  "ownedMembership.OfType<StateSubactionMembership>().Where(item..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:679 mismatched input '<EOF>' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:74 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:91 extraneous input 'Sequence' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(ValidateFeatureEndMultiplicity) [2 ms]
+  Error Message:
+     Expected string length 126 but was 113. Strings differ at index 56.
+  Expected: "...s().allSuperTypes().flatten().flatten.OfType<MultiplicityR..."
+  But was:  "...s().allSuperTypes().flatten().OfType<MultiplicityRange>()...."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(ValidateRedefinitionFeaturingTypes) [3 ms]
+  Error Message:
+     Expected string length 531 but was 95. Strings differ at index 0.
+  Expected: "// TODO ((Type)redefiningFeature.resolveGlobal("Base::Anythin..."
+  But was:  "((Type)redefiningFeature.resolveGlobal("Base::Anything").mode..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:679 mismatched input '<EOF>' expecting {'(', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+
+  Failed SysMLRules(DeriveViewpointDefinitionViewpointStakeholder) [1 ms]
+  Error Message:
+     Expected string length 63 but was 110. Strings differ at index 63.
+  Expected: "...rMembership>()"
+  But was:  "...rMembership>().Select(item => item.ownedStakeholderParameter)"
+  ----------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(ValidateMergeNodeOutgoingSuccessions) [< 1 ms]
+  Error Message:
+     Expected string length 66 but was 53. Strings differ at index 41.
+  Expected: "...eConnector.selectAsKind(Succession).selectAsKind.Count() <= 1"
+  But was:  "...eConnector.selectAsKind(Succession).Count() <= 1"
+  --------------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(ValidateDefinitionVariationSpecialization) [3 ms]
+  Error Message:
+     Expected string length 111 but was 117. Strings differ at index 86.
+  Expected: "...m => (item is Definition) && (Definition).isVariation))"
+  But was:  "...m => (item is Definition) && ((Definition)item).isVariation))"
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveCaseUsageActorParameter) [< 1 ms]
+  Error Message:
+     Expected string length 43 but was 84. Strings differ at index 43.
+  Expected: "...e<ActorMembership>()"
+  But was:  "...e<ActorMembership>().Select(item => item.ownedActorParameter)"
+  ----------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:98 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(DeriveViewDefinitionViewCondition) [< 1 ms]
+  Error Message:
+     Expected string length 49 but was 80. Strings differ at index 49.
+  Expected: "...ype<ElementFilterMembership>()"
+  But was:  "...ype<ElementFilterMembership>().Select(item => item.condition)"
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveInvocationExpressionArgument) [1 ms]
+  Error Message:
+     Expected string length 124 but was 119. Strings differ at index 65.
+  Expected: "...> item.redefines(inp)).valuation.Where(v => v != null).value)"
+  But was:  "...> redefines(inp)).valuation.Where(v => v != null).value)"
+  ----------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:26 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:47 extraneous input 'Sequence' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:21 extraneous input 'Set' expecting {'(', ')', 'if', 'let', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:33 token recognition error at: '{'
+line 1:34 extraneous input '}' expecting ')'
+  Failed SysMLRules(CheckMetadataFeatureSemanticSpecialization) [< 1 ms]
+  Error Message:
+     Expected string length 97 but was 84. Strings differ at index 83.
+  Expected: "...s (Type) == annotatedElement.selectAsKind(Type).selectAsKind)"
+  But was:  "...s (Type) == annotatedElement.selectAsKind(Type))"
+  -------------------------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:26 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+ line 1:47 extraneous input 'Sequence' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+
+  Failed SysMLRules(ValidateUsageVariationSpecialization) [2 ms]
+  Error Message:
+     Expected string length 142 but was 165. Strings differ at index 66.
+  Expected: "...ion.specific.Any(item => (item.Definition) && (Definition)..."
+  But was:  "...ion.specific.Any(item => (item is Definition) && ((Definit..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:88 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+line 1:130 mismatched input 'in' expecting ')'
+line 1:118 extraneous input 'if' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(DeriveOccurrenceUsageIndividualDefinition) [1 ms]
+  Error Message:
+     Expected string length 195 but was 187. Strings differ at index 0.
+  Expected: "// TODO occurrenceDefinition.OfType<OccurrenceDefinition>().W..."
+  But was:  "occurrenceDefinition.OfType<OccurrenceDefinition>().Where(ite..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveVerificationCaseDefinitionVerifiedRequirement) [1 ms]
+  Error Message:
+     Expected string length 163 but was 204. Strings differ at index 140.
+  Expected: "...mentVerificationMembership>().Distinct().ToHashSet())"
+  But was:  "...mentVerificationMembership>().Select(item => item.verified..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(CheckDecisionNodeOutgoingSuccessionSpecialization) [< 1 ms]
+  Error Message:
+     Expected string length 145 but was 140. Strings differ at index 49.
+  Expected: "...ype<Succession>().All(item => item.subsetsChain(this, reso..."
+  But was:  "...ype<Succession>().All(item => subsetsChain(this, resolveGl..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:111 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(CheckOccurrenceUsageSuboccurrenceSpecialization) [1 ms]
+  Error Message:
+     Expected string length 255 but was 256. Strings differ at index 167.
+  Expected: "...)owningType).type.Any(item => (item is Class)))) || specia..."
+  But was:  "...)owningType).type.Any(item => oclIsKind(Class)))) || speci..."
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:319 mismatched input ''in'' expecting ')'
+line 1:241 mismatched input '|' expecting {')', ','}
+line 1:264 extraneous input ')' expecting 'then'
+  Failed SysMLRules(DeriveSatisfyRequirementUsageSatisfyingFeature) [3 ms]
+  Error Message:
+     Expected string length 294 but was 282. Strings differ at index 0.
+  Expected: "// TODO ownedMember.OfType<BindingConnector>().Where(b => b.r..."
+  But was:  "ownedMember.OfType<BindingConnector>().Where(b => b.relatedEl..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:241 mismatched input '|' expecting {')', ','}
+ line 1:264 extraneous input ')' expecting 'then'
+
+  Failed SysMLRules(DerivePackageFilterCondition) [< 1 ms]
+  Error Message:
+     Expected string length 49 but was 80. Strings differ at index 49.
+  Expected: "...ype<ElementFilterMembership>()"
+  But was:  "...ype<ElementFilterMembership>().Select(item => item.condition)"
+  --------------------------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Failed SysMLRules(DeriveViewpointUsageViewpointStakeholder) [1 ms]
+  Error Message:
+     Expected string length 63 but was 110. Strings differ at index 63.
+  Expected: "...rMembership>()"
+  But was:  "...rMembership>().Select(item => item.ownedStakeholderParameter)"
+  ----------------------------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+line 1:150 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+  Failed SysMLRules(ValidateTriggerInvocationExpressionAfterArgument) [1 ms]
+  Error Message:
+     Expected string length 231 but was 219. Strings differ at index 0.
+  Expected: "// TODO (!(TriggerKind.after) || argument.Any()) && argument...."
+  But was:  "(!(TriggerKind.after) || argument.Any()) && argument.ElementA..."
+  -----------^
+
+  Stack Trace:
+     at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+1)    at Ocl2CSharp.Tests.TestFileOclConstraintTests.SysMLRules(TestData data) in /home/runner/work/Ocl2CSharp/Ocl2CSharp/src/Ocl2CSharp.Tests/TestFileOclConstraintTests.cs:line 29
+   at InvokeStub_TestFileOclConstraintTests.SysMLRules(Object, Span`1)
+
+
+  Standard Error Messages:
+ line 1:150 extraneous input 'let' expecting {'(', 'oclIsKindOf', 'oclIsTypeOf', 'oclIsType', 'oclAsType', 'oclIsUndefined', 'oclIsInvalid', '+', '-', 'not', '?', '!', 'OrderedSet{', 'Bag{', 'Set{', 'Sequence{', 'Map{', BOOLEAN_LITERAL, FLOAT_LITERAL, STRING1_LITERAL, STRING2_LITERAL, ENUMERATION_LITERAL, 'null', INT, ID}
+
+
+Failed!  - Failed:    96, Passed:   550, Skipped:     0, Total:   646, Duration: 724 ms - Ocl2CSharp.Tests.dll (net8.0)
