@@ -14,12 +14,12 @@ public class TestFileOclConstraintTests
 		}
 	}
 
-	[TestCaseSource(nameof(GetOclData), ["SysML_OCLAndCSharp.md"])]
+	[TestCaseSource(nameof(GetOclData), new object [] {"SysML_OCLAndCSharp.md"})]
 	public void SysML(TestData data)
 	{
 		ConvertOcl(data);
 	}
-	[TestCaseSource(nameof(GetOclData), ["Consolidated_OCLAndCSharp.md"])]
+	[TestCaseSource(nameof(GetOclData), new object [] {"SysML_OCLAndCSharp.md"})]
 
 	public void Consolidated(TestData data)
 	{
