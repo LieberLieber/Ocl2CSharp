@@ -62,6 +62,16 @@ public interface IOCLListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitExpression([NotNull] OCLParser.ExpressionContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="OCLParser.function"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterFunction([NotNull] OCLParser.FunctionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OCLParser.function"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitFunction([NotNull] OCLParser.FunctionContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="OCLParser.conditionalExpression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

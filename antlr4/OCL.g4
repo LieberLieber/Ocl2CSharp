@@ -38,6 +38,15 @@ expression
     | logicalExpression
     | conditionalExpression
     | letExpression
+    | function
+    ;
+
+function
+    : 'oclIsType' '(' expression ')'
+    | 'oclIsTypeOf' '(' expression ')'
+    | 'oclIsKindOf' '(' expression ')'
+    | 'oclIsType' '(' expression ')'
+    | 'oclAsType' '(' expression ')'
     ;
 
 conditionalExpression
