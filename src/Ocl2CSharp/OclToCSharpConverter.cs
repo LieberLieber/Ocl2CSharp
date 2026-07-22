@@ -262,7 +262,7 @@ else
 		}
 
 		var op = context.GetChild(0).GetText();
-		var inner = Visit(context.unaryExpression());
+		var inner = Visit(context.expression());
 		var csharpOp = op switch
 		{
 			"not" => "!",

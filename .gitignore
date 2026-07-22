@@ -10,9 +10,6 @@
 *.userosscache
 *.sln.docstates
 
-# Rider ignored files
-src/.idea/
-
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -364,4 +361,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /.obsidian/*.*
-antlr4/generated/
+
+# Rider devcontainer
+.devcontainer/
