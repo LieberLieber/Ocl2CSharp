@@ -545,7 +545,7 @@ public class OclToCSharpConverterTests
             "    endif";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "referent == ownedMembership.Where(item => !((ParameterMembership))).Select(nonParameterMemberships => (!nonParameterMemberships.Any() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))",
+            "referent == ownedMembership.Where(item => !((ParameterMembership))).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))",
             result);
     }
 
@@ -619,7 +619,7 @@ public class OclToCSharpConverterTests
             "ownedFeatures->excluding(result)->isEmpty()";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "!ownedFeatures.Where(item => item != result).Any()",
+            "ownedFeatures.Where(item => item != result).IsEmpty()",
             result);
     }
 
@@ -647,7 +647,7 @@ public class OclToCSharpConverterTests
             "    endif";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "subjectParameter == featureMembership.OfType<SubjectMembership>().Select(subjectMems => (!subjectMems.Any() ? null : subjectMems.First().ownedSubjectParameter))",
+            "subjectParameter == featureMembership.OfType<SubjectMembership>().Select(subjectMems => (subjectMems.IsEmpty() ? null : subjectMems.First().ownedSubjectParameter))",
             result);
     }
 
@@ -756,7 +756,7 @@ public class OclToCSharpConverterTests
             "    ownedConcern";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "framedConcern == featureMembership.OfType<FramedConcernMembership>()",
+            "framedConcern == featureMembership.OfType<FramedConcernMembership>().Select(item => item.ownedConcern)",
             result);
     }
 
@@ -786,7 +786,7 @@ public class OclToCSharpConverterTests
             "    endif";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "targetFeature == ownedMembership.Where(item => !((ParameterMembership))).Select(nonParameterMemberships => (!nonParameterMemberships.Any() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))",
+            "targetFeature == ownedMembership.Where(item => !((ParameterMembership))).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))",
             result);
     }
 
@@ -810,7 +810,7 @@ public class OclToCSharpConverterTests
             "    ownedAction.outgoingTransition->isEmpty()";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "(!(isParallel) || !ownedAction.incomingTransition.Any()) && !ownedAction.outgoingTransition.Any()",
+            "(!(isParallel) || ownedAction.incomingTransition.IsEmpty()) && ownedAction.outgoingTransition.IsEmpty()",
             result);
     }
 
@@ -818,7 +818,7 @@ public class OclToCSharpConverterTests
     public void SysML_ValidateInvocationExpressionOwnedFeatures()
     {
         var ocl =
-            "ownedFeature->forAll(f |\n" +
+            "ownedFeature->forAll(f | \n" +
             "    f <> result implies \n" +
             "        f.direction = FeatureDirectionKind::_'in')";
         var result = OclToCSharpConverter.Convert(ocl);
@@ -883,7 +883,7 @@ public class OclToCSharpConverterTests
             "    selectByKind(FeatureMembership).memberFeature";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "inheritedFeature == inheritedMemberships.OfType<FeatureMembership>()",
+            "inheritedFeature == inheritedMemberships.OfType<FeatureMembership>().Select(item => item.memberFeature)",
             result);
     }
 
@@ -897,7 +897,7 @@ public class OclToCSharpConverterTests
             "    asOrderedSet()";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "exposedElement == ownedImport.OfType<Expose>().importedMemberships(new HashSet<dynamic> {  }).memberElement.Where(elm => includeAsExposed(elm)).Distinct().ToHashSet()",
+            "exposedElement == ownedImport.OfType<Expose>().importedMemberships(new HashSet<dynamic> {  }).memberElement.Where(elm => includeAsExposed(elm)).AsOrderedSet()",
             result);
     }
 
@@ -971,7 +971,7 @@ public class OclToCSharpConverterTests
             "    forAll(isDefault)";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "/* closure */ featureWithValue.redefinition.redefinedFeature.valuation.All(item => isDefault)",
+            "featureWithValue.redefinition.redefinedFeature.Closure(item => item.redefinition.redefinedFeature).valuation.All(item => item.isDefault)",
             result);
     }
 
@@ -1026,7 +1026,7 @@ public class OclToCSharpConverterTests
             "isVariation implies ownedFeatureMembership->isEmpty()";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "(!(isVariation) || !ownedFeatureMembership.Any())",
+            "(!(isVariation) || ownedFeatureMembership.IsEmpty())",
             result);
     }
 
@@ -1077,7 +1077,7 @@ public class OclToCSharpConverterTests
             "    endif";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "ownedAnnotatingElement == ownedRelatedElement.OfType<AnnotatingElement>().Select(ownedAnnotatingElements => (!ownedAnnotatingElements.Any() ? null : ownedAnnotatingElements.First()))",
+            "ownedAnnotatingElement == ownedRelatedElement.OfType<AnnotatingElement>().Select(ownedAnnotatingElements => (ownedAnnotatingElements.IsEmpty() ? null : ownedAnnotatingElements.First()))",
             result);
     }
 
@@ -1088,7 +1088,7 @@ public class OclToCSharpConverterTests
             "allocation = usage->selectAsKind(AllocationUsage)";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "allocation == usage.selectAsKind(AllocationUsage).selectAsKind",
+            "allocation == usage.OfType<AllocationUsage>()",
             result);
     }
 
@@ -1205,7 +1205,7 @@ public class OclToCSharpConverterTests
             "    else ownedConjugators->at(1) endif";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "ownedConjugator == ownedRelationship.OfType<Conjugation>().Select(ownedConjugators => (!ownedConjugators.Any() ? null : ownedConjugators.ElementAt(0)))",
+            "ownedConjugator == ownedRelationship.OfType<Conjugation>().Select(ownedConjugators => (ownedConjugators.IsEmpty() ? null : ownedConjugators.ElementAt(0)))",
             result);
     }
 
@@ -1236,7 +1236,7 @@ public class OclToCSharpConverterTests
             "    endif";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "verifiedRequirement == (objectiveRequirement == null ? new List<dynamic> {  } : objectiveRequirement.featureMembership.OfType<RequirementVerificationMembership>().Distinct().ToHashSet())",
+            "verifiedRequirement == (objectiveRequirement == null ? new List<dynamic> {  } : objectiveRequirement.featureMembership.OfType<RequirementVerificationMembership>().Select(item => item.verifiedRequirement).AsOrderedSet())",
             result);
     }
 
@@ -1260,7 +1260,7 @@ public class OclToCSharpConverterTests
             "ownedSpecialization.general->forAll(not oclIsKindOf(Structure))";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "ownedSpecialization.general.All(item => !(Structure))",
+            "ownedSpecialization.general.All(item => !Structure)",
             result);
     }
 
@@ -1295,7 +1295,7 @@ public class OclToCSharpConverterTests
             "    condition";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "viewCondition == ownedMembership.OfType<ElementFilterMembership>()",
+            "viewCondition == ownedMembership.OfType<ElementFilterMembership>().Select(item => item.condition)",
             result);
     }
 

@@ -19,8 +19,7 @@ public class TestFileOclConstraintTests
 	{
 		ConvertOcl(data);
 	}
-	[TestCaseSource(nameof(GetOclData), new object [] {"SysML_OCLAndCSharp.md"})]
-
+	[TestCaseSource(nameof(GetOclData), new object [] {"Consolidated_OCLAndCSharp.md"})]
 	public void Consolidated(TestData data)
 	{
 		ConvertOcl(data);

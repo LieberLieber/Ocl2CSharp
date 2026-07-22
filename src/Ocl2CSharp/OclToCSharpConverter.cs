@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Antlr4.Runtime;
-using static Ocl2CSharp.OCLParser;
+using Antlr4.Runtime.Misc;
 
 namespace Ocl2CSharp;
 
@@ -54,7 +51,7 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 	// Type
 	// -------------------------------------------------------------------------
 
-	public override string VisitType(TypeContext context)
+	public override string VisitType(OCLParser.TypeContext context)
 	{
 		var child0 = context.GetChild(0).GetText();
 		return child0 switch
@@ -74,7 +71,7 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 	// Expressions
 	// -------------------------------------------------------------------------
 
-	public override string VisitExpression(ExpressionContext context)
+	public override string VisitExpression(OCLParser.ExpressionContext context)
 	{
 		// Derivation form: ID '=' letExpression  or  ID '=' conditionalExpression
 		if (context.ID() != null)
@@ -85,11 +82,10 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 			if (context.conditionalExpression() != null)
 				return $"{id} == {Visit(context.conditionalExpression())}";
 		}
-
 		return VisitChildren(context) ?? string.Empty;
 	}
 
-	public override string VisitConditionalExpression(ConditionalExpressionContext context)
+	public override string VisitConditionalExpression(OCLParser.ConditionalExpressionContext context)
 	{
 		// if condition then thenExpr else elseExpr endif
 		var condition = Visit(context.expression(0));
@@ -111,7 +107,7 @@ else
 		return $"({condition} ? {thenExpr} : {elseExpr})";
 	}
 
-	public override string VisitLetExpression(LetExpressionContext context)
+	public override string VisitLetExpression(OCLParser.LetExpressionContext context)
 	{
 		// let var1 = expr1, var2 = expr2 in body
 		// Translate to chained LINQ Select calls:
@@ -138,11 +134,10 @@ else
 				: $"({initExpr})";
 			result = $"{receiver}.Select({name} => {result})";
 		}
-
 		return result;
 	}
 
-	public override string VisitLogicalExpression(LogicalExpressionContext context)
+	public override string VisitLogicalExpression(OCLParser.LogicalExpressionContext context)
 	{
 		var operands = context.equalityExpression();
 		if (operands.Length == 1)
@@ -159,7 +154,7 @@ else
 				"and" or "&" => "&&",
 				"or" => "||",
 				"xor" => "^",
-				"=>" or "implies" => "||", // implies: !left || right — simplified here
+				"=>" or "implies" => "||",  // implies: !left || right — simplified here
 				_ => op,
 			};
 
@@ -175,11 +170,10 @@ else
 				sb.Append($" {csharpOp} {Visit(operands[i])}");
 			}
 		}
-
 		return sb.ToString();
 	}
 
-	public override string VisitEqualityExpression(EqualityExpressionContext context)
+	public override string VisitEqualityExpression(OCLParser.EqualityExpressionContext context)
 	{
 		var operands = context.additiveExpression();
 		if (operands.Length == 1)
@@ -202,11 +196,10 @@ else
 			};
 			sb.Append($" {csharpOp} {Visit(operands[i])}");
 		}
-
 		return sb.ToString();
 	}
 
-	public override string VisitAdditiveExpression(AdditiveExpressionContext context)
+	public override string VisitAdditiveExpression(OCLParser.AdditiveExpressionContext context)
 	{
 		var operands = context.multiplicativeExpression();
 		if (operands.Length == 1)
@@ -226,11 +219,10 @@ else
 			};
 			sb.Append($" {csharpOp} {Visit(operands[i])}");
 		}
-
 		return sb.ToString();
 	}
 
-	public override string VisitMultiplicativeExpression(MultiplicativeExpressionContext context)
+	public override string VisitMultiplicativeExpression(OCLParser.MultiplicativeExpressionContext context)
 	{
 		var operands = context.unaryExpression();
 		if (operands.Length == 1)
@@ -250,11 +242,10 @@ else
 			};
 			sb.Append($" {csharpOp} {Visit(operands[i])}");
 		}
-
 		return sb.ToString();
 	}
 
-	public override string VisitUnaryExpression(UnaryExpressionContext context)
+	public override string VisitUnaryExpression(OCLParser.UnaryExpressionContext context)
 	{
 		if (context.navigationExpression() != null)
 		{
@@ -272,7 +263,7 @@ else
 		return $"{csharpOp}{inner}";
 	}
 
-	public override string VisitNavigationExpression(NavigationExpressionContext context)
+	public override string VisitNavigationExpression(OCLParser.NavigationExpressionContext context)
 	{
 		var primary = Visit(context.primaryFactor());
 		var suffixes = context.postfixSuffix();
@@ -281,61 +272,46 @@ else
 			return primary;
 		}
 
-		if (context.primaryFactor().basicExpression() != null)
-		{
-			if (context.primaryFactor().basicExpression().identifier() != null)
-			{
-				context.ToString();
-			}
-		}
-
 		var result = primary;
 		foreach (var suffix in suffixes)
 		{
-			result = ApplyPostfixSuffix(context.primaryFactor(), result, suffix);
+			result = ApplyPostfixSuffix(result, suffix);
 		}
-
 		return result;
 	}
 
-	public override string VisitPrimaryFactor(PrimaryFactorContext context)
+	public override string VisitPrimaryFactor(OCLParser.PrimaryFactorContext context)
 	{
 		if (context.setExpression() != null)
 		{
 			return Visit(context.setExpression());
 		}
-
 		return Visit(context.basicExpression());
 	}
 
-	public override string VisitBasicExpression(BasicExpressionContext context)
+	public override string VisitBasicExpression(OCLParser.BasicExpressionContext context)
 	{
 		// Simple literal tokens
 		if (context.NULL_LITERAL() != null)
 		{
 			return "null";
 		}
-
 		if (context.BOOLEAN_LITERAL() != null)
 		{
 			return context.BOOLEAN_LITERAL().GetText();
 		}
-
 		if (context.INT() != null)
 		{
 			return context.INT().GetText();
 		}
-
 		if (context.FLOAT_LITERAL() != null)
 		{
 			return context.FLOAT_LITERAL().GetText();
 		}
-
 		if (context.STRING1_LITERAL() != null)
 		{
 			return context.STRING1_LITERAL().GetText();
 		}
-
 		if (context.STRING2_LITERAL() != null)
 		{
 			// Convert single-quoted OCL string to double-quoted C# string
@@ -343,11 +319,28 @@ else
 			var inner = raw.Substring(1, raw.Length - 2).Replace("\\\"", "\"").Replace("\"", "\\\"");
 			return $"\"{inner}\"";
 		}
-
 		if (context.ENUMERATION_LITERAL() != null)
 		{
 			// Class::Value → Class.Value
 			return context.ENUMERATION_LITERAL().GetText().Replace("::", ".");
+		}
+
+		// Bare OCL type-checking/casting operations (no explicit receiver → implicit 'this')
+		// These arise when used inside collection op bodies without an explicit iterator variable.
+		var firstToken = context.GetChild(0)?.GetText();
+		if (firstToken == "oclIsKindOf" || firstToken == "oclIsType" || firstToken == "oclIsTypeOf")
+		{
+			var typeExpr = context.expression() != null ? Visit(context.expression()) : string.Empty;
+			return $"(this is {typeExpr})";
+		}
+		if (firstToken == "oclAsType")
+		{
+			var typeExpr = context.expression() != null ? Visit(context.expression()) : string.Empty;
+			return $"(({typeExpr})this)";
+		}
+		if (firstToken == "oclIsUndefined" || firstToken == "oclIsInvalid")
+		{
+			return "(this == null)";
 		}
 
 		// Recursive / composite cases
@@ -357,10 +350,8 @@ else
 			// ID or '(' expression ')'
 			if (context.identifier() != null)
 			{
-				return Visit(context.identifier());
-				;
+				return Visit(context.identifier()); ;
 			}
-
 			// parenthesized expression
 			if (context.expression() != null)
 				return $"({Visit(context.expression())})";
@@ -374,14 +365,12 @@ else
 				// member access: basicExpression '.' ID
 				return $"{baseExpr}.{context.identifier().ID().GetText()}";
 			}
-
 			if (sep == "(")
 			{
 				// method call: basicExpression '(' expressionList? ')'
 				var args = context.expressionList() != null ? Visit(context.expressionList()) : string.Empty;
 				return $"{baseExpr}({args})";
 			}
-
 			if (sep == "[")
 			{
 				// index: basicExpression '[' expression ']'
@@ -392,7 +381,7 @@ else
 		return context.GetText();
 	}
 
-	public override string VisitExpressionList(ExpressionListContext context)
+	public override string VisitExpressionList(OCLParser.ExpressionListContext context)
 	{
 		var exprs = context.expression();
 		return string.Join(", ", Array.ConvertAll(exprs, e => Visit(e)));
@@ -402,15 +391,11 @@ else
 	// Postfix suffix helper
 	// -------------------------------------------------------------------------
 
-	private string ApplyPostfixSuffix(PrimaryFactorContext targetFactor, string target, PostfixSuffixContext context)
+	private string ApplyPostfixSuffix(string target, OCLParser.PostfixSuffixContext context)
 	{
-		var op = context.GetChild(0)?.GetText(); // '.' or '->'
-		var name = context.GetChild(1)?.GetText(); // operation name
-
-		if (op is null || name is null)
-		{
-			return string.Empty;
-		}
+		if (context.ChildCount == 0) return target;
+		var op = context.GetChild(0).GetText();     // '.' or '->'
+		var name = context.GetChild(1).GetText();   // operation name
 
 		if (op == ".")
 		{
@@ -421,7 +406,7 @@ else
 				"oclIsUndefined" => $"({target} == null)",
 				"oclIsInvalid" => $"({target} == null)",
 				"oclIsNew" => $"/* oclIsNew({target}) */",
-				"oclAsSet" => $"new Set({target})",
+				"oclAsSet" => $"new HashSet<dynamic> {{ {target} }}",
 				"oclIsType" => $"({target} is {Visit(context.expression(0))})",
 				"oclIsTypeOf" => $"({target} is {Visit(context.expression(0))})",
 				"oclIsKindOf" => $"({target} is {Visit(context.expression(0))})",
@@ -431,14 +416,12 @@ else
 				"min" => $"{target}.Min()",
 				"indexOf" => $"{target}.IndexOf({Visit(context.expression(0))})",
 				"at" => BuildAtAccess(target, context),
-				"isUnique" => $".IsUnique(item => item.{target})",
 				_ => BuildDotMethodCall(target, context),
 			};
 		}
-
 		return name switch
 		{
-			"size" => $"{target}.Count()",
+			"size" => BuildSize(target, context),
 			"isEmpty" => $"{target}.IsEmpty()",
 			"notEmpty" => $"{target}.Any()",
 			"asSet" => $"{target}.ToHashSet()",
@@ -480,23 +463,24 @@ else
 			"count" => BuildCount(target, context),
 			"indexOf" => $"{target}.ToList().IndexOf({Visit(context.expression(0))})",
 			"equalsIgnoreCase" => $"{target}.Equals({Visit(context.expression(0))}, StringComparison.OrdinalIgnoreCase)",
-			"oclAsType" => $"({target} as {Visit(context.expression(0))})",
+			"oclAsType" => BuildArrowOclAsType(target, context),
 			"at" => $"{target}.ElementAt({ItemIndex(Visit(context.expression(0)))})",
 			"oclIsType" => $"({target} is {Visit(context.expression(0))})",
-			"selectByKind" or
-				"oclIsTypeOf" or
-				"oclIsKindOf" => $"{target}.OfType<{Visit(context.expression(0))}>()",
-			"oclAsSet" => $"{target}.AsSet()",
+			"selectAsKind" or
+ 			"selectByKind" or
+			"oclIsTypeOf" or
+			"oclIsKindOf" => BuildSelectByKind(target, context),
+			"oclAsSet" => $"new HashSet<dynamic> {{ {target} }}",
 			"subSequence" => BuildSubSequence(target, context),
 			"collect" => BuildCollectionOp(target, "Select", context),
 			"select" => BuildCollectionOp(target, "Where", context),
-			"reject" => BuildCollectionOp(target, "Reject", context),
+			"reject" => BuildReject(target, context),
 			"forAll" => BuildCollectionOp(target, "All", context),
 			"exists" => BuildCollectionOp(target, "Any", context),
 			"one" => BuildOne(target, context),
-			"closure" => BuildCollectionOp(target, "Traverse", context),
+			"closure" => BuildClosure(target, context),
 			"sortedBy" => BuildCollectionOp(target, "OrderBy", context),
-			"isUnique" => BuildCollectionOp(target, "IsUnique", context),
+			"isUnique" => BuildIsUnique(target, context),
 			"insertAt" => BuildInsertAt(target, context),
 			"iterate" => BuildIterate(target, context),
 			_ => BuildArrowGenericCall(target, context),
@@ -517,20 +501,57 @@ else
 		};
 	}
 
-	private string BuildOclAsType(string target, PostfixSuffixContext context)
+	private string BuildOclAsType(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var expr = Visit(context.expression(0));
 		// Check if there's a chained .ID after the cast
 		var ids = context.ID();
 		if (ids.Length > 0)
 		{
-			return $"({target} as {expr}).{ids[0].GetText()}";
+			return $"(({expr}){target}).{ids[0].GetText()}";
 		}
-
-		return $"({target} as {expr})";
+		return $"(({expr}){target})";
 	}
 
-	private string BuildAtAccess(string target, PostfixSuffixContext context)
+	private string BuildArrowOclAsType(string target, OCLParser.PostfixSuffixContext context)
+	{
+		var expr = Visit(context.expression(0));
+		var ids = context.ID();
+		if (ids.Length > 0)
+		{
+			return $"(({expr}){target}).{ids[0].GetText()}";
+		}
+		return $"(({expr}){target})";
+	}
+
+	private string BuildSelectByKind(string target, OCLParser.PostfixSuffixContext context)
+	{
+		var typeExpr = Visit(context.expression(0));
+		var ids = context.ID();
+		// For `->selectByKind(T).property`, the context IDs are: [operationName, property].
+		// For keyword-based ops like `->oclIsKindOf(T)`, there is no operation-name ID token,
+		// so ids.Length == 0 means no trailing property access.
+		// For the generic-rule-based `->selectByKind(T)`, ids[0] is the operation name; ids[1] would be the trailing property.
+		bool hasTrailingProperty = ids.Length > 1;
+		if (hasTrailingProperty)
+		{
+			return $"{target}.OfType<{typeExpr}>().Select(item => item.{ids[ids.Length - 1].GetText()})";
+		}
+		return $"{target}.OfType<{typeExpr}>()";
+	}
+
+	private string BuildSize(string target, OCLParser.PostfixSuffixContext context)
+	{
+		var exprs = context.expression();
+		if (exprs.Length > 0)
+		{
+			// ->size(n) means count == n
+			return $"{target}.Count() == {Visit(exprs[0])}";
+		}
+		return $"{target}.Count()";
+	}
+
+	private string BuildAtAccess(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var expr = Visit(context.expression(0));
 		var ids = context.ID();
@@ -538,7 +559,7 @@ else
 		return $"{target}[{expr}]{access}";
 	}
 
-	private string BuildDotMethodCall(string target, PostfixSuffixContext context)
+	private string BuildDotMethodCall(string target, OCLParser.PostfixSuffixContext context)
 	{
 		// '.' ID '(' (expression (',' expression)*)? ')' ('.' ID)?
 		// or '.' ID
@@ -563,85 +584,200 @@ else
 		return $"{target}.{methodName}";
 	}
 
-	private string BuildArrowSimpleOrChained(string target, string csMethod, PostfixSuffixContext context)
+	private string BuildArrowSimpleOrChained(string target, string csMethod, OCLParser.PostfixSuffixContext context)
 	{
 		var ids = context.ID();
 		var suffix = ids.Length > 0 ? $".{ids[0].GetText()}" : string.Empty;
 		return $"{target}.{csMethod}(){suffix}";
 	}
 
-	private string BuildCollectionOp(string target, string csMethod, PostfixSuffixContext context)
+	private string BuildCollectionOp(string target, string csMethod, OCLParser.PostfixSuffixContext context)
 	{
 		// ->op( (identOptType | identOptTypeList '|')? expression )
 		var identOpt = context.identOptType();
-		var exprs = context.expression();
 		var identOptList = context.identOptTypeList();
+		var exprs = context.expression();
+		string lambda;
+		if (identOpt != null && exprs.Length > 0)
+		{
+			var varName = identOpt.ID().GetText();
+			lambda = $"{varName} => {Visit(exprs[0])}";
+		}
+		else if (identOptList != null && exprs.Length > 0)
+		{
+			// Use the first variable from the list as the primary lambda parameter
+			var firstVar = identOptList.identOptType(0).ID().GetText();
+			lambda = $"{firstVar} => {Visit(exprs[0])}";
+		}
+		else if (exprs.Length > 0)
+		{
+			// No explicit iterator variable — apply implicit-self transformation
+			var body = Visit(exprs[0]);
+			lambda = $"item => {ApplyImplicitSelf(body)}";
+		}
+		else
+		{
+			return $"{target}.{csMethod}()";
+		}
 
 		// Handle possible chained .ID (for any, first, last)
 		var ids = context.ID();
 		var suffix = ids.Length > 0 ? $".{ids[0].GetText()}" : string.Empty;
-		return $"{target}.{csMethod}({BuildLambda(identOptList, identOpt, exprs)}){suffix}";
+		return $"{target}.{csMethod}({lambda}){suffix}";
 	}
 
-	private string BuildExcluding(string target, PostfixSuffixContext context)
+	/// <summary>
+	/// When OCL omits an explicit iterator variable in a collection operation, expressions that refer
+	/// to properties of the iterator element use the implicit "self" receiver. This helper rewrites
+	/// such expressions so that:
+	/// <list type="bullet">
+	///   <item>A bare identifier like <c>isImplied</c> becomes <c>item.isImplied</c>.</item>
+	///   <item>Implicit-self OCL operations like <c>(this is T)</c> or <c>((T)this)</c>
+	///         (produced by the bare-expression grammar alternatives) are rewritten to use
+	///         <c>item</c> instead of <c>this</c>.</item>
+	/// </list>
+	/// </summary>
+	private static string ApplyImplicitSelf(string expr, string iteratorName = "item")
+	{
+		// Case 1: Standalone simple identifier → iterator property access
+		if (System.Text.RegularExpressions.Regex.IsMatch(expr, @"^[A-Za-z_][A-Za-z0-9_]*$"))
+			return $"{iteratorName}.{expr}";
+
+		// Case 2: Negated simple lowercase identifier → !item.id
+		// e.g. !isComposite → !item.isComposite
+		var negId = System.Text.RegularExpressions.Regex.Match(expr, @"^!([a-z_][A-Za-z0-9_]*)$");
+		if (negId.Success)
+			return $"!{iteratorName}.{negId.Groups[1].Value}";
+
+		// Case 3: Simple lowercase identifier at start of comparison → prefix with iterator
+		// e.g. kind == TransitionFeatureKind.trigger  →  item.kind == TransitionFeatureKind.trigger
+		expr = System.Text.RegularExpressions.Regex.Replace(
+			expr,
+			@"^([a-z_][A-Za-z0-9_]*)(\s*(?:==|!=|<=|>=|<|>))",
+			m => $"{iteratorName}.{m.Value}");
+
+		// Replace implicit-self patterns produced by bare oclIsKindOf / oclAsType in basicExpression
+		expr = expr
+			.Replace($"(this is ", $"({iteratorName} is ")
+			.Replace($"(({iteratorName} is ", $"(({iteratorName} is ")  // prevent double-replace
+			.Replace($"((this is ", $"(({iteratorName} is ")
+			.Replace($"((this.GetType() == typeof(", $"(({iteratorName}.GetType() == typeof(");
+
+		// Replace oclAsType implicit this cast patterns like ((Type)this)
+		expr = System.Text.RegularExpressions.Regex.Replace(
+			expr,
+			@"\(\(([A-Za-z_][A-Za-z0-9_<>, ]*)\)this\)",
+			m => $"(({m.Groups[1].Value}){iteratorName})");
+
+		return expr;
+	}
+
+	private string BuildReject(string target, OCLParser.PostfixSuffixContext context)
+	{
+		var identOpt = context.identOptType();
+		var exprs = context.expression();
+		string lambda;
+		if (identOpt != null && exprs.Length > 0)
+		{
+			var varName = identOpt.ID().GetText();
+			lambda = $"{varName} => !({Visit(exprs[0])})";
+		}
+		else if (exprs.Length > 0)
+		{
+			var body = Visit(exprs[0]);
+			lambda = $"item => !{ApplyImplicitSelf(body)}";
+		}
+		else
+		{
+			return $"{target}.Where(/* reject */ item => true)";
+		}
+		return $"{target}.Where({lambda})";
+	}
+
+	private string BuildExcluding(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var expr = Visit(context.expression(0));
-		return $"{target}.Excluding({expr})";
+		return $"{target}.Where(item => item != {expr})";
 	}
 
-	private string BuildSymmetricDifference(string target, PostfixSuffixContext context)
+	private string BuildSymmetricDifference(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var expr = Visit(context.expression(0));
 		return $"{target}.Except({expr}).Union({expr}.Except({target}))";
 	}
 
-	private string BuildCount(string target, PostfixSuffixContext context)
+	private string BuildCount(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var exprs = context.expression();
 		if (exprs.Length > 0)
 		{
 			return $"{target}.Count(item => item == {Visit(exprs[0])})";
 		}
-
 		return $"{target}.Count()";
 	}
 
-	private string BuildOne(string target, PostfixSuffixContext context)
+	private string BuildOne(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var identOpt = context.identOptType();
 		var exprs = context.expression();
-		var identOptList = context.identOptTypeList();
-
-		return $"({target}.Count({BuildLambda(identOptList, identOpt, exprs)}) == 1)";
-	}
-
-
-	private string BuildLambda(IdentOptTypeListContext identList, IdentOptTypeContext identOpt, IEnumerable<ExpressionContext> exprs)
-	{
-		if (!exprs.Any())
-		{
-			return string.Empty;
-		}
-
-		var visited = Visit(exprs.First());
-
-		if (identList != null)
-		{
-			// Use the first variable from the list as the primary lambda parameter
-			var firstVar = identList.identOptType(0).ID().GetText();
-			return $"{firstVar} => {visited}";
-		}
-
-		if (identOpt != null)
+		string lambda;
+		if (identOpt != null && exprs.Length > 0)
 		{
 			var varName = identOpt.ID().GetText();
-			return $"{varName} => {visited}";
+			lambda = $"{varName} => {Visit(exprs[0])}";
 		}
-
-		return $"item => item.{visited}";
+		else if (exprs.Length > 0)
+		{
+			lambda = $"item => {Visit(exprs[0])}";
+		}
+		else
+		{
+			return $"({target}.Count() == 1)";
+		}
+		return $"({target}.Count({lambda}) == 1)";
 	}
 
-	private string BuildInsertAt(string target, PostfixSuffixContext context)
+	private string BuildClosure(string target, OCLParser.PostfixSuffixContext context)
+	{
+		var identOpt = context.identOptType();
+		var exprs = context.expression();
+		if (identOpt != null && exprs.Length > 0)
+		{
+			var varName = identOpt.ID().GetText();
+			return $"{target}.Closure({varName} => {Visit(exprs[0])})";
+		}
+		if (exprs.Length > 0)
+		{
+			// No explicit iterator variable — implicit self navigation
+			var body = Visit(exprs[0]);
+			return $"{target}.Closure(item => item.{body})";
+		}
+		return $"/* closure */ {target}";
+	}
+
+	private string BuildIsUnique(string target, OCLParser.PostfixSuffixContext context)
+	{
+		var identOpt = context.identOptType();
+		var exprs = context.expression();
+		string selector;
+		if (identOpt != null && exprs.Length > 0)
+		{
+			var varName = identOpt.ID().GetText();
+			selector = $"{varName} => {Visit(exprs[0])}";
+		}
+		else if (exprs.Length > 0)
+		{
+			var body = Visit(exprs[0]);
+			selector = $"item => {ApplyImplicitSelf(body)}";
+		}
+		else
+		{
+			return $"{target}.Distinct().Count() == {target}.Count()";
+		}
+		return $"{target}.IsUnique({selector})";
+	}
+
+	private string BuildInsertAt(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var exprs = context.expression();
 		var pos = Visit(exprs[0]);
@@ -649,7 +785,7 @@ else
 		return $"/* insertAt */ {target}.Take({pos} - 1).Append({elem}).Concat({target}.Skip({pos} - 1))";
 	}
 
-	private string BuildIterate(string target, PostfixSuffixContext context)
+	private string BuildIterate(string target, OCLParser.PostfixSuffixContext context)
 	{
 		// ->iterate( identifier ; identOptType = expression | expression )
 		var accId = Visit(context.identifier());
@@ -662,25 +798,26 @@ else
 			var varName = iterVar.ID().GetText();
 			return $"{target}.Aggregate({initExpr}, ({accId}, {varName}) => {bodyExpr})";
 		}
-
 		return $"{target}.Aggregate({initExpr}, ({accId}, item) => {bodyExpr})";
 	}
 
-	private string BuildSubSequence(string target, PostfixSuffixContext context)
+		private string BuildSubSequence(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var exprs = context.expression();
 		var args = string.Join(", ", Array.ConvertAll(exprs, e => Visit(e)));
 		return $"{target}.SubSequence({args})";
 	}
 
-	private string BuildArrowGenericCall(string target, PostfixSuffixContext context)
+	private string BuildArrowGenericCall(string target, OCLParser.PostfixSuffixContext context)
 	{
 		// '->' ID '(' (expression (',' expression)*)? ')' ('.' ID)?
+		// context.ID() returns all ID tokens: [operationName, trailingProperty?]
 		var name = context.GetChild(1).GetText();
 		var exprs = context.expression();
 		var args = string.Join(", ", Array.ConvertAll(exprs, e => Visit(e)));
 		var ids = context.ID();
-		var suffix = ids.Length > 0 ? $".{ids[0].GetText()}" : string.Empty;
+		// ids[0] is the operation name; ids[1] (if present) is the trailing .Property
+		var suffix = ids.Length > 1 ? $".{ids[ids.Length - 1].GetText()}" : string.Empty;
 		return $"{target}.{name}({args}){suffix}";
 	}
 
@@ -688,18 +825,17 @@ else
 	// IdentOptType / IdentOptTypeList
 	// -------------------------------------------------------------------------
 
-	public override string VisitIdentOptType(IdentOptTypeContext context)
+	public override string VisitIdentOptType(OCLParser.IdentOptTypeContext context)
 	{
 		var id = context.ID().GetText();
 		if (context.type() != null)
 		{
 			return $"{Visit(context.type())} {id}";
 		}
-
 		return id;
 	}
 
-	public override string VisitIdentOptTypeList(IdentOptTypeListContext context)
+	public override string VisitIdentOptTypeList(OCLParser.IdentOptTypeListContext context)
 	{
 		var items = context.identOptType();
 		return string.Join(", ", Array.ConvertAll(items, i => Visit(i)));
@@ -709,14 +845,14 @@ else
 	// Set/Collection literals
 	// -------------------------------------------------------------------------
 
-	public override string VisitSetExpression(SetExpressionContext context)
+	public override string VisitSetExpression(OCLParser.SetExpressionContext context)
 	{
 		var kind = context.GetChild(0).GetText();
 		var items = context.expressionList() != null ? Visit(context.expressionList()) : string.Empty;
 		return kind switch
 		{
-			"Set{" => $"new Set({items})",
-			"OrderedSet{" => $"new OrderedSet({items})",
+			"Set{" => $"new HashSet<dynamic> {{ {items} }}",
+			"OrderedSet{" => $"new List<dynamic> {{ {items} }}", // OrderedSet preserves insertion order
 			"Bag{" => $"new List<dynamic> {{ {items} }}",
 			"Sequence{" => $"new List<dynamic> {{ {items} }}",
 			"Map{" => $"new Dictionary<dynamic, dynamic> {{ {items} }}",
@@ -724,36 +860,21 @@ else
 		};
 	}
 
-	public override string VisitFunction(FunctionContext context)
-	{
-		var name = context.GetChild(0).GetText();
-		return name switch
-		{
-			"oclAsType" => $" as {Visit(context.expression())}",
-			"oclIsType" => $" is {Visit(context.expression())}",
-			"oclIsTypeOf" or
-				"oclIsKindOf" => $"OfType<{Visit(context.expression())}>()",
-			_ => string.Empty
-		};
-	}
-
-
 	// -------------------------------------------------------------------------
 	// Identifier / qualified_name
 	// -------------------------------------------------------------------------
 
-	public override string VisitIdentifier(IdentifierContext context)
+	public override string VisitIdentifier(OCLParser.IdentifierContext context)
 	{
 		var tmp = context.ID().GetText();
 		if (tmp == "self")
 		{
 			return "this";
 		}
-
 		return tmp;
 	}
 
-	public override string VisitQualified_name(Qualified_nameContext context)
+	public override string VisitQualified_name(OCLParser.Qualified_nameContext context)
 	{
 		// ENUMERATION_LITERAL = ID '::' ID → convert to 'ClassName.attribute'
 		return context.ENUMERATION_LITERAL().GetText().Replace("::", ".");
