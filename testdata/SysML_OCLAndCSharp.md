@@ -5228,14 +5228,11 @@ redefiningFeaturingTypes <> redefinedFeaturingType
 ```
 ### C#
 ``` CSharp 
-((Type)redefiningFeature.resolveGlobal("Base::Anything").modelElement).Select(an
-ythingType => (redefiningFeature.isVariable ? new HashSet<dynamic> { 
+((Type)redefiningFeature.resolveGlobal("Base::Anything").modelElement).Select(anythingType => (redefiningFeature.isVariable ? new HashSet<dynamic> { 
 redefiningFeature.owningType } : 
-redefiningFeature.featuringTypes.ToHashSet().Append(anythingType)).Select(redefi
-ningFeaturingTypes => (redefinedFeature.isVariable ? new HashSet<dynamic> { 
+redefiningFeature.featuringTypes.ToHashSet().Append(anythingType)).Select(redefiningFeaturingTypes => (redefinedFeature.isVariable ? new HashSet<dynamic> { 
 redefinedFeature.owningType } : 
-redefinedFeature.featuringTypes.ToHashSet().Append(anythingType)).Select(redefin
-edFeaturingTypes => redefiningFeaturingTypes != redefinedFeaturingType)))
+redefinedFeature.featuringTypes.ToHashSet().Append(anythingType)).Select(redefinedFeaturingTypes => redefiningFeaturingTypes != redefinedFeaturingType)))
 ```
 # ValidateFeatureEndNotDerivedAbstractCompositeOrPortion
 ### OCL
