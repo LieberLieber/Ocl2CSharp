@@ -1,4 +1,7 @@
-﻿namespace Ocl2CSharp
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Ocl2CSharp
 {
 	public class Set<T>:  HashSet<T>
 	{

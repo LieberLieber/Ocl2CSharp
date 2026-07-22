@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Antlr4.Runtime;
 using static Ocl2CSharp.OCLParser;
@@ -278,10 +281,18 @@ else
 			return primary;
 		}
 
+		if (context.primaryFactor().basicExpression() != null)
+		{
+			if (context.primaryFactor().basicExpression().identifier() != null)
+			{
+				context.ToString();
+			}
+		}
+
 		var result = primary;
 		foreach (var suffix in suffixes)
 		{
-			result = ApplyPostfixSuffix(result, suffix);
+			result = ApplyPostfixSuffix(context.primaryFactor(), result, suffix);
 		}
 
 		return result;
@@ -391,10 +402,15 @@ else
 	// Postfix suffix helper
 	// -------------------------------------------------------------------------
 
-	private string ApplyPostfixSuffix(string target, PostfixSuffixContext context)
+	private string ApplyPostfixSuffix(PrimaryFactorContext targetFactor, string target, PostfixSuffixContext context)
 	{
-		var op = context.GetChild(0).GetText(); // '.' or '->'
-		var name = context.GetChild(1).GetText(); // operation name
+		var op = context.GetChild(0)?.GetText(); // '.' or '->'
+		var name = context.GetChild(1)?.GetText(); // operation name
+
+		if (op is null || name is null)
+		{
+			return string.Empty;
+		}
 
 		if (op == ".")
 		{
@@ -424,8 +440,8 @@ else
 		{
 			"size" => $"{target}.Count()",
 			"isEmpty" => $"{target}.IsEmpty()",
-			"notEmpty" => $"{target}.NotEmpty()",
-			"asSet" => $"{target}.AsSet()",
+			"notEmpty" => $"{target}.Any()",
+			"asSet" => $"{target}.ToHashSet()",
 			"asBag" => $"{target}.ToList()",
 			"asOrderedSet" => $"{target}.AsOrderedSet()",
 			"asSequence" => $"{target}.ToList()",
@@ -710,14 +726,14 @@ else
 
 	public override string VisitFunction(FunctionContext context)
 	{
-		var name = context.GetChild(0).GetText(); 
+		var name = context.GetChild(0).GetText();
 		return name switch
 		{
 			"oclAsType" => $" as {Visit(context.expression())}",
 			"oclIsType" => $" is {Visit(context.expression())}",
-				"oclIsTypeOf" or
-				"oclIsKindOf" => $".OfType<{Visit(context.expression())}>()",
-			_=> string.Empty
+			"oclIsTypeOf" or
+				"oclIsKindOf" => $"OfType<{Visit(context.expression())}>()",
+			_ => string.Empty
 		};
 	}
 

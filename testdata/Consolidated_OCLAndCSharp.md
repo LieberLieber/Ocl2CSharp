@@ -39,9 +39,9 @@ owningType.oclIsType(CaseUsage)
 ```
 ### C#
 ``` CSharp 
-ownedMembership.Reject(item => (item is ParameterMembership)).Select(nonParameterMemberships => (!nonParameterMemberships.Any() ||
+ownedMembership.Reject(item => item.OfType<ParameterMembership>()).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() ||
 !(nonParameterMemberships.First().memberElement is Feature) ? null :
-((Feature)nonParameterMemberships.First().memberElement)))
+(nonParameterMemberships.First().memberElement as Feature)))
 ```
 # not, implies, selectByKind, size
 ### OCL
@@ -109,7 +109,7 @@ ownedFeatures.Excluding(result).IsEmpty()
 ```
 ### C#
 ``` CSharp 
-ownedMembership.Reject(reject => reject is ParameterMembership).Select(nonParameterMemberships => !nonParameterMemberships.Any() ||  !(nonParameterMemberships.First().memberElement is Feature)? null : nonParameterMemberships.First().memberElement as Feature )
+ownedMembership.Reject(item => item.OfType<ParameterMembership>()).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : (nonParameterMemberships.First().memberElement as Feature)))
 ```
 # forAll containing implies, enum with keyword
 ### OCL
