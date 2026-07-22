@@ -20,7 +20,8 @@ action.OfType<CalculationUsage>()
 # oclIsType, or
 ### OCL
 ``` OCL 
-owningType.oclIsType(RequirementDefinition) or owningType.oclIsType(CaseUsage)
+owningType.oclIsType(RequirementDefinition) or
+owningType.oclIsType(CaseUsage)
 ```
 ### C#
 ``` CSharp 
@@ -38,9 +39,9 @@ owningType.oclIsType(RequirementDefinition) or owningType.oclIsType(CaseUsage)
 ```
 ### C#
 ``` CSharp 
-ownedMembership.Where(item => !(item is ParameterMembership)).Select(nonParameterMemberships => 
-(!nonParameterMemberships.Any() || !(nonParameterMemberships.First().memberElement is Feature) 
-? null : ((Feature)nonParameterMemberships.First().memberElement)))
+ownedMembership.Where(reject => !(reject is ParameterMembership)).Select(nonParameterMemberships => (!nonParameterMemberships.Any() ||
+!(nonParameterMemberships.First().memberElement is Feature) ? null :
+((Feature)nonParameterMemberships.First().memberElement)))
 ```
 # not, implies, selectByKind, size
 ### OCL
@@ -65,8 +66,7 @@ ownedSpecializations->forAll(isImplied) implies
 ```
 ### C#
 ``` CSharp 
-(!(direction == null && ownedSpecializations.All(item => item.isImplied)) || 
-ownedMembership.OfType<FeatureValue>().All(fv => specializes(fv.value.result)))
+(direction == null) && (ownedSpecializations.ForAll(item => item.isImplied) || ownedMembership.OfType<FeatureValue>().ForAll(fv => specializes(fv.value.result)))
 ```
 # selectByKind, select, self
 ### OCL
@@ -94,7 +94,7 @@ ownedFeatures->excluding(result)->isEmpty()
 ```
 ### C#
 ``` CSharp 
-!ownedFeatures.Where(item => item != result).Any()
+!ownedFeatures.Excluding(result).Any()
 ```
 # let with sequence, reject, oclIsKindOf, or, oclIsKindOf, oclAsType
 ### OCL
@@ -109,9 +109,7 @@ ownedFeatures->excluding(result)->isEmpty()
 ```
 ### C#
 ``` CSharp 
-ownedMembership.Where(item => !(item is ParameterMembership))
-    .Select(nonParameterMemberships => (!nonParameterMemberships.Any() || !(nonParameterMemberships.First().memberElement is Feature) 
-    ? null : ((Feature)nonParameterMemberships.First().memberElement)))
+ownedMembership.Reject(reject => reject is ParameterMembership).Select(nonParameterMemberships => !nonParameterMemberships.Any() ||  !(nonParameterMemberships.First().memberElement is Feature)? null : nonParameterMemberships.First().memberElement as Feature )
 ```
 # forAll containing implies, enum with keyword
 ### OCL
@@ -122,7 +120,7 @@ ownedFeature->forAll(f |
 ```
 ### C#
 ``` CSharp 
-ownedFeature.All(f => (!(f != result) || f.direction == FeatureDirectionKind.In))
+ownedFeature.All(f => (!(f != result) || f.direction == FeatureDirectionKind.in))
 ```
 # selectByKind, empty set, select, asOrderedSet
 ### OCL
@@ -134,8 +132,7 @@ ownedImport->selectByKind(Expose).
 ```
 ### C#
 ``` CSharp 
-ownedImport.OfType<Expose>().importedMemberships(new HashSet<dynamic> {  
-}).Select(item => item.memberElement).Where(elm => includeAsExposed(elm)).Distinct().ToHashSet()
+ownedImport.OfType<Expose>().importedMemberships(new Set()).memberElement.Where(elm => includeAsExposed(elm)).AsOrderedSet()
 ```
 # let, functioncall with select on return, at
 ### OCL
@@ -147,8 +144,7 @@ triggerAction->notEmpty() implies
 ```
 ### C#
 ``` CSharp 
-var payloadParameter = inputParameter(2);
-(!(triggerAction.Any()) || (payloadParameter is Feature && payloadParameter.subsetsChain(triggerAction.ElementAt(0), triggerPayloadParameter())))
+(!(triggerAction.Any()) || inputParameter(2).Select(payloadParameter => payloadParameter != null && payloadParameter.subsetsChain(triggerAction->ElementAt(0), triggerPayloadParameter())))
 ```
 # closure, forAll
 ### OCL
@@ -159,9 +155,7 @@ featureWithValue.redefinition.redefinedFeature->
 ```
 ### C#
 ``` CSharp 
-featureWithValue.redefinition.redefinedFeature
-    .Closure(item => item.redefinition.redefinedFeature)
-    .Select(items2 => item.valuation.All(item => item.isDefault))
+featureWithValue.redefinition.redefinedFeature.Closure(item => item.redefinition.redefinedFeature).Select(item2 => item2.valuation.ForAll(item3 => item3.isDefault));
 ```
 # let with OrderedSet, selectByKind, isEmpty, first
 ### OCL
@@ -174,8 +168,8 @@ featureWithValue.redefinition.redefinedFeature
 ```
 ### C#
 ``` CSharp 
-featureMembership.OfType<SubjectMembership>()
-    .Select(subjects => (!subjects.Any() ? null : subjects.First().ownedSubjectParameter))
+featureMembership.OfType<SubjectMembership>().Select(subjects => (subjects.IsEmpty() ? null :
+subjects.First().ownedSubjectParameter))
 ```
 # oclIsKindOf, exists, size with parameter
 ### OCL
@@ -187,9 +181,7 @@ instantiatedType.oclIsKindOf(Feature) and
 ```
 ### C#
 ``` CSharp 
-(instantiatedType is Behavior) || (instantiatedType is Feature) && 
-instantiatedType.type.Any(item => (item is Behavior)) && 
-instantiatedType.type.Count() == 1
+(instantiatedType is Behavior) || (instantiatedType is Feature) && instantiatedType.type.Any(item => (item is Behavior)) && instantiatedType.type.Count() == 1
 ```
 # let with OrderedSet, asOrderedSet, if, isEmpty, union
 ### OCL
@@ -205,10 +197,7 @@ instantiatedType.type.Count() == 1
 ```
 ### C#
 ``` CSharp 
-featuring.type.Distinct().ToHashSet()
-    .Select(featuringTypes => (!chainingFeature.Any() 
-    ? featuringTypes : featuringTypes.Union(chainingFeature.First().featuringType).Distinct().ToHashSet
-()))
+featuring.type.AsOrderedSet().Select(featuringTypes => !(chainingFeature.Any()) ? featuringTypes : featuringTypes.Union(chainingFeature.First().featuringType).AsOrderedSet())
 ```
 # selectByKind, exists, includes
 ### OCL
@@ -231,10 +220,7 @@ ownedFeatureMembership->
 ```
 ### C#
 ``` CSharp 
-ownedFeatureMembership.OfType<TransitionFeatureMembership>()
-    .Where(item => item.kind == TransitionFeatureKind.trigger)
-    .Select(item2 => item2.transitionFeature)
-    .OfType<Expression>()
+ownedFeatureMembership.OfType<TransitionFeatureMembership>().Where(item => item.kind == TransitionFeatureKind.trigger).Select(item2 => item2.transitionFeature).OfType<Expression>()
 ```
 # let with OrderedSet, new OrderedSet, comment, closure, asOrderedSet, reject, exist
 ### OCL
@@ -246,9 +232,7 @@ ownedFeatureMembership.OfType<TransitionFeatureMembership>()
 ```
 ### C#
 ``` CSharp 
-new List<dynamic> { this }.Closure(item => item.typingFeatures())
-    .Select(item => item.typing.type).Distinct().ToHashSet()
-    .Select(types => types.Where(t1 => !(types.exist(t2).t2 != t1 && t2.specializes(t1))))
+(new OrderedSet(this)).Closure(item =>item.typingFeatures()).SelectMany(item2 => item.typing.AsOrderedSet<Types>()).Reject(t1 => t1.types->Any(t2 => t2 <> t1 and t2.specializes(t1)))
 ```
 # select containing let
 ### OCL
@@ -260,7 +244,7 @@ feature->select(f |
 ```
 ### C#
 ``` CSharp 
-feature.Where(f => directionOf(f).Select(direction => direction == FeatureDirectionKind.in)) || direction == FeatureDirectionKind.inout
+feature.Where(f => directionOf(f).Select(direction => direction == FeatureDirectionKind._)) || direction == FeatureDirectionKind.inout
 ```
 # selectByKind, collect, forAll
 ### OCL
@@ -272,9 +256,8 @@ sourceConnector->selectByKind(Succession)->
 ```
 ### C#
 ``` CSharp 
-sourceConnector.OfType<Succession>()
-    .Select(item => connectorEnd.ElementAt(0))
-    .All(sourceMult => multiplicityHasBounds(sourceMult, 1, 1))
+// TODO
+sourceConnector.OfType<Succession>().Select(item => item.connectorEnd.ElementAt(0)).All(sourceMult => multiplicityHasBounds(sourceMult, 1, 1))
 ```
 # selectByKind, isUnique
 ### OCL
@@ -285,7 +268,7 @@ ownedMembership->
 ```
 ### C#
 ``` CSharp 
-ownedMembership.OfType<StateSubactionMembership>().IsUnique(item => item.kind)
+ownedMembership.OfType<StateSubactionMembership>().IsUnique(item => item.kind);
 ```
 # implies, asSet
 ### OCL
@@ -295,7 +278,7 @@ crossFeature <> null implies
 ```
 ### C#
 ``` CSharp 
-(!(crossFeature != null) || crossFeature.type.ToHashSet() == type.ToHashSet())
+(!(crossFeature != null) || crossFeature.type.AsSet() == type.AsSet())
 ```
 # The big one
 ### OCL
@@ -317,10 +300,7 @@ owningType <> null and
 ```
 ### C#
 ``` CSharp 
-(!(owningType != null && ((owningType is Function) && this == ((Function)owningType).result || 
-(owningType is Expression) && this == ((Expression)owningType).result)) || 
-((Function)owningType.ownedSpecialization.general.Where(item => (item is Function) || 
-(item is Expression)).All(supertype => (redefines((supertype) is Function) ? ((Function)superType).result : ((Expression)superType).result)
+(!(owningType != null && ((owningType is ) && this == (()owningType).result || (owningType is Expression) && this == ((Expression)owningType).result)) || (()owningType.ownedSpecialization.general.Where(item => (item is Function) || (item is Expression)).All(supertype => (redefines() is )).superType).result)
 ```
 # if, size, OrderedSet
 ### OCL
@@ -334,7 +314,7 @@ owningType <> null and
 ```
 ### C#
 ``` CSharp 
-(relatedType.Count() < 2 ? new List<dynamic> {  } : relatedType.SubSequence(2, relatedType.Count()).Distinct().ToHashSet())
+(relatedType.Count() < 2 ? new OrderedSet() : relatedType.SubSequence(2, relatedType.Count()).AsOrderedSet())
 ```
 
 # let with OrderedSet, select, forAll, intersection
@@ -348,9 +328,7 @@ result.ownedFeature->forAll(f |
 ```
 ### C#
 ``` CSharp 
-instantiatedType.feature
-    .Where(item => owningMembership.visibility == VisibilityKind.public)
-    .Select(features => result.ownedFeature.All(f => f.ownedRedefinition.redefinedFeature.Intersect(features).Count() == 1))
+instantiatedType.feature.Where(item => owningMembership.visibility == VisibilityKind.public).Select(features => result.ownedFeature.All(f => f.ownedRedefinition.redefinedFeature.Intersect(features).Count() == 1))
 ```
 # let with functioncall, notEmpty, first
 ### OCL
@@ -363,10 +341,7 @@ targetParameter->first().ownedFeature->first().redefines(referent)
 ```
 ### C#
 ``` CSharp 
-inputParameter(1).Select(targetParameter => targetParameter != null 
-    && targetParameter.ownedFeature.Any() 
-    && targetParameter.First().ownedFeature.Any() 
-    && targetParameter.First().ownedFeature.First().redefines(referent))
+inputParameter(1).Select(targetParameter => targetParameter != null && targetParameter.ownedFeature.Any() && targetParameter.First().ownedFeature.Any() && targetParameter.First().ownedFeature.First().redefines(referent))
 ```
 # if, else if, select
 ### OCL
@@ -383,10 +358,9 @@ inputParameter(1).Select(targetParameter => targetParameter != null
 ```
 ### C#
 ``` CSharp 
-(owningNamespace == null 
-? null : (name != null && owningNamespace.ownedMember.Where(m => m.name == name).IndexOf(this) != 1
-? null : (owningNamespace.owner == null ? escapedName() : (owningNamespace.qualifiedName == null || escapedName() == null 
-? null : owningNamespace.qualifiedName + "::" + escapedName()))))
+(owningNamespace == null ? null : (name != null && owningNamespace.ownedMember.Where(m => m.name == name).IndexOf(this) != 1
+? null : (owningNamespace.owner == null ? escapedName() : (owningNamespace.qualifiedName == null || escapedName() == null ?
+null : owningNamespace.qualifiedName + "::" + escapedName()))))
 ```
 # notEqual, xor, null, 
 ### OCL
@@ -404,7 +378,7 @@ inheritedMemberships(Set{}, Set{}, false)
 ```
 ### C#
 ``` CSharp 
-inheritedMemberships(new HashSet<dynamic> {  }, new HashSet<dynamic> {  }, false)
+inheritedMemberships(new Set(), new Set(), false)
 ```
 # nested if with let
 ### OCL
@@ -420,9 +394,8 @@ inheritedMemberships(new HashSet<dynamic> {  }, new HashSet<dynamic> {  }, false
 ```
 ### C#
 ``` CSharp 
-(!succession.targetFeature.Any() 
-? null : (succession.targetFeature.First().featureTarget)
-    .Select(targetFeature => (!(targetFeature is ActionUsage) ? null : ((ActionUsage)targetFeature))))
+(!succession.targetFeature.Any() ? null : (succession.targetFeature.First().featureTarget).Select(targetFeature =>
+(!(targetFeature is ActionUsage) ? null : ((ActionUsage)targetFeature))))
 ```
 # simplest if ever
 ### OCL
@@ -444,9 +417,7 @@ ownedMembership.selectByKind(ResultExpressionMembership)->
 ```
 ### C#
 ``` CSharp 
-ownedMembership.OfType<ResultExpressionMembership>())
-    .All(mem => ownedFeature.OfType<BindingConnector>()
-        .Any(binding => binding.relatedFeature.Contains(result) && binding.relatedFeature.Contains(mem.ownedResultExpression.result)))
+ownedMembership.selectByKind(ResultExpressionMembership).All(mem => ownedFeature.selectByKind(BindingConnector).Any(binding => binding.relatedFeature.Contains(result) && binding.relatedFeature.Contains(mem.ownedResultExpression.result)))
 ```
 # second big if
 ### OCL
@@ -467,14 +438,5 @@ annotatedElementFeatures->notEmpty() implies
 ```
 ### C#
 ``` CSharp 
-((Feature)resolveGlobal('Metaobjects::Metaobject::annotatedElement').memberElement)
-    .Select(baseAnnotatedElementFeature => feature
-        .Where(item => item.specializes(baseAnnotatedElementFeature))
-        .Excluding(baseAnnotatedElementFeature)
-        .Select(annotatedElementFeatures => annotatedElementFeatures.Any()
-            || annotatedElementFeatures.typing.type.AsSet()
-            .Select(annotatedElementTypes => annotatedElement.OclType()
-                .Select(item =>item.qualifiedName)
-                .Select(qn => ((Metaclass)resolveGlobal(qn).memberElement))
-                .Select(metaclasses => metaclasses.All(m => annotatedElementTypes.Any(t => m.specializes(t)))))))
+((Feature)resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberElement).Select(baseAnnotatedElementFeature => feature.Where(item => specializes(baseAnnotatedElementFeature)).Where(item2 => item2 != baseAnnotatedElementFeature).Select(annotatedElementFeatures => (!(annotatedElementFeatures.Any()) || annotatedElementTypes is (Feature) == annotatedElementFeatures.typing.type.ToHashSet())))
 ```

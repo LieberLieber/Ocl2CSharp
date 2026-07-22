@@ -399,8 +399,30 @@ public class OclToCSharpConverterTests
     public void SetLiteral_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("Set{1, 2, 3}->includes(status)");
-        Assert.That(result, Does.Contain("new HashSet<dynamic>"));
+        Assert.That(result, Does.Contain("new Set("));
         Assert.That(result, Does.Contain(".Contains(status)"));
+    }
+
+    [Test]
+    public void OrderedSetLiteral_IsConverted()
+    {
+        var result = OclToCSharpConverter.Convert("OrderedSet{1, 2, 3}->size() > 0");
+        Assert.That(result, Does.Contain("new OrderedSet("));
+        Assert.That(result, Does.Contain(".Count()"));
+    }
+
+    [Test]
+    public void AsSet_UsesOclExtension()
+    {
+        var result = OclToCSharpConverter.Convert("items->asSet()");
+        Assert.That(result, Does.Contain(".AsSet()"));
+    }
+
+    [Test]
+    public void AsOrderedSet_UsesOclExtension()
+    {
+        var result = OclToCSharpConverter.Convert("items->asOrderedSet()");
+        Assert.That(result, Does.Contain(".AsOrderedSet()"));
     }
 
     [Test]
