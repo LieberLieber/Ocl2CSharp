@@ -41,7 +41,7 @@ owningType.oclIsType(CaseUsage)
 ```
 ### C#
 ``` CSharp
-ownedMembership.Where(item => !(item is
+ownedMembership.Reject(item => (item is
 ParameterMembership)).Select(nonParameterMemberships =>
 (nonParameterMemberships.IsEmpty() ||
 !(nonParameterMemberships.First().memberElement is Feature) ? null :
@@ -107,7 +107,7 @@ ownedFeatures->excluding(result)->isEmpty()
 ```
 ### C#
 ``` CSharp
-!ownedFeatures.Where(item => item != result).Any()
+ownedFeatures.Where(item => item != result).IsEmpty()
 ```
 # ValidateAssociationBinarySpecialization
 ### OCL
@@ -130,7 +130,7 @@ associationEnds->size() > 2 implies
 ```
 ### C#
 ``` CSharp
-featureMembership.OfType<SubjectMembership>().Select(subjectMems => (subjectMems.IsEpmty() ? null : subjectMems.First().ownedSubjectParameter))
+featureMembership.OfType<SubjectMembership>().Select(subjectMems => (subjectMems.IsEmpty() ? null : subjectMems.First().ownedSubjectParameter))
 ```
 # DeriveDefinitionOwnedConnection
 ### OCL
@@ -342,7 +342,7 @@ ownedImport->selectByKind(Expose).
 ```
 ### C#
 ``` CSharp
-ownedImport.OfType<Expose>().importedMemberships(new HashSet<dynamic> {  }).memberElement.Where(elm => includeAsExposed(elm)).Distinct().ToHashSet()
+ownedImport.OfType<Expose>().importedMemberships(new HashSet<dynamic> {  }).memberElement.Where(elm => includeAsExposed(elm)).AsOrderedSet()
 ```
 # DeriveViewDefinitionView
 ### OCL
@@ -501,7 +501,7 @@ usage->selectAsKind(AllocationUsage)
 ```
 ### C#
 ``` CSharp
-usage.selectAsKind(AllocationUsage)
+usage.OfType<AllocationUsage>()
 ```
 # ValidateConnectorRelatedFeatures
 ### OCL
@@ -624,7 +624,7 @@ owningType.oclIsKindOf(CaseUsage)
 ```
 ### C#
 ``` CSharp
-(objectiveRequirement == null ? new List<dynamic> {  } : objectiveRequirement.featureMembership.OfType<RequirementVerificationMembership>().Select(item => item.verifiedRequirement).Distinct().ToHashSet())
+(objectiveRequirement == null ? new List<dynamic> {  } : objectiveRequirement.featureMembership.OfType<RequirementVerificationMembership>().Select(item => item.verifiedRequirement).AsOrderedSet())
 ```
 # CheckConcernUsageFramedConcernSpecialization
 ### OCL
@@ -1329,8 +1329,8 @@ specializesFromLibrary("UseCases::UseCase")
 ```
 ### C#
 ``` CSharp
-featuring.type.Distinct().ToHashSet().Select(featuringTypes => (chainingFeature.IsEmpty() ? featuringTypes :
-featuringTypes.Union(chainingFeature.First().featuringType).Distinct().ToHashSet()))
+featuring.type.AsOrderedSet().Select(featuringTypes => (chainingFeature.IsEmpty() ? featuringTypes :
+featuringTypes.Union(chainingFeature.First().featuringType).AsOrderedSet()))
 ```
 # CheckLiteralIntegerSpecialization
 ### OCL
@@ -1606,8 +1606,8 @@ result.owningType == this
 ### C#
 ``` CSharp
 new List<dynamic> { this }.Closure(item =>
-item.typingFeatures()).typing.type.Distinct().ToHashSet().Select(types =>
-types.Where(t1 => !(types.exist(t2).t2 != t1 && t2.specializes(t1))))
+item.typingFeatures()).typing.type.AsOrderedSet().Select(types =>
+types.Reject(t1 => (types.exist(t2).t2 != t1 && t2.specializes(t1))))
 ```
 # CheckPartDefinitionSpecialization
 ### OCL
@@ -1862,7 +1862,7 @@ membership->at(1).memberElement.oclIsKindOf(Feature)
 ```
 ### C#
 ``` CSharp
-ownedMembership.Where(m => !((m is ParameterMembership))).Select(membership => membership.Any() && (membership.ElementAt(0) is Feature))
+ownedMembership.Reject(m => ((m is ParameterMembership))).Select(membership => membership.Any() && (membership.ElementAt(0) is Feature))
 ```
 # CheckFeatureChainExpressionResultSpecialization
 ### OCL
@@ -2101,8 +2101,8 @@ Expression)).All(supertype => (redefines() is )).superType).result)
 ```
 ### C#
 ``` CSharp
-(relatedType.Count() < 2 ? new List<dynamic> {  } : relatedType.subSequence(2,
-relatedType.Count()).Distinct().ToHashSet())
+(relatedType.Count() < 2 ? new List<dynamic> {  } : relatedType.SubSequence(2,
+relatedType.Count()).AsOrderedSet())
 ```
 # DeriveDefinitionOwnedCase
 ### OCL
@@ -4412,7 +4412,7 @@ input->forAll(inp1 | input->forAll(inp2 |
 ```
 ### C#
 ``` CSharp
-(instantiatedType.feature).Select(features => input.All(inp1 => input.All(inp2 => (!(inp1 != inp2) || !inp1.ownedRedefinition.redefinedFeature.Intersect(inp2.ownedRedefinition.redefinedFeature).Intersect(features).Any()))))
+(instantiatedType.feature).Select(features => input.All(inp1 => input.All(inp2 => (!(inp1 != inp2) || inp1.ownedRedefinition.redefinedFeature.Intersect(inp2.ownedRedefinition.redefinedFeature).Intersect(features).IsEmpty()))))
 ```
 # DeriveTransitionUsageSuccession
 ### OCL
@@ -4468,8 +4468,7 @@ owningType <> null and
 ```
 ### C#
 ``` CSharp
-(relatedFeature.Count() < 2 ? new List<dynamic> {  } :
-relatedFeature.subSequence(2, relatedFeature.Count()).Distinct().ToHashSet())
+(relatedFeature.Count() < 2 ? new List<dynamic> {  } : relatedFeature.SubSequence(2, relatedFeature.Count()).AsOrderedSet())
 ```
 # DeriveUsageNestedRequirement
 ### OCL
@@ -4596,7 +4595,7 @@ endif
 ``` CSharp
 relatedFeature.Closure(item => item.featuringType).Where(t =>
 relatedFeature.All(f => f.isFeaturedWithin(t))).Select(commonFeaturingTypes =>
-commonFeaturingTypes.Where(t1 => !(commonFeaturingTypes.Any(t2 => t2 != t1 &&
+commonFeaturingTypes.Reject(t1 => (commonFeaturingTypes.Any(t2 => t2 != t1 &&
 t2.Closure(item =>
 item.featuringType).contains(t1)))).Select(nearestCommonFeaturingTypes =>
 (nearestCommonFeaturingTypes.IsEmpty() ? null :
@@ -4747,7 +4746,7 @@ sourceConnector->selectAsKind(Succession)->
 ```
 ### C#
 ``` CSharp
-sourceConnector.selectAsKind(Succession).Select(item =>
+sourceConnector.OfType<Succession>().Select(item =>
 connectorEnd.ElementAt(1)).All(targetMult => multiplicityHasBounds(targetMult,
 0, 1))
 ```
@@ -4838,7 +4837,7 @@ libraryNamespace() != null
 ```
 ### C#
 ``` CSharp
-(connectorEnd.Count() < 2 || !connectorEnd.ElementAt(1).Any() ? null : connectorEnd.ElementAt(1).First())
+(connectorEnd.Count() < 2 || connectorEnd.ElementAt(1).IsEmpty() ? null : connectorEnd.ElementAt(1).First())
 ```
 # ValidateRequirementDefinitionOnlyOneSubject
 ### OCL
@@ -5341,7 +5340,7 @@ sourceConnector->selectAsKind(Succession)->size() <= 1
 ```
 ### C#
 ``` CSharp
-sourceConnector.selectAsKind(Succession).Count() <= 1
+sourceConnector.OfType<Succession>().Count() <= 1
 ```
 # CheckWhileLoopActionUsageSpecialization
 ### OCL
@@ -5419,7 +5418,7 @@ isVariation implies
 ```
 ### C#
 ``` CSharp
-(!(isVariation) || ownedSpecialization.specific.IsEmpty(item => (item is
+(!(isVariation) || !ownedSpecialization.specific.Any(item => (item is
 Definition) && ((Definition)item).isVariation))
 ```
 # CheckStateUsageOwnedStateSpecialization
@@ -5706,7 +5705,7 @@ isSemantic() implies
 ### C#
 ``` CSharp
 (!(isSemantic()) || annotatedTypes is (Type) ==
-annotatedElement.selectAsKind(Type))
+annotatedElement.OfType<Type>())
 ```
 # CheckItemUsageSubitemSpecialization
 ### OCL
@@ -5754,7 +5753,7 @@ isVariation implies
 ```
 ### C#
 ``` CSharp
-(!(isVariation) || ownedSpecialization.specific.IsEmpty(item => (item is
+(!(isVariation) || !ownedSpecialization.specific.Any(item => (item is
 Definition) && ((Definition)item).isVariation || (item is Usage) &&
 ((Usage)item).isVariation))
 ```
@@ -5978,7 +5977,7 @@ owningFeatureMembership <> null implies
 ``` CSharp
 (objectiveRequirement == null ? new List<dynamic> {  } :
 objectiveRequirement.featureMembership.OfType<RequirementVerificationMembership>
-().Select(item => item.verifiedRequirement).Distinct().ToHashSet())
+().Select(item => item.verifiedRequirement).AsOrderedSet())
 ```
 # CheckDecisionNodeOutgoingSuccessionSpecialization
 ### OCL
@@ -6103,7 +6102,7 @@ result.ownedFeature->forAll(f1 | result.ownedFeature->forAll(f2 |
 ```
 ### C#
 ``` CSharp
-instantiatedType.feature.Where(item => item.visibility == VisibilityKind.public).Select(features => result.ownedFeature.All(f1 => result.ownedFeature.All(f2 => (!(f1 != f2) || !f1.ownedRedefinition.redefinedFeature.Intersect(f2.ownedRedefinition.redefinedFeature).Intersect(features).Any()))))
+instantiatedType.feature.Where(item => item.visibility == VisibilityKind.public).Select(features => result.ownedFeature.All(f1 => result.ownedFeature.All(f2 => (!(f1 != f2) || f1.ownedRedefinition.redefinedFeature.Intersect(f2.ownedRedefinition.redefinedFeature).Intersect(features).IsEmpty()))))
 ```
 # CheckTransitionUsageSourceBindingConnector
 ### OCL

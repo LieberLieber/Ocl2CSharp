@@ -256,7 +256,6 @@ sourceConnector->selectByKind(Succession)->
 ```
 ### C#
 ``` CSharp
-// TODO
 sourceConnector.OfType<Succession>().Select(item => item.connectorEnd.ElementAt(0)).All(sourceMult => multiplicityHasBounds(sourceMult, 1, 1))
 ```
 # selectByKind, isUnique
@@ -278,7 +277,7 @@ crossFeature <> null implies
 ```
 ### C#
 ``` CSharp
-(!(crossFeature != null) || crossFeature.type.AsSet() == type.AsSet())
+(!(crossFeature != null) || crossFeature.type.ToHashSet() == type.ToHashSet())
 ```
 # The big one
 ### OCL
@@ -438,5 +437,5 @@ annotatedElementFeatures->notEmpty() implies
 ```
 ### C#
 ``` CSharp
-((Feature)resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberElement).Select(baseAnnotatedElementFeature => feature.Where(item => specializes(baseAnnotatedElementFeature)).Where(item2 => item2 != baseAnnotatedElementFeature).Select(annotatedElementFeatures => (!(annotatedElementFeatures.Any()) || annotatedElementTypes is (Feature) == annotatedElementFeatures.typing.type.ToHashSet())))
+((Feature)resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberElement).Select(baseAnnotatedElementFeature => feature.Where(item => specializes(baseAnnotatedElementFeature)).Where(item => item != baseAnnotatedElementFeature).Select(annotatedElementFeatures => annotatedElementFeatures.Any()))
 ```

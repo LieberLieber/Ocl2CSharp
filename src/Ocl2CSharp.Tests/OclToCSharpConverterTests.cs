@@ -399,7 +399,7 @@ public class OclToCSharpConverterTests
     public void SetLiteral_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("Set{1, 2, 3}->includes(status)");
-        Assert.That(result, Does.Contain("new Set("));
+        Assert.That(result, Does.Contain("new HashSet<dynamic> "));
         Assert.That(result, Does.Contain(".Contains(status)"));
     }
 
@@ -407,7 +407,7 @@ public class OclToCSharpConverterTests
     public void OrderedSetLiteral_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("OrderedSet{1, 2, 3}->size() > 0");
-        Assert.That(result, Does.Contain("new OrderedSet("));
+        Assert.That(result, Does.Contain("new List<dynamic> "));
         Assert.That(result, Does.Contain(".Count()"));
     }
 
@@ -545,7 +545,7 @@ public class OclToCSharpConverterTests
             "    endif";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "referent == ownedMembership.Where(item => !((ParameterMembership))).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))",
+            "referent == ownedMembership.Reject(item => ((ParameterMembership))).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))",
             result);
     }
 
@@ -786,7 +786,7 @@ public class OclToCSharpConverterTests
             "    endif";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "targetFeature == ownedMembership.Where(item => !((ParameterMembership))).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))",
+            "targetFeature == ownedMembership.Reject(item => ((ParameterMembership))).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))",
             result);
     }
 

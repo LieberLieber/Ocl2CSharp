@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
@@ -680,19 +681,20 @@ else
 		if (identOpt != null && exprs.Length > 0)
 		{
 			var varName = identOpt.ID().GetText();
-			lambda = $"{varName} => !({Visit(exprs[0])})";
+			lambda = $"{varName} => {Visit(exprs[0])}";
 		}
 		else if (exprs.Length > 0)
 		{
 			var body = Visit(exprs[0]);
-			lambda = $"item => !{ApplyImplicitSelf(body)}";
+			lambda = $"item => {ApplyImplicitSelf(body)}";
 		}
 		else
 		{
 			return $"{target}.Where(/* reject */ item => true)";
 		}
-		return $"{target}.Where({lambda})";
+		return $"{target}.Reject({lambda})";
 	}
+
 
 	private string BuildExcluding(string target, OCLParser.PostfixSuffixContext context)
 	{
