@@ -437,5 +437,5 @@ annotatedElementFeatures->notEmpty() implies
 ```
 ### C#
 ``` CSharp
-((Feature)resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberElement).Select(baseAnnotatedElementFeature => feature.Where(item => specializes(baseAnnotatedElementFeature)).Where(item => item != baseAnnotatedElementFeature).Select(annotatedElementFeatures => annotatedElementFeatures.Any()))
+((Feature)resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberElement).Select(baseAnnotatedElementFeature => feature.Where(item => specializes(baseAnnotatedElementFeature)).Excluding(item => baseAnnotatedElementFeature).Select(annotatedElementFeatures => annotatedElementFeatures.Any()))
 ```

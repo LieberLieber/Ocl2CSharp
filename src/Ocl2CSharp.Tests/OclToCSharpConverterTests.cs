@@ -619,7 +619,7 @@ public class OclToCSharpConverterTests
             "ownedFeatures->excluding(result)->isEmpty()";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "ownedFeatures.Where(item => item != result).IsEmpty()",
+            "ownedFeatures.Excluding(item => result).IsEmpty()",
             result);
     }
 

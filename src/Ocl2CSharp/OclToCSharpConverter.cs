@@ -699,7 +699,7 @@ else
 	private string BuildExcluding(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var expr = Visit(context.expression(0));
-		return $"{target}.Where(item => item != {expr})";
+		return $"{target}.Excluding(item => {expr})";
 	}
 
 	private string BuildSymmetricDifference(string target, OCLParser.PostfixSuffixContext context)

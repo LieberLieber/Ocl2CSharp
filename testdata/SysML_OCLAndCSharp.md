@@ -107,7 +107,7 @@ ownedFeatures->excluding(result)->isEmpty()
 ```
 ### C#
 ``` CSharp
-ownedFeatures.Where(item => item != result).IsEmpty()
+ownedFeatures.Excluding(item => result).IsEmpty()
 ```
 # ValidateAssociationBinarySpecialization
 ### OCL
@@ -2828,7 +2828,7 @@ annotatedElementFeatures->notEmpty() implies
 ``` CSharp
 ((Feature)resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberEleme
 nt).Select(baseAnnotatedElementFeature => feature.Where(item =>
-specializes(baseAnnotatedElementFeature)).Where(item => item !=
+specializes(baseAnnotatedElementFeature)).Excluding(item =>
 baseAnnotatedElementFeature).Select(annotatedElementFeatures =>
 (!(annotatedElementFeatures.Any()) || annotatedElementTypes is (Feature) ==
 annotatedElementFeatures.typing.type.ToHashSet())))
@@ -3312,7 +3312,7 @@ isOwnedCrossFeature() implies
 ```
 ### C#
 ``` CSharp
-(!(isOwnedCrossFeature()) || otherEnds is (Feature) == ((Feature)owner).owningType.endFeature.Where(item => item != this))
+(!(isOwnedCrossFeature()) || otherEnds is (Feature) == ((Feature)owner).owningType.endFeature.Excluding(item => this))
 ```
 # CheckFeatureSuboccurrenceSpecialization
 ### OCL
