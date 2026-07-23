@@ -423,8 +423,8 @@ else
 		return name switch
 		{
 			"size" => BuildSize(target, context),
-			"isEmpty" => $"{target}.IsEmpty()",
-			"notEmpty" => $"{target}.Any()",
+			"isEmpty" => $"{target}.IsEmpty()", //use IsEmpty() because it checks for null
+			"notEmpty" => $"{target}.NotEmpty()", //use NotEmpty() because it checks for null
 			"asSet" => $"{target}.ToHashSet()",
 			"asBag" => $"{target}.ToList()",
 			"asOrderedSet" => $"{target}.AsOrderedSet()",
@@ -455,7 +455,7 @@ else
 			"includes" => $"{target}.Contains({Visit(context.expression(0))})",
 			"excludes" => $"!{target}.Contains({Visit(context.expression(0))})",
 			"including" => $"{target}.Append({Visit(context.expression(0))})",
-			"excluding" => BuildExcluding(target, context),
+			"excluding" => BuildExcluding(target, context), //use Excluding() because it checks for null
 			"includesAll" => $"{target}.IsSupersetOf({Visit(context.expression(0))})",
 			"symmetricDifference" => BuildSymmetricDifference(target, context),
 			"excludesAll" => $"!{target}.Intersect({Visit(context.expression(0))}).Any()",
@@ -475,9 +475,9 @@ else
 			"subSequence" => BuildSubSequence(target, context),
 			"collect" => BuildCollectionOp(target, "Select", context),
 			"select" => BuildCollectionOp(target, "Where", context),
-			"reject" => BuildReject(target, context),
+			"reject" => BuildReject(target, context), //use Reject() because it checks for null
 			"forAll" => BuildCollectionOp(target, "All", context),
-			"exists" => BuildCollectionOp(target, "Any", context),
+			"exists" => BuildCollectionOp(target, "Exists", context), //use Exists() because it checks for null
 			"one" => BuildOne(target, context),
 			"closure" => BuildClosure(target, context),
 			"sortedBy" => BuildCollectionOp(target, "OrderBy", context),
@@ -699,7 +699,7 @@ else
 	private string BuildExcluding(string target, OCLParser.PostfixSuffixContext context)
 	{
 		var expr = Visit(context.expression(0));
-		return $"{target}.Excluding(item => {expr})";
+		return $"{target}.Excluding({expr})";
 	}
 
 	private string BuildSymmetricDifference(string target, OCLParser.PostfixSuffixContext context)

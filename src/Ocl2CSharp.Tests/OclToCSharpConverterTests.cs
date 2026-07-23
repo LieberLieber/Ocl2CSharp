@@ -249,7 +249,7 @@ public class OclToCSharpConverterTests
     {
         var result = OclToCSharpConverter.Convert("employees->select(e | e.age >= 18)->notEmpty()");
         Assert.That(result, Does.Contain(".Where(e => e.age >= 18)"));
-        Assert.That(result, Does.Contain(".Any()"));
+        Assert.That(result, Does.Contain(".NotEmpty()"));
     }
 
     [Test]
@@ -263,7 +263,7 @@ public class OclToCSharpConverterTests
     public void ExistsOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("employees->exists(e | e.role = 'CEO')");
-        Assert.AreEqual("employees.Any(e => e.role == \"CEO\")", result);
+        Assert.AreEqual("employees.Exists(e => e.role == \"CEO\")", result);
     }
 
     [Test]
@@ -271,7 +271,7 @@ public class OclToCSharpConverterTests
     {
         var result = OclToCSharpConverter.Convert("employees->collect(e | e.name)->notEmpty()");
         Assert.That(result, Does.Contain(".Select(e => e.name)"));
-        Assert.That(result, Does.Contain(".Any()"));
+        Assert.That(result, Does.Contain(".NotEmpty()"));
     }
 
     [Test]
@@ -292,7 +292,7 @@ public class OclToCSharpConverterTests
     public void NotEmptyOperation_IsConverted()
     {
         var result = OclToCSharpConverter.Convert("contracts->notEmpty()");
-        Assert.AreEqual("contracts.Any()", result);
+        Assert.AreEqual("contracts.NotEmpty()", result);
     }
 
     [Test]
@@ -619,7 +619,7 @@ public class OclToCSharpConverterTests
             "ownedFeatures->excluding(result)->isEmpty()";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "ownedFeatures.Excluding(item => result).IsEmpty()",
+            "ownedFeatures.Excluding(result).IsEmpty()",
             result);
     }
 
@@ -958,7 +958,7 @@ public class OclToCSharpConverterTests
             "    payloadParameter.subsetsChain(triggerAction->at(1), triggerPayloadParameter())";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "(!(triggerAction.Any()) || payloadParameter is Feature == inputParameter(2))",
+            "(!(triggerAction.NotEmpty()) || payloadParameter is Feature == inputParameter(2))",
             result);
     }
 
@@ -1353,7 +1353,7 @@ public class OclToCSharpConverterTests
             "    specializesFromLibrary('Objects::linkObjects')";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "(!(association.Any(item => item.OfType<AssociationStructure>())) || specializesFromLibrary(\"Objects::linkObjects\"))",
+            "(!(association.Exists(item => item.OfType<AssociationStructure>())) || specializesFromLibrary(\"Objects::linkObjects\"))",
             result);
     }
 
@@ -1467,7 +1467,7 @@ public class OclToCSharpConverterTests
             "    redefines('AssigmentAction::target::startingAt::accessedFeature')";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "inputParameter(1).Select(targetParameter => targetParameter != null && targetParameter.ownedFeature.Any() && targetParameter.First().ownedFeature.Any() && targetParameter.First().ownedFeature.First().redefines(\"AssigmentAction::target::startingAt::accessedFeature\"))",
+            "inputParameter(1).Select(targetParameter => targetParameter != null && targetParameter.ownedFeature.NotEmpty() && targetParameter.First().ownedFeature.NotEmpty() && targetParameter.First().ownedFeature.First().redefines(\"AssigmentAction::target::startingAt::accessedFeature\"))",
             result);
     }
 
@@ -1482,7 +1482,7 @@ public class OclToCSharpConverterTests
             "    forAll(oclIsKindOf(ActionUsage))";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "ownedMember.OfType<Succession>().Select(successions => successions.Any() && successions.ElementAt(0).featureTarget.All(item => (item is ActionUsage)))",
+            "ownedMember.OfType<Succession>().Select(successions => successions.NotEmpty() && successions.ElementAt(0).featureTarget.All(item => (item is ActionUsage)))",
             result);
     }
 
