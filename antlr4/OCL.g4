@@ -1,10 +1,10 @@
 /******************************
 * Parser for OCL 2.4 with extensions for textual notations
-* for UML classes and usecases. 
+* for UML classes and usecases.
 *
-* Arrow operators ->op are used consistently for any OCL 
-* operator, not just collection operators. 
-* 
+* Arrow operators ->op are used consistently for any OCL
+* operator, not just collection operators.
+*
 * Copyright (c) 2003--2023 Kevin Lano
 * This program and the accompanying materials are made available under the
 * terms of the Eclipse Public License 2.0 which is available at
@@ -18,12 +18,28 @@
 
 grammar OCL;
 
+multipleContextSpecifications
+    : (singleInvariant | singleDerivedAttribute)+ EOF
+    ;
+
+contextSpecification
+    : (singleInvariant | singleDerivedAttribute) EOF
+    ;
+
+singleInvariant
+    : 'context' ID 'inv' ID? ':' expression
+    ;
+
+singleDerivedAttribute
+    : 'context' qualified_name ':' type ('init:' expression)? 'derive:' expression
+    ;
+
 type
     : 'Sequence' '(' type ')'
     | 'Set' '(' type ')'
     | 'Bag' '(' type ')'
     | 'OrderedSet' '(' type ')'
-    | 'Ref' '(' type ')'  
+    | 'Ref' '(' type ')'
     | 'Map' '(' type ',' type ')'
     | 'Function' '(' type ',' type ')'
     | identifier
@@ -34,20 +50,9 @@ expressionList
     ;
 
 expression
-    : ID '=' (letExpression | conditionalExpression)  // derivation: x = let … or x = if …
-    | logicalExpression
+    : logicalExpression
     | conditionalExpression
     | letExpression
-    | function
-    | unaryExpression
-    ;
-
-function
-    : 'oclIsType' '(' expression ')'
-    | 'oclIsTypeOf' '(' expression ')'
-    | 'oclIsKindOf' '(' expression ')'
-    | 'oclIsType' '(' expression ')'
-    | 'oclAsType' '(' expression ')'
     ;
 
 conditionalExpression
@@ -62,15 +67,10 @@ letBinding
     : ID (':' type)? '=' expression
     ;
 
+
 basicExpression
     : NULL_LITERAL
     | BOOLEAN_LITERAL
-    | 'oclIsKindOf' '(' expression ')'
-    | 'oclIsTypeOf' '(' expression ')'
-    | 'oclIsType' '(' expression ')'
-    | 'oclAsType' '(' expression ')'
-    | 'oclIsUndefined' '(' ')'
-    | 'oclIsInvalid' '(' ')'
     | basicExpression '.' identifier
     | basicExpression '(' expressionList? ')'
     | basicExpression '[' expression ']'
@@ -93,7 +93,7 @@ logicalExpression
 
 equalityExpression
     : additiveExpression (('=' | '<' | '>' | '>=' | '<=' | '/=' | '<>' | ':' | '/:' | '<:') additiveExpression)* ;
-    
+
 additiveExpression
     : multiplicativeExpression (('+' | '-' | '..' | '|->') multiplicativeExpression)* ;
 
@@ -101,13 +101,13 @@ multiplicativeExpression
     : unaryExpression (('*' | '/' | 'mod' | 'div') unaryExpression)* ;
 
 unaryExpression
-    : ('not' | '-' | '+' | '?' | '!') expression
+    : ('not' | '-' | '+' | '?' | '!') unaryExpression
     | navigationExpression
     ;
 
 //////////////////////////////////////////////////////////////////////////////
 // Postfix chaning expression handling.
-// 'navigationExpression' is a postfix expression that 
+// 'navigationExpression' is a postfix expression that
 // is direct left recursive: it can appear on LHS of ->
 // ->subrange is used for ->substring and ->subSequence
 //////////////////////////////////////////////////////////////////////////////
@@ -127,17 +127,14 @@ postfixSuffix
     | '.' 'oclIsInvalid' '(' ')'
     | '.' 'oclIsNew' '(' ')'
     | '.' 'oclAsSet' '(' ')'
-    | '.' 'oclIsType' '(' expression ')'
     | '.' 'oclIsTypeOf' '(' expression ')'
     | '.' 'oclIsKindOf' '(' expression ')'
-    | '.' 'oclIsType' '(' expression ')'
     | '.' 'oclAsType' '(' expression ')' ('.' ID)?
     | '.' 'size' '(' ')'
     | '.' 'max' '(' ')'
     | '.' 'min' '(' ')'
     | '.' 'indexOf' '(' expression ')'
     | '.' 'at' '(' expression ')' ('.' ID)?
-    | '.' 'isUnique'
     | '.' ID '(' (expression (',' expression)*)? ')' ('.' ID)?  // Generic dot operation with optional args and chaining
     | '.' ID
     | '->' 'size' '(' ')'
@@ -185,7 +182,7 @@ postfixSuffix
       ) '(' expression ')'
     | '->' 'equalsIgnoreCase' '(' expression ')'
     | '->' ('oclAsType' | 'at') '(' expression ')' ('.' ID)?
-    | '->' ('oclIsType' | 'oclIsTypeOf' | 'oclIsKindOf' | 'oclAsSet') '(' expression ')'
+    | '->' ('oclIsTypeOf' | 'oclIsKindOf' | 'oclAsSet') '(' expression ')'
     | '->' 'collect' '(' (identOptType '|')? expression ')'
     | '->' 'select' '(' (identOptType '|')? expression ')'
     | '->' 'reject' '(' (identOptType '|')? expression ')'
