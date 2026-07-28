@@ -254,7 +254,7 @@ else
 		}
 
 		var op = context.GetChild(0).GetText();
-		var inner = Visit(context.expression());
+		var inner = Visit(context.unaryExpression());
 		var csharpOp = op switch
 		{
 			"not" => "!",
@@ -320,10 +320,19 @@ else
 			var inner = raw.Substring(1, raw.Length - 2).Replace("\\\"", "\"").Replace("\"", "\\\"");
 			return $"\"{inner}\"";
 		}
-		if (context.ENUMERATION_LITERAL() != null)
+		if (context.qualified_name() != null)
 		{
 			// Class::Value → Class.Value
-			return context.ENUMERATION_LITERAL().GetText().Replace("::", ".");
+			var tmp = context.qualified_name().GetText().Replace("::", ".");
+			//return tmp.Replace(@"_'[a-zA-Z]*'", "[a-zA-Z]");
+
+			var a = context.qualified_name().GetChild(1)?.GetText();
+			if(a != null)
+			{
+				var b = a.Replace("'", "");
+				return tmp.Replace($"_{a}", $"{b}");
+			}
+			return tmp;
 		}
 
 		// Bare OCL type-checking/casting operations (no explicit receiver → implicit 'this')
@@ -509,9 +518,9 @@ else
 		var ids = context.ID();
 		if (ids.Length > 0)
 		{
-			return $"(({expr}){target}).{ids[0].GetText()}";
+			return $"({target}.{ids[0].GetText()} as {expr})";
 		}
-		return $"(({expr}){target})";
+		return $"({target} as {expr})";
 	}
 
 	private string BuildArrowOclAsType(string target, OCLParser.PostfixSuffixContext context)
@@ -520,9 +529,9 @@ else
 		var ids = context.ID();
 		if (ids.Length > 0)
 		{
-			return $"(({expr}){target}).{ids[0].GetText()}";
+			return $"({target}.{ids[0].GetText()} as {expr})";
 		}
-		return $"(({expr}){target})";
+		return $"({target} as {expr})";
 	}
 
 	private string BuildSelectByKind(string target, OCLParser.PostfixSuffixContext context)
@@ -668,7 +677,7 @@ else
 		expr = System.Text.RegularExpressions.Regex.Replace(
 			expr,
 			@"\(\(([A-Za-z_][A-Za-z0-9_<>, ]*)\)this\)",
-			m => $"(({m.Groups[1].Value}){iteratorName})");
+			m => $"({iteratorName} as {m.Groups[1].Value})");
 
 		return expr;
 	}
@@ -868,10 +877,14 @@ else
 
 	public override string VisitIdentifier(OCLParser.IdentifierContext context)
 	{
-		var tmp = context.ID().GetText();
+		var tmp = context.ID()?.GetText();
 		if (tmp == "self")
 		{
 			return "this";
+		}
+		if (tmp == null)
+		{
+			return "Function";
 		}
 		return tmp;
 	}
@@ -879,6 +892,6 @@ else
 	public override string VisitQualified_name(OCLParser.Qualified_nameContext context)
 	{
 		// ENUMERATION_LITERAL = ID '::' ID → convert to 'ClassName.attribute'
-		return context.ENUMERATION_LITERAL().GetText().Replace("::", ".");
+		return context.ENUMERATION_LITERAL(0).GetText().Replace("::", ".");
 	}
 }

@@ -39,7 +39,7 @@ owningType.oclIsType(CaseUsage)
 ```
 ### C#
 ``` CSharp
-ownedMembership.Reject(item => item.OfType<ParameterMembership>()).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() ||
+ownedMembership.Reject(item => (item is ParameterMembership)).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() ||
 !(nonParameterMemberships.First().memberElement is Feature) ? null :
 (nonParameterMemberships.First().memberElement as Feature)))
 ```
@@ -109,7 +109,7 @@ ownedFeatures.Excluding(result).IsEmpty()
 ```
 ### C#
 ``` CSharp
-ownedMembership.Reject(item => item.OfType<ParameterMembership>()).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : (nonParameterMemberships.First().memberElement as Feature)))
+ownedMembership.Reject(item => (item is ParameterMembership)).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : (nonParameterMemberships.First().memberElement as Feature)))
 ```
 # forAll containing implies, enum with keyword
 ### OCL
@@ -232,7 +232,7 @@ ownedFeatureMembership.OfType<TransitionFeatureMembership>().Where(item => item.
 ```
 ### C#
 ``` CSharp
-new List<dynamic> { this }.Closure(item => item.typingFeatures()).typing.type.AsOrderedSet().SelectMany(item2 => item.typing.AsOrderedSet<Types>()).Reject(t1 => t1.types->Exists(t2 => t2 <> t1 and t2.specializes(t1)))
+new List<dynamic> { this }.Closure(item => item.typingFeatures()).typing.type.AsOrderedSet().Select(types => types.Reject(t1 => types.exist(t2).t2 != t1 && t2.specializes(t1)))
 ```
 # select containing let
 ### OCL
@@ -244,7 +244,7 @@ feature->select(f |
 ```
 ### C#
 ``` CSharp
-feature.Where(f => directionOf(f).Select(direction => direction == FeatureDirectionKind._)) || direction == FeatureDirectionKind.inout
+feature.Where(f => directionOf(f).Select(direction => direction == FeatureDirectionKind.in || direction == FeatureDirectionKind.inout))
 ```
 # selectByKind, collect, forAll
 ### OCL
@@ -299,7 +299,7 @@ owningType <> null and
 ```
 ### C#
 ``` CSharp
-(!(owningType != null && ((owningType is Function) && this == (owningType as Expression).result || (owningType is Expression) && this == (owningType as Expression).result)) || (()owningType.ownedSpecialization.general.Where(item => (item is Function) || (item is Expression)).All(supertype => (redefines() is )).superType).result)
+(!(owningType != null && ((owningType is Function) && this == (owningType.result as Function) || (owningType is Expression) && this == (owningType.result as Expression))) || owningType.ownedSpecialization.general.Where(item => (item is Function) || (item is Expression)).All(supertype => redefines(((superType is Function) ? (superType.result as Function) : (superType.result as Expression)))))
 ```
 # if, size, OrderedSet
 ### OCL
@@ -394,7 +394,7 @@ inheritedMemberships(new HashSet<dynamic> {  }, new HashSet<dynamic> {  }, false
 ### C#
 ``` CSharp
 (succession.targetFeature.IsEmpty() ? null : (succession.targetFeature.First().featureTarget).Select(targetFeature =>
-(!(targetFeature is ActionUsage) ? null : ((ActionUsage)targetFeature))))
+(!(targetFeature is ActionUsage) ? null : (targetFeature as ActionUsage))))
 ```
 # simplest if ever
 ### OCL

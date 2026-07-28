@@ -545,7 +545,7 @@ public class OclToCSharpConverterTests
             "    endif";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "referent == ownedMembership.Reject(item => ((ParameterMembership))).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))",
+            "referent == ownedMembership.Reject(item => (item is ParameterMembership)).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : (nonParameterMemberships.First().memberElement as Feature)))",
             result);
     }
 
@@ -570,7 +570,7 @@ public class OclToCSharpConverterTests
             "        size() = 1";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "(!(!(ConjugatedPortDefinition)) || ownedMember.OfType<ConjugatedPortDefinition>().Count() == 1)",
+            "(!(!(this is ConjugatedPortDefinition)) || ownedMember.OfType<ConjugatedPortDefinition>().Count() == 1)",
             result);
     }
 
@@ -786,7 +786,7 @@ public class OclToCSharpConverterTests
             "    endif";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "targetFeature == ownedMembership.Reject(item => ((ParameterMembership))).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : ((Feature)nonParameterMemberships.First().memberElement)))",
+            "targetFeature == ownedMembership.Reject(item => (item is ParameterMembership)).Select(nonParameterMemberships => (nonParameterMemberships.IsEmpty() || !(nonParameterMemberships.First().memberElement is Feature) ? null : (nonParameterMemberships.First().memberElement as Feature)))",
             result);
     }
 
@@ -823,7 +823,7 @@ public class OclToCSharpConverterTests
             "        f.direction = FeatureDirectionKind::_'in')";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "ownedFeature.All(f => (!(f != result) || f.direction == FeatureDirectionKind._))",
+            "ownedFeature.All(f => (!(f != result) || f.direction == FeatureDirectionKind.in))",
             result);
     }
 
@@ -1260,7 +1260,7 @@ public class OclToCSharpConverterTests
             "ownedSpecialization.general->forAll(not oclIsKindOf(Structure))";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "ownedSpecialization.general.All(item => !Structure)",
+            "ownedSpecialization.general.All(item => !(item is Structure))",
             result);
     }
 
@@ -1353,7 +1353,7 @@ public class OclToCSharpConverterTests
             "    specializesFromLibrary('Objects::linkObjects')";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "(!(association.Exists(item => item.OfType<AssociationStructure>())) || specializesFromLibrary(\"Objects::linkObjects\"))",
+            "(!(association.Exists(item => (item is AssociationStructure))) || specializesFromLibrary(\"Objects::linkObjects\"))",
             result);
     }
 
@@ -1371,7 +1371,7 @@ public class OclToCSharpConverterTests
             "    endif endif";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "referencedRendering == ownedRendering.referencedFeatureTarget().Select(referencedFeature => (referencedFeature == null ? ownedRendering : ((referencedFeature is RenderingUsage) ? ((RenderingUsage)refrencedFeature) : null)))",
+            "referencedRendering == ownedRendering.referencedFeatureTarget().Select(referencedFeature => (referencedFeature == null ? ownedRendering : ((referencedFeature is RenderingUsage) ? (refrencedFeature as RenderingUsage) : null)))",
             result);
     }
 
@@ -1499,7 +1499,7 @@ public class OclToCSharpConverterTests
             "            redefines(gen.oclAsType(CaseUsage).objectiveRequirement))";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "(!(owningfeatureMembership != null && (owningfeatureMembership is ObjectiveMembership)) || owningType.ownedSpecialization.general.All(gen => ((!((gen is CaseDefinition)) || redefines(((CaseDefinition)gen).objectiveRequirement))) && ((!((gen is CaseUsage)) || redefines(((CaseUsage)gen).objectiveRequirement)))))",
+            "(!(owningfeatureMembership != null && (owningfeatureMembership is ObjectiveMembership)) || owningType.ownedSpecialization.general.All(gen => ((!((gen is CaseDefinition)) || redefines((gen.objectiveRequirement as CaseDefinition)))) && ((!((gen is CaseUsage)) || redefines((gen.objectiveRequirement as CaseUsage))))))",
             result);
     }
 }

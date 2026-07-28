@@ -18,22 +18,6 @@
 
 grammar OCL;
 
-multipleContextSpecifications
-    : (singleInvariant | singleDerivedAttribute)+ EOF
-    ;
-
-contextSpecification
-    : (singleInvariant | singleDerivedAttribute) EOF
-    ;
-
-singleInvariant
-    : 'context' ID 'inv' ID? ':' expression
-    ;
-
-singleDerivedAttribute
-    : 'context' qualified_name ':' type ('init:' expression)? 'derive:' expression
-    ;
-
 type
     : 'Sequence' '(' type ')'
     | 'Set' '(' type ')'
@@ -50,9 +34,19 @@ expressionList
     ;
 
 expression
-    : logicalExpression
+    : ID '=' (letExpression | conditionalExpression)  // derivation: x = let … or x = if …
+    | logicalExpression
     | conditionalExpression
     | letExpression
+    | function
+    ;
+
+function
+    : 'oclIsType' '(' expression ')'
+    | 'oclIsTypeOf' '(' expression ')'
+    | 'oclIsKindOf' '(' expression ')'
+    | 'oclIsType' '(' expression ')'
+    | 'oclAsType' '(' expression ')'
     ;
 
 conditionalExpression
@@ -67,10 +61,15 @@ letBinding
     : ID (':' type)? '=' expression
     ;
 
-
 basicExpression
     : NULL_LITERAL
     | BOOLEAN_LITERAL
+    | 'oclIsKindOf' '(' expression ')'
+    | 'oclIsTypeOf' '(' expression ')'
+    | 'oclIsType' '(' expression ')'
+    | 'oclAsType' '(' expression ')'
+    | 'oclIsUndefined' '(' ')'
+    | 'oclIsInvalid' '(' ')'
     | basicExpression '.' identifier
     | basicExpression '(' expressionList? ')'
     | basicExpression '[' expression ']'
@@ -78,7 +77,7 @@ basicExpression
     | FLOAT_LITERAL
     | STRING1_LITERAL
     | STRING2_LITERAL
-    | ENUMERATION_LITERAL
+    | qualified_name
     | identifier
     | '(' expression ')'
     ;
@@ -127,17 +126,22 @@ postfixSuffix
     | '.' 'oclIsInvalid' '(' ')'
     | '.' 'oclIsNew' '(' ')'
     | '.' 'oclAsSet' '(' ')'
+    | '.' 'oclIsType' '(' expression ')'
     | '.' 'oclIsTypeOf' '(' expression ')'
     | '.' 'oclIsKindOf' '(' expression ')'
+    | '.' 'oclIsType' '(' expression ')'
     | '.' 'oclAsType' '(' expression ')' ('.' ID)?
     | '.' 'size' '(' ')'
+    | '.' 'size' '('expression')'
     | '.' 'max' '(' ')'
     | '.' 'min' '(' ')'
     | '.' 'indexOf' '(' expression ')'
     | '.' 'at' '(' expression ')' ('.' ID)?
+    | '.' 'isUnique'
     | '.' ID '(' (expression (',' expression)*)? ')' ('.' ID)?  // Generic dot operation with optional args and chaining
     | '.' ID
     | '->' 'size' '(' ')'
+    | '->' 'size' '('expression')'
     | '->' 'isEmpty' '(' ')'
     | '->' 'notEmpty' '(' ')'
     | '->' 'asSet' '(' ')'
@@ -182,7 +186,7 @@ postfixSuffix
       ) '(' expression ')'
     | '->' 'equalsIgnoreCase' '(' expression ')'
     | '->' ('oclAsType' | 'at') '(' expression ')' ('.' ID)?
-    | '->' ('oclIsTypeOf' | 'oclIsKindOf' | 'oclAsSet') '(' expression ')'
+    | '->' ('oclIsType' | 'oclIsTypeOf' | 'oclIsKindOf' | 'oclAsSet') '(' expression ')'
     | '->' 'collect' '(' (identOptType '|')? expression ')'
     | '->' 'select' '(' (identOptType '|')? expression ')'
     | '->' 'reject' '(' (identOptType '|')? expression ')'
@@ -219,10 +223,12 @@ setExpression
 
 identifier
     : ID
+    | 'Function'
     ;
 
 qualified_name
     : ENUMERATION_LITERAL
+    | ENUMERATION_LITERAL + STRING2_LITERAL
     ;
 
 
