@@ -287,7 +287,26 @@ else
 		{
 			return Visit(context.setExpression());
 		}
+		if (context.function() != null)
+		{
+			return Visit(context.function());
+		}
 		return Visit(context.basicExpression());
+	}
+
+	public override string VisitFunction(OCLParser.FunctionContext context)
+	{
+		var keyword = context.GetChild(0).GetText();
+		return keyword switch
+		{
+			"oclIsKindOf" or "oclIsType" or "oclIsTypeOf" =>
+				$"(this is {Visit(context.expression())})",
+			"oclAsType" =>
+				$"(({Visit(context.expression())})this)",
+			"oclIsUndefined" or "oclIsInvalid" =>
+				"(this == null)",
+			_ => context.GetText()
+		};
 	}
 
 	public override string VisitBasicExpression(OCLParser.BasicExpressionContext context)
@@ -333,24 +352,6 @@ else
 				return tmp.Replace($"_{a}", $"{b}");
 			}
 			return tmp;
-		}
-
-		// Bare OCL type-checking/casting operations (no explicit receiver → implicit 'this')
-		// These arise when used inside collection op bodies without an explicit iterator variable.
-		var firstToken = context.GetChild(0)?.GetText();
-		if (firstToken == "oclIsKindOf" || firstToken == "oclIsType" || firstToken == "oclIsTypeOf")
-		{
-			var typeExpr = context.expression() != null ? Visit(context.expression()) : string.Empty;
-			return $"(this is {typeExpr})";
-		}
-		if (firstToken == "oclAsType")
-		{
-			var typeExpr = context.expression() != null ? Visit(context.expression()) : string.Empty;
-			return $"(({typeExpr})this)";
-		}
-		if (firstToken == "oclIsUndefined" || firstToken == "oclIsInvalid")
-		{
-			return "(this == null)";
 		}
 
 		// Recursive / composite cases

@@ -45,8 +45,9 @@ function
     : 'oclIsType' '(' expression ')'
     | 'oclIsTypeOf' '(' expression ')'
     | 'oclIsKindOf' '(' expression ')'
-    | 'oclIsType' '(' expression ')'
     | 'oclAsType' '(' expression ')'
+    | 'oclIsUndefined' '(' ')'
+    | 'oclIsInvalid' '(' ')'
     ;
 
 conditionalExpression
@@ -64,12 +65,6 @@ letBinding
 basicExpression
     : NULL_LITERAL
     | BOOLEAN_LITERAL
-    | 'oclIsKindOf' '(' expression ')'
-    | 'oclIsTypeOf' '(' expression ')'
-    | 'oclIsType' '(' expression ')'
-    | 'oclAsType' '(' expression ')'
-    | 'oclIsUndefined' '(' ')'
-    | 'oclIsInvalid' '(' ')'
     | basicExpression '.' identifier
     | basicExpression '(' expressionList? ')'
     | basicExpression '[' expression ']'
@@ -116,6 +111,7 @@ navigationExpression
 
 primaryFactor
     : setExpression
+    | function
     | basicExpression
     ;
 
