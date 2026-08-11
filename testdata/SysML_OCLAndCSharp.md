@@ -2819,8 +2819,7 @@ annotatedElementFeatures->notEmpty() implies
 ```
 ### C#
 ``` CSharp
-// TODO
-(resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberElement as Feature).Select(baseAnnotatedElementFeature => feature.Where(item => specializes(baseAnnotatedElementFeature)).Excluding(baseAnnotatedElementFeature).Select(annotatedElementFeatures => (!(annotatedElementFeatures.NotEmpty()) || annotatedElementTypes is (Feature) == annotatedElementFeatures.typing.type.ToHashSet())))
+(resolveGlobal("Metaobjects::Metaobject::annotatedElement").memberElement as Feature).Select(baseAnnotatedElementFeature => feature.Where(item => item.specializes(baseAnnotatedElementFeature)).Excluding(baseAnnotatedElementFeature).Select(annotatedElementFeatures => (!(annotatedElementFeatures.NotEmpty()) || annotatedElementFeatures.typing.type.ToHashSet().Select(annotatedElementTypes => annotatedElement.GetType().qualifiedName.Select(qn => (resolveGlobal(qn).memberElement as Metaclass)).Select(metaclasses => metaclasses.All(m => annotatedElementTypes.Exists(t => m.specializes(t))))))))
 ```
 # CheckSendActionUsageSubactionSpecialization
 ### OCL
@@ -3301,8 +3300,7 @@ isOwnedCrossFeature() implies
 ```
 ### C#
 ``` CSharp
-// TODO
-(!(isOwnedCrossFeature()) || otherEnds is (Feature) == (owner as Feature).owningType.endFeature.Excluding(this))
+(!(isOwnedCrossFeature()) || (owner as Feature).owningType.endFeature.Excluding(this).Select(otherEnds => (otherEnds.Count() == 1 ? featuringType == otherEnds.First().type : featuringType.Count() == 1 && featuringType.First().isCartesianProduct() && featuringType.First().asCartesianProduct() == otherEnds.type && featuringType.First().allSupertypes().IsSupersetOf((owner as Feature).ownedRedefinition.redefinedFeature.Where(item => item.crossFeature() != null).crossFeature().featuringType))))
 ```
 # CheckFeatureSuboccurrenceSpecialization
 ### OCL
@@ -4281,8 +4279,7 @@ not isDefault implies
 ```
 ### C#
 ``` CSharp
-// TODO
-(!(!isDefault) || featureWithValue.ownedMember.OfType<BindingConnector>().Exists(b => b.relatedFeature.Contains(featureWithValue) && b.relatedFeature.Exists(f => f.chainingFeature == new List<dynamic> { value, value.result }) && ifisInitial).b.featuringType == featureWithValue.featuringType)
+(!(!isDefault) || featureWithValue.ownedMember.OfType<BindingConnector>().Exists(b => b.relatedFeature.Contains(featureWithValue) && b.relatedFeature.Exists(f => f.chainingFeature == new List<dynamic> { value, value.result }) && (!isInitial ? b.featuringType == featureWithValue.featuringType : b.featuringType.Exists(t => (t is Feature) && (t as Feature).chainingFeature == new List<dynamic> { resolveGlobal("Base::things::that").memberElement, resolveGlobal("Occurrences::Occurrence::startShot").memberElement }))))
 ```
 # CheckEventOccurrenceUsageSpecialization
 ### OCL
@@ -4309,10 +4306,7 @@ TriggerKind::when implies
 ```
 ### C#
 ``` CSharp
-// TODO
-(!(TriggerKind.when) || argument.NotEmpty()) && (argument.ElementAt(0) is
-FeatureReferenceExpression) && referent is Feature ==
-(argument.ElementAt(0) as FeatureReferenceExpression).referent
+(!(TriggerKind.when) || argument.NotEmpty() && (argument.ElementAt(0) is FeatureReferenceExpression) && (argument.ElementAt(0) as FeatureReferenceExpression).referent.Select(referent => (referent is Expression) && (referent as Expression).result.specializesFromLibrary("ScalarValues::Boolean")))
 ```
 # ValidateFeatureValueIsInitial
 ### OCL
@@ -5678,9 +5672,7 @@ isSemantic() implies
 ```
 ### C#
 ``` CSharp
-//TODO
-(!(isSemantic()) || annotatedTypes is (Type) ==
-annotatedElement.OfType<Type>())
+(!(isSemantic()) || annotatedElement.OfType<Type>().Select(annotatedTypes => evaluateFeature((resolveGlobal("Metaobjects::SemanticMetadata::baseType").memberElement as Feature)).OfType<MetadataFeature>().Select(baseTypes => (!(annotatedTypes.NotEmpty() && baseTypes.NotEmpty() && baseTypes.First().isSyntactic()) || annotatedTypes.First().Select(annotatedType => baseTypes.First().syntaxElement().Select(baseType => ((annotatedType is Classifier) && (baseType is Feature) ? (baseType as Feature).type.All(t => annotatedType.specializes(t)) : ((baseType is Type) ? annotatedType.specializes((baseType as Type)) : true))))))))
 ```
 # CheckItemUsageSubitemSpecialization
 ### OCL
@@ -5995,8 +5987,7 @@ owningFeatureMembership.oclIsKindOf(StateSubactionMembership) implies
 ```
 ### C#
 ``` CSharp
-// TODO
-(!(owningFeatureMembership != null && (owningFeatureMembership is StateSubactionMembership)) || kind is StateSubactionKind == (owningFeatureMembership as StateSubactionMembership).kind)
+(!(owningFeatureMembership != null && (owningFeatureMembership is StateSubactionMembership)) || (owningFeatureMembership as StateSubactionMembership).kind.Select(kind => (kind == StateSubactionKind.entry ? redefinesFromLibrary("States::StateAction::entryAction") : (kind == StateSubactionKind.do ? redefinesFromLibrary("States::StateAction::doAction") : redefinesFromLibrary("States::StateAction::exitAction")))))
 ```
 # CheckOccurrenceUsageSuboccurrenceSpecialization
 ### OCL
