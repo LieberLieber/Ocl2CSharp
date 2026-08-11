@@ -1,10 +1,10 @@
 /******************************
 * Parser for OCL 2.4 with extensions for textual notations
-* for UML classes and usecases. 
+* for UML classes and usecases.
 *
-* Arrow operators ->op are used consistently for any OCL 
-* operator, not just collection operators. 
-* 
+* Arrow operators ->op are used consistently for any OCL
+* operator, not just collection operators.
+*
 * Copyright (c) 2003--2023 Kevin Lano
 * This program and the accompanying materials are made available under the
 * terms of the Eclipse Public License 2.0 which is available at
@@ -23,7 +23,7 @@ type
     | 'Set' '(' type ')'
     | 'Bag' '(' type ')'
     | 'OrderedSet' '(' type ')'
-    | 'Ref' '(' type ')'  
+    | 'Ref' '(' type ')'
     | 'Map' '(' type ',' type ')'
     | 'Function' '(' type ',' type ')'
     | identifier
@@ -38,6 +38,15 @@ expression
     | logicalExpression
     | conditionalExpression
     | letExpression
+    | function
+    ;
+
+function
+    : 'oclIsType' '(' expression ')'
+    | 'oclIsTypeOf' '(' expression ')'
+    | 'oclIsKindOf' '(' expression ')'
+    | 'oclIsType' '(' expression ')'
+    | 'oclAsType' '(' expression ')'
     ;
 
 conditionalExpression
@@ -55,6 +64,12 @@ letBinding
 basicExpression
     : NULL_LITERAL
     | BOOLEAN_LITERAL
+    | 'oclIsKindOf' '(' expression ')'
+    | 'oclIsTypeOf' '(' expression ')'
+    | 'oclIsType' '(' expression ')'
+    | 'oclAsType' '(' expression ')'
+    | 'oclIsUndefined' '(' ')'
+    | 'oclIsInvalid' '(' ')'
     | basicExpression '.' identifier
     | basicExpression '(' expressionList? ')'
     | basicExpression '[' expression ']'
@@ -62,7 +77,7 @@ basicExpression
     | FLOAT_LITERAL
     | STRING1_LITERAL
     | STRING2_LITERAL
-    | ENUMERATION_LITERAL
+    | qualified_name
     | identifier
     | '(' expression ')'
     ;
@@ -77,7 +92,7 @@ logicalExpression
 
 equalityExpression
     : additiveExpression (('=' | '<' | '>' | '>=' | '<=' | '/=' | '<>' | ':' | '/:' | '<:') additiveExpression)* ;
-    
+
 additiveExpression
     : multiplicativeExpression (('+' | '-' | '..' | '|->') multiplicativeExpression)* ;
 
@@ -91,7 +106,7 @@ unaryExpression
 
 //////////////////////////////////////////////////////////////////////////////
 // Postfix chaning expression handling.
-// 'navigationExpression' is a postfix expression that 
+// 'navigationExpression' is a postfix expression that
 // is direct left recursive: it can appear on LHS of ->
 // ->subrange is used for ->substring and ->subSequence
 //////////////////////////////////////////////////////////////////////////////
@@ -117,6 +132,7 @@ postfixSuffix
     | '.' 'oclIsType' '(' expression ')'
     | '.' 'oclAsType' '(' expression ')' ('.' ID)?
     | '.' 'size' '(' ')'
+    | '.' 'size' '('expression')'
     | '.' 'max' '(' ')'
     | '.' 'min' '(' ')'
     | '.' 'indexOf' '(' expression ')'
@@ -125,6 +141,7 @@ postfixSuffix
     | '.' ID '(' (expression (',' expression)*)? ')' ('.' ID)?  // Generic dot operation with optional args and chaining
     | '.' ID
     | '->' 'size' '(' ')'
+    | '->' 'size' '('expression')'
     | '->' 'isEmpty' '(' ')'
     | '->' 'notEmpty' '(' ')'
     | '->' 'asSet' '(' ')'
@@ -206,10 +223,12 @@ setExpression
 
 identifier
     : ID
+    | 'Function'
     ;
 
 qualified_name
     : ENUMERATION_LITERAL
+    | ENUMERATION_LITERAL + STRING2_LITERAL
     ;
 
 

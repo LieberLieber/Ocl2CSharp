@@ -73,6 +73,18 @@ public partial class OCLBaseListener : IOCLListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitExpression([NotNull] OCLParser.ExpressionContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="OCLParser.function"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterFunction([NotNull] OCLParser.FunctionContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OCLParser.function"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitFunction([NotNull] OCLParser.FunctionContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="OCLParser.conditionalExpression"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
