@@ -138,9 +138,14 @@ else
 		return result;
 	}
 
+	public override string VisitLogicalOperand(OCLParser.LogicalOperandContext context)
+	{
+		return VisitChildren(context) ?? string.Empty;
+	}
+
 	public override string VisitLogicalExpression(OCLParser.LogicalExpressionContext context)
 	{
-		var operands = context.equalityExpression();
+		var operands = context.logicalOperand();
 		if (operands.Length == 1)
 		{
 			return Visit(operands[0]);
@@ -161,7 +166,7 @@ else
 
 			if (op is "=>" or "implies")
 			{
-				// a implies b  ↔  !a || b
+				// a implies b  ↔  (!(a) || b)
 				var left = sb.ToString();
 				sb.Clear();
 				sb.Append($"(!({left}) || {Visit(operands[i])})");
@@ -519,7 +524,7 @@ else
 		var ids = context.ID();
 		if (ids.Length > 0)
 		{
-			return $"({target}.{ids[0].GetText()} as {expr})";
+			return $"({target} as {expr}).{ids[0].GetText()}";
 		}
 		return $"({target} as {expr})";
 	}
@@ -530,7 +535,7 @@ else
 		var ids = context.ID();
 		if (ids.Length > 0)
 		{
-			return $"({target}.{ids[0].GetText()} as {expr})";
+			return $"({target} as {expr}).{ids[0].GetText()}";
 		}
 		return $"({target} as {expr})";
 	}
@@ -660,7 +665,12 @@ else
 		if (negId.Success)
 			return $"!{iteratorName}.{negId.Groups[1].Value}";
 
-		// Case 3: Simple lowercase identifier at start of comparison → prefix with iterator
+		// Case 3: Lowercase identifier followed by '(' (method call) → prefix with iterator
+		// e.g. specializes(baseAnnotatedElementFeature) → item.specializes(baseAnnotatedElementFeature)
+		if (System.Text.RegularExpressions.Regex.IsMatch(expr, @"^[a-z_][A-Za-z0-9_]*\("))
+			return $"{iteratorName}.{expr}";
+
+		// Case 4: Simple lowercase identifier at start of comparison → prefix with iterator
 		// e.g. kind == TransitionFeatureKind.trigger  →  item.kind == TransitionFeatureKind.trigger
 		expr = System.Text.RegularExpressions.Regex.Replace(
 			expr,
@@ -878,6 +888,12 @@ else
 
 	public override string VisitIdentifier(OCLParser.IdentifierContext context)
 	{
+		var quotedId = context.QUOTED_IDENTIFIER()?.GetText();
+		if (quotedId != null)
+		{
+			// _'keyword' → extract keyword name, e.g. _'in' → in
+			return quotedId[2..^1]; // strip leading _' and trailing '
+		}
 		var tmp = context.ID()?.GetText();
 		if (tmp == "self")
 		{

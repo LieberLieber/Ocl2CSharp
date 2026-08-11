@@ -958,7 +958,7 @@ public class OclToCSharpConverterTests
             "    payloadParameter.subsetsChain(triggerAction->at(1), triggerPayloadParameter())";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "(!(triggerAction.NotEmpty()) || payloadParameter is Feature == inputParameter(2))",
+            "(!(triggerAction.NotEmpty()) || inputParameter(2).Select(payloadParameter => payloadParameter != null && payloadParameter.subsetsChain(triggerAction.ElementAt(0), triggerPayloadParameter())))",
             result);
     }
 
@@ -1499,7 +1499,7 @@ public class OclToCSharpConverterTests
             "            redefines(gen.oclAsType(CaseUsage).objectiveRequirement))";
         var result = OclToCSharpConverter.Convert(ocl);
         Assert.AreEqual(
-            "(!(owningfeatureMembership != null && (owningfeatureMembership is ObjectiveMembership)) || owningType.ownedSpecialization.general.All(gen => ((!((gen is CaseDefinition)) || redefines((gen.objectiveRequirement as CaseDefinition)))) && ((!((gen is CaseUsage)) || redefines((gen.objectiveRequirement as CaseUsage))))))",
+            "(!(owningfeatureMembership != null && (owningfeatureMembership is ObjectiveMembership)) || owningType.ownedSpecialization.general.All(gen => ((!((gen is CaseDefinition)) || redefines((gen as CaseDefinition).objectiveRequirement))) && ((!((gen is CaseUsage)) || redefines((gen as CaseUsage).objectiveRequirement)))))",
             result);
     }
 }

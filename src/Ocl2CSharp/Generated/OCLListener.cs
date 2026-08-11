@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from antlr4/OCL.g4 by ANTLR 4.13.2
+// Generated from /home/rdeininger@Olymp3000.com/Projects/Code/Public/Ocl2CSharp-Copilot/antlr4/OCL.g4 by ANTLR 4.13.2
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -19,6 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
+namespace Ocl2CSharp {
 using Antlr4.Runtime.Misc;
 using IParseTreeListener = Antlr4.Runtime.Tree.IParseTreeListener;
 using IToken = Antlr4.Runtime.IToken;
@@ -120,6 +121,16 @@ public interface IOCLListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitLogicalExpression([NotNull] OCLParser.LogicalExpressionContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="OCLParser.logicalOperand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterLogicalOperand([NotNull] OCLParser.LogicalOperandContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OCLParser.logicalOperand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitLogicalOperand([NotNull] OCLParser.LogicalOperandContext context);
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="OCLParser.equalityExpression"/>.
 	/// </summary>
@@ -241,3 +252,4 @@ public interface IOCLListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitQualified_name([NotNull] OCLParser.Qualified_nameContext context);
 }
+} // namespace Ocl2CSharp

@@ -144,7 +144,7 @@ triggerAction->notEmpty() implies
 ```
 ### C#
 ``` CSharp
-(!(triggerAction.NotEmpty()) || inputParameter(2).Select(payloadParameter => payloadParameter != null && payloadParameter.subsetsChain(triggerAction->ElementAt(0), triggerPayloadParameter())))
+(!(triggerAction.NotEmpty()) || inputParameter(2).Select(payloadParameter => payloadParameter != null && payloadParameter.subsetsChain(triggerAction.ElementAt(0), triggerPayloadParameter())))
 ```
 # closure, forAll
 ### OCL
@@ -299,7 +299,7 @@ owningType <> null and
 ```
 ### C#
 ``` CSharp
-(!(owningType != null && ((owningType is Function) && this == (owningType.result as Function) || (owningType is Expression) && this == (owningType.result as Expression))) || owningType.ownedSpecialization.general.Where(item => (item is Function) || (item is Expression)).All(supertype => redefines(((superType is Function) ? (superType.result as Function) : (superType.result as Expression)))))
+(!(owningType != null && ((owningType is Function) && this == (owningType as Function).result || (owningType is Expression) && this == (owningType as Expression).result)) || owningType.ownedSpecialization.general.Where(item => (item is Function) || (item is Expression)).All(supertype => redefines(((superType is Function) ? (superType as Function).result : (superType as Expression).result))))
 ```
 # if, size, OrderedSet
 ### OCL

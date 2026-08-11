@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from antlr4/OCL.g4 by ANTLR 4.13.2
+// Generated from /home/rdeininger@Olymp3000.com/Projects/Code/Public/Ocl2CSharp-Copilot/antlr4/OCL.g4 by ANTLR 4.13.2
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -19,6 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
+namespace Ocl2CSharp {
 
 using Antlr4.Runtime.Misc;
 using IErrorNode = Antlr4.Runtime.Tree.IErrorNode;
@@ -143,6 +144,18 @@ public partial class OCLBaseListener : IOCLListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitLogicalExpression([NotNull] OCLParser.LogicalExpressionContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="OCLParser.logicalOperand"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterLogicalOperand([NotNull] OCLParser.LogicalOperandContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="OCLParser.logicalOperand"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitLogicalOperand([NotNull] OCLParser.LogicalOperandContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by <see cref="OCLParser.equalityExpression"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -301,3 +314,4 @@ public partial class OCLBaseListener : IOCLListener {
 	/// <remarks>The default implementation does nothing.</remarks>
 	public virtual void VisitErrorNode([NotNull] IErrorNode node) { }
 }
+} // namespace Ocl2CSharp
