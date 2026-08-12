@@ -51,7 +51,7 @@ function
     ;
 
 conditionalExpression
-    : 'if' expression 'then' expression 'else' expression 'endif'
+    : 'if' expression 'then' expression 'else' expression 'endif'?
     ;
 
 letExpression
@@ -82,8 +82,16 @@ basicExpression
 // Expression precedence levels (lowest precedence first)
 ///////////////////////////////////////////////////////////////////////////////
 
+// and / or / xor / implies — left-associative; let/if allowed as operands
 logicalExpression
-    : equalityExpression (('and' | '&' | 'or' | 'xor' | '=>' | 'implies') equalityExpression)* ;
+    : logicalOperand (('and' | '&' | 'or' | 'xor' | '=>' | 'implies') logicalOperand)* ;
+
+// Allows let/if as operands so they can appear inside and/or/implies chains
+logicalOperand
+    : letExpression
+    | conditionalExpression
+    | equalityExpression
+    ;
 
 equalityExpression
     : additiveExpression (('=' | '<' | '>' | '>=' | '<=' | '/=' | '<>' | ':' | '/:' | '<:') additiveExpression)* ;
@@ -219,6 +227,7 @@ setExpression
 
 identifier
     : ID
+    | QUOTED_IDENTIFIER
     | 'Function'
     ;
 
@@ -238,6 +247,10 @@ FLOAT_LITERAL
 
 STRING1_LITERAL
     : '"' (~["\\\r\n] | EscapeSequence)* '"'
+    ;
+
+QUOTED_IDENTIFIER
+    : '_\'' [a-zA-Z_][a-zA-Z0-9_]* '\''
     ;
 
 STRING2_LITERAL

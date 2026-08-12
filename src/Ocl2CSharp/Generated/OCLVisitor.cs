@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from antlr4/OCL.g4 by ANTLR 4.13.2
+// Generated from /home/rdeininger@Olymp3000.com/Projects/Code/Public/Ocl2CSharp-Copilot/antlr4/OCL.g4 by ANTLR 4.13.2
 
 // Unreachable code detected
 #pragma warning disable 0162
@@ -19,6 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
+namespace Ocl2CSharp {
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using IToken = Antlr4.Runtime.IToken;
@@ -85,6 +86,12 @@ public interface IOCLVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitLogicalExpression([NotNull] OCLParser.LogicalExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="OCLParser.logicalOperand"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitLogicalOperand([NotNull] OCLParser.LogicalOperandContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="OCLParser.equalityExpression"/>.
 	/// </summary>
@@ -158,3 +165,4 @@ public interface IOCLVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitQualified_name([NotNull] OCLParser.Qualified_nameContext context);
 }
+} // namespace Ocl2CSharp
