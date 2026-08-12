@@ -12,6 +12,7 @@ namespace Ocl2CSharp;
 public class OclToCSharpConverter : OCLBaseVisitor<string>
 {
 	private readonly bool _useIfStatement;
+	private readonly bool _codeWithReturn;
 
 	/// <summary>
 	/// Tracks local variable names (lambda parameters, let-binding names) so that
@@ -31,27 +32,19 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 	/// <summary>
 	/// Initializes a new instance of <see cref="OclToCSharpConverter"/>.
 	/// </summary>
-	/// <param name="useIfStatement">
-	/// When <see langword="true"/>, OCL <c>if…then…else…endif</c> expressions are emitted as
-	/// multiline C# <c>if</c>/<c>else</c> statements (suitable for use inside a method or property getter).
-	/// When <see langword="false"/> (the default), they are emitted as inline ternary <c>?:</c> expressions.
-	/// </param>
-	private OclToCSharpConverter(bool useIfStatement = false)
+	private OclToCSharpConverter(ConversionOptions options)
 	{
-		_useIfStatement = useIfStatement;
+		_useIfStatement = options.UseIfStatement;
+		_codeWithReturn = options.CodeWithReturn;
 	}
 
 	/// <summary>
-	/// Converts an OCL expression string to the equivalent C# expression.
+	/// Converts an OCL expression string to the equivalent C# code.
 	/// </summary>
 	/// <param name="oclCode">The OCL expression text.</param>
-	/// <param name="useIfStatement">
-	/// When <see langword="true"/>, OCL <c>if…then…else…endif</c> expressions are emitted as
-	/// multiline C# <c>if</c>/<c>else</c> statements.
-	/// When <see langword="false"/> (the default), they are emitted as inline ternary <c>?:</c> expressions.
-	/// </param>
-	/// <returns>The equivalent C# expression as a string.</returns>
-	public static string Convert(string oclCode, bool useIfStatement = false)
+	/// <param name="options">Controls code-generation behaviour (if-statement style, return prefix, …).</param>
+	/// <returns>The equivalent C# statement as a string.</returns>
+	public static string Convert(string oclCode, ConversionOptions options)
 	{
 		var inputStream = new AntlrInputStream(oclCode);
 		var lexer = new OCLLexer(inputStream);
@@ -59,8 +52,12 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 		var parser = new OCLParser(tokenStream);
 
 		var tree = parser.expression();
-		var visitor = new OclToCSharpConverter(useIfStatement);
-		return visitor.Visit(tree);
+		var visitor = new OclToCSharpConverter(options);
+		var result = visitor.Visit(tree);
+		// Block output (if/else) already contains return statements inside its branches.
+		if (result.TrimEnd().EndsWith('}'))
+			return result;
+		return options.CodeWithReturn ? "return " + result + ";" : result + ";";
 	}
 
 	// -------------------------------------------------------------------------
@@ -110,13 +107,14 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 
 		if (_useIfStatement)
 		{
+			var prefix = _codeWithReturn ? "return " : "";
 			return $@"if ({condition})
 {{
-	return {thenExpr};
+	{prefix}{thenExpr};
 }}
 else
 {{
-	return {elseExpr};
+	{prefix}{elseExpr};
 }}";
 		}
 

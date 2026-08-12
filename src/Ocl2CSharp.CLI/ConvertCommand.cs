@@ -25,6 +25,10 @@ internal sealed class ConvertCommand : Command<ConvertCommand.Settings>
         [Description("Emit OCL if…then…else…endif as a multiline C# if/else statement instead of a ternary ?: expression.")]
         [CommandOption("--if-statement")]
         public bool UseIfStatement { get; init; }
+
+        [Description("Wrap the generated C# expression as a return statement: return <expr>;")]
+        [CommandOption("--with-return")]
+        public bool WithReturn { get; init; }
     }
 
     public override int Execute(CommandContext context, Settings settings, CancellationToken cancellationToken)
@@ -57,7 +61,11 @@ internal sealed class ConvertCommand : Command<ConvertCommand.Settings>
         string csharpCode;
         try
         {
-            csharpCode = OclToCSharpConverter.Convert(oclCode, settings.UseIfStatement);
+            csharpCode = OclToCSharpConverter.Convert(oclCode, new ConversionOptions
+            {
+                UseIfStatement = settings.UseIfStatement,
+                CodeWithReturn = settings.WithReturn,
+            });
         }
         catch (Exception ex)
         {

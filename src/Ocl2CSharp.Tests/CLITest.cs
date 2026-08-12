@@ -49,7 +49,8 @@ public class CLITest
         yield return new TestData(0, "X", "-e", "x");
         yield return new TestData(0, "Output written to: y", "-e", "X", "-o", "y");
         yield return new TestData(0, @"\(true \? A : B\)", "-e", "if true then a else b endif");
-        yield return new TestData(0, @"if \(true\)\s*{\s*return A;\s*}\s*else\s*{\s*return B;\s*}", "-e", "if true then a else b endif", "--if-statement");
+        yield return new TestData(0, @"if \(true\)\s*{\s*A;\s*}\s*else\s*{\s*B;\s*}", "-e", "if true then a else b endif", "--if-statement");
+        yield return new TestData(0, @"if \(true\)\s*{\s*return A;\s*}\s*else\s*{\s*return B;\s*}", "-e", "if true then a else b endif", "--if-statement", "--with-return");
     }
 
     [OneTimeSetUp]
