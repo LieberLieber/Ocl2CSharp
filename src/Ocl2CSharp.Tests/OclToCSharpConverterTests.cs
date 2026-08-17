@@ -399,6 +399,72 @@ public class OclToCSharpConverterTests
     }
 
     // -------------------------------------------------------------------------
+    // TypeNameMapper
+    // -------------------------------------------------------------------------
+
+    [Test]
+    public void TypeNameMapper_Null_LeavesTypeNamesUnchanged()
+    {
+        var result = OclToCSharpConverter.Convert("obj.oclIsKindOf(Person)", new ConversionOptions());
+        Assert.AreEqual("(Obj is Person);", result);
+    }
+
+    [Test]
+    public void TypeNameMapper_RemapsDotOclIsKindOfTarget()
+    {
+        var options = new ConversionOptions
+        {
+            TypeNameMapper = name => name switch { "Person" => "Individual", _ => name }
+        };
+        var result = OclToCSharpConverter.Convert("obj.oclIsKindOf(Person)", options);
+        Assert.AreEqual("(Obj is Individual);", result);
+    }
+
+    [Test]
+    public void TypeNameMapper_RemapsArrowOclIsKindOfTarget()
+    {
+        var options = new ConversionOptions
+        {
+            TypeNameMapper = name => name switch { "Person" => "Individual", _ => name }
+        };
+        var result = OclToCSharpConverter.Convert("obj->oclIsKindOf(Person)", options);
+        Assert.AreEqual("Obj.OfType<Individual>();", result);
+    }
+
+    [Test]
+    public void TypeNameMapper_RemapsOclAsTypeTarget()
+    {
+        var options = new ConversionOptions
+        {
+            TypeNameMapper = name => name switch { "Integer" => "int", _ => name }
+        };
+        var result = OclToCSharpConverter.Convert("value.oclAsType(Integer)", options);
+        Assert.AreEqual("(Value as int);", result);
+    }
+
+    [Test]
+    public void TypeNameMapper_RemapsSelectByKindTarget()
+    {
+        var options = new ConversionOptions
+        {
+            TypeNameMapper = name => name switch { "Person" => "Individual", _ => name }
+        };
+        var result = OclToCSharpConverter.Convert("items->selectByKind(Person)", options);
+        Assert.That(result, Does.Contain(".OfType<Individual>()"));
+    }
+
+    [Test]
+    public void TypeNameMapper_DoesNotAffectRegularIdentifiers()
+    {
+        var options = new ConversionOptions
+        {
+            TypeNameMapper = name => name switch { "Person" => "Individual", _ => name }
+        };
+        var result = OclToCSharpConverter.Convert("person.name <> null", options);
+        Assert.AreEqual("Person.Name != null;", result);
+    }
+
+    // -------------------------------------------------------------------------
     // Collection literals
     // -------------------------------------------------------------------------
 

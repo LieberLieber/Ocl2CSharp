@@ -13,6 +13,7 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 {
 	private readonly bool _useIfStatement;
 	private readonly bool _codeWithReturn;
+	private readonly Func<string, string>? _typeNameMapper;
 
 	/// <summary>
 	/// Tracks local variable names (lambda parameters, let-binding names) so that
@@ -36,7 +37,14 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 	{
 		_useIfStatement = options.UseIfStatement;
 		_codeWithReturn = options.CodeWithReturn;
+		_typeNameMapper = options.TypeNameMapper;
 	}
+
+	/// <summary>
+	/// Applies the caller-supplied <see cref="ConversionOptions.TypeNameMapper"/> (if any)
+	/// to an already-resolved type name, to translate OCL naming conventions to C# ones.
+	/// </summary>
+	private string MapTypeName(string name) => _typeNameMapper != null ? _typeNameMapper(name) : name;
 
 	/// <summary>
 	/// Converts an OCL expression string to the equivalent C# code.
@@ -76,7 +84,7 @@ public class OclToCSharpConverter : OCLBaseVisitor<string>
 			"Ref" => $"{Visit(context.type(0))}",
 			"Map" => $"IDictionary<{Visit(context.type(0))}, {Visit(context.type(1))}>",
 			"Function" => $"Func<{Visit(context.type(0))}, {Visit(context.type(1))}>",
-			_ => Visit(context.identifier()),
+			_ => MapTypeName(Visit(context.identifier())),
 		};
 	}
 
@@ -325,9 +333,9 @@ else
 		return keyword switch
 		{
 			"oclIsKindOf" or "oclIsType" or "oclIsTypeOf" =>
-				$"(this is {Visit(context.expression())})",
+				$"(this is {MapTypeName(Visit(context.expression()))})",
 			"oclAsType" =>
-				$"(({Visit(context.expression())})this)",
+				$"(({MapTypeName(Visit(context.expression()))})this)",
 			"oclIsUndefined" or "oclIsInvalid" =>
 				"(this == null)",
 			_ => context.GetText()
@@ -440,9 +448,9 @@ else
 				"oclIsInvalid" => $"({target} == null)",
 				"oclIsNew" => $"/* oclIsNew({target}) */",
 				"oclAsSet" => $"new HashSet<dynamic> {{ {target} }}",
-				"oclIsType" => $"({target} is {Visit(context.expression(0))})",
-				"oclIsTypeOf" => $"({target} is {Visit(context.expression(0))})",
-				"oclIsKindOf" => $"({target} is {Visit(context.expression(0))})",
+				"oclIsType" => $"({target} is {MapTypeName(Visit(context.expression(0)))})",
+				"oclIsTypeOf" => $"({target} is {MapTypeName(Visit(context.expression(0)))})",
+				"oclIsKindOf" => $"({target} is {MapTypeName(Visit(context.expression(0)))})",
 				"oclAsType" => BuildOclAsType(target, context),
 				"size" => $"{target}.Length",
 				"max" => $"{target}.Max()",
@@ -498,7 +506,7 @@ else
 			"equalsIgnoreCase" => $"{target}.Equals({Visit(context.expression(0))}, StringComparison.OrdinalIgnoreCase)",
 			"oclAsType" => BuildArrowOclAsType(target, context),
 			"at" => $"{target}.ElementAt({ItemIndex(Visit(context.expression(0)))}){(context.ID().Length > 0 ? $".{ToPascalCase(context.ID()[0].GetText())}" : string.Empty)}",
-			"oclIsType" => $"({target} is {Visit(context.expression(0))})",
+			"oclIsType" => $"({target} is {MapTypeName(Visit(context.expression(0)))})",
 			"selectAsKind" or
  			"selectByKind" or
 			"oclIsTypeOf" or
@@ -536,7 +544,7 @@ else
 
 	private string BuildOclAsType(string target, OCLParser.PostfixSuffixContext context)
 	{
-		var expr = Visit(context.expression(0));
+		var expr = MapTypeName(Visit(context.expression(0)));
 		var ids = context.ID();
 		if (ids.Length > 0)
 		{
@@ -547,7 +555,7 @@ else
 
 	private string BuildArrowOclAsType(string target, OCLParser.PostfixSuffixContext context)
 	{
-		var expr = Visit(context.expression(0));
+		var expr = MapTypeName(Visit(context.expression(0)));
 		var ids = context.ID();
 		if (ids.Length > 0)
 		{
@@ -558,7 +566,7 @@ else
 
 	private string BuildSelectByKind(string target, OCLParser.PostfixSuffixContext context)
 	{
-		var typeExpr = Visit(context.expression(0));
+		var typeExpr = MapTypeName(Visit(context.expression(0)));
 		var ids = context.ID();
 		// For `->selectByKind(T).property`, the context IDs are: [operationName, property].
 		// For keyword-based ops like `->oclIsKindOf(T)`, there is no operation-name ID token,
