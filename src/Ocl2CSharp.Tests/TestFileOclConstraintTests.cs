@@ -27,7 +27,7 @@ public class TestFileOclConstraintTests
 
 	private void ConvertOcl(TestData data)
 	{
-		var result = OclToCSharpConverter.Convert(data.Ocl, data.GenerateIfStatement).Trim();
+		var result = OclToCSharpConverter.Convert(data.Ocl, new ConversionOptions { UseIfStatement = data.GenerateIfStatement }).Trim();
 #if DEBUG
 		TestContext.WriteLine("Ocl");
 		TestContext.WriteLine(data.Ocl);
